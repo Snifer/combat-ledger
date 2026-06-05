@@ -139,16 +139,12 @@ export class BattleTrackerView extends ItemView {
 		avatarEl.empty();
 		if (avatarSrc) {
 			avatarEl.addClass("bt-avatar-image");
-			avatarEl.setCssProps({
-				"background-image": `url("${avatarSrc}")`,
-				"background-size": "cover",
-				"background-position": "center",
-			});
+			avatarEl.setCssProps({ "--bt-avatar-image": `url("${avatarSrc}")` });
 			return;
 		}
 
 		avatarEl.removeClass("bt-avatar-image");
-		avatarEl.setCssProps({ "background-image": "" });
+		avatarEl.setCssProps({ "--bt-avatar-image": "none" });
 		avatarEl.setText((combatant.icon || combatant.name.slice(0, 2)).toUpperCase());
 	}
 
@@ -326,23 +322,25 @@ export class BattleTrackerView extends ItemView {
 		if (this.activeLogFile || this.logDismissed || this.logSetupInProgress) return;
 
 		this.logSetupInProgress = true;
-		new LogSetupModal(this.app, this.plugin, this, async (file: TFile | null) => {
-			this.logSetupInProgress = false;
-			if (file) {
-				this.activeLogFile = file;
-				this.logDismissed = false;
-				const lang = this.plugin.settings.language;
-				const startMsg = LOCALIZATION[lang].logStarted;
-				const currentQueue = [startMsg, ...this.logQueue];
-				this.logQueue = [];
-				for (const msg of currentQueue) {
-					await this.writeToLog(msg);
+		new LogSetupModal(this.app, this.plugin, this, (file: TFile | null) => {
+			void (async () => {
+				this.logSetupInProgress = false;
+				if (file) {
+					this.activeLogFile = file;
+					this.logDismissed = false;
+					const lang = this.plugin.settings.language;
+					const startMsg = LOCALIZATION[lang].logStarted;
+					const currentQueue = [startMsg, ...this.logQueue];
+					this.logQueue = [];
+					for (const msg of currentQueue) {
+						await this.writeToLog(msg);
+					}
+				} else {
+					this.logDismissed = true;
+					this.logQueue = [];
 				}
-			} else {
-				this.logDismissed = true;
-				this.logQueue = [];
-			}
-			this.refresh();
+				this.refresh();
+			})();
 		}).open();
 	}
 
@@ -961,21 +959,23 @@ export class BattleTrackerView extends ItemView {
 			}
 			files = this.app.vault.getMarkdownFiles().filter((file) => file.path.startsWith(folder + "/"));
 		} else {
-			new PickCombatantsModal(this.app, this.plugin, async (picked) => {
-				const loaded = await Promise.all(picked.map((file) => this.fileToCombatant(file)));
-				for (const combatant of loaded) {
-					if (!this.combatants.find((entry) => entry.id === combatant.id)) {
-						this.combatants.push(combatant);
+			new PickCombatantsModal(this.app, this.plugin, (picked) => {
+				void (async () => {
+					const loaded = await Promise.all(picked.map((file) => this.fileToCombatant(file)));
+					for (const combatant of loaded) {
+						if (!this.combatants.find((entry) => entry.id === combatant.id)) {
+							this.combatants.push(combatant);
+						}
 					}
-				}
-				this.ensureActiveCombatant();
-				for (const combatant of loaded) {
-					await this.writeToLog(lang === "es"
-						? `Combatiente cargado: ${combatant.name} (Iniciativa: ${combatant.initiative}, PV: ${combatant.hp}/${combatant.hpMax})`
-						: `Combatant loaded: ${combatant.name} (Initiative: ${combatant.initiative}, HP: ${combatant.hp}/${combatant.hpMax})`);
-				}
-				this.refresh();
-				if (this.combatants.length > 0) this.triggerLogSetup();
+					this.ensureActiveCombatant();
+					for (const combatant of loaded) {
+						await this.writeToLog(lang === "es"
+							? `Combatiente cargado: ${combatant.name} (Iniciativa: ${combatant.initiative}, PV: ${combatant.hp}/${combatant.hpMax})`
+							: `Combatant loaded: ${combatant.name} (Initiative: ${combatant.initiative}, HP: ${combatant.hp}/${combatant.hpMax})`);
+					}
+					this.refresh();
+					if (this.combatants.length > 0) this.triggerLogSetup();
+				})();
 			}).open();
 			return;
 		}
@@ -1036,7 +1036,7 @@ export class BattleTrackerView extends ItemView {
 			);
 			const timerBar = timerWrap.createDiv("bt-turn-timer-bar");
 			const timerFill = timerBar.createDiv(`bt-turn-timer-fill${timerState.expired ? " expired" : ""}`);
-			timerFill.setCssProps({ "width": `${Math.max(0, timerState.progress * 100)}%` });
+			timerFill.setCssProps({ "--bt-fill-width": `${Math.max(0, timerState.progress * 100)}%` });
 		}
 
 		const topActions = topBar.createDiv("bt-top-actions");
@@ -1118,7 +1118,8 @@ export class BattleTrackerView extends ItemView {
 		const board = boardSection.createDiv(`bt-board${this.boardGridEnabled ? " has-grid" : ""}`);
 		const backgroundSrc = this.resolveBackgroundSrc(this.boardBackground);
 		if (backgroundSrc) {
-			board.setCssProps({ "background-image": `url("${backgroundSrc}")` });
+			board.addClass("bt-board-has-background");
+			board.setCssProps({ "--bt-board-background": `url("${backgroundSrc}")` });
 		}
 		board.setCssProps({ "--bt-grid-size": `${this.boardGridSize}px` });
 
@@ -1128,9 +1129,9 @@ export class BattleTrackerView extends ItemView {
 
 			const token = board.createDiv(`bt-token${combatant.id === this.activeCombatantId ? " active" : ""}${tokenState.hidden ? " is-hidden" : ""}${this.selectedTokenIds.includes(combatant.id) ? " is-selected" : ""}`);
 			token.setCssProps({
-				"left": `${tokenState.x}px`,
-				"top": `${tokenState.y}px`,
-				"transform": `scale(${tokenState.scale})`,
+				"--bt-token-left": `${tokenState.x}px`,
+				"--bt-token-top": `${tokenState.y}px`,
+				"--bt-token-scale": String(tokenState.scale),
 			});
 			token.title = combatant.name;
 
@@ -1313,10 +1314,10 @@ export class BattleTrackerView extends ItemView {
 					const entry = conditionEntries.find((item) => item.name === condition.name);
 					if (entry?.color) {
 						tag.setCssProps({
-							"color": entry.color,
-							"border-color": entry.color,
-							"background-color": entry.color + "22",
+							"--bt-cond-color": entry.color,
+							"--bt-cond-background": `${entry.color}22`,
 						});
+						tag.addClass("bt-cond-tag-custom");
 					}
 				});
 			}
@@ -1329,7 +1330,7 @@ export class BattleTrackerView extends ItemView {
 
 			const bar = hpWrap.createDiv("bt-bar");
 			const fill = bar.createDiv("bt-bar-fill");
-			fill.setCssProps({ "width": `${Math.max(0, ratio * 100)}%` });
+			fill.setCssProps({ "--bt-fill-width": `${Math.max(0, ratio * 100)}%` });
 			fill.className = `bt-bar-fill ${ratio > 0.6 ? "bt-hp-ok" : ratio > 0.3 ? "bt-hp-mid" : "bt-hp-low"}`;
 
 			const extraNames = Object.keys(combatant.extraFields);

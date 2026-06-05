@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replaced direct `innerHTML`, `prompt`, `confirm`, and `require()` usage with safer UI flows and static imports.
 - Reworked dynamic styling to rely on CSS classes and `setCssProps()` instead of direct static style assignments.
 - Reduced unsafe typing around persisted session data, frontmatter synchronization, and modal element access.
+- Awaited workspace leaf reveal operations and wrapped modal callbacks so Obsidian review checks no longer flag floating promises.
+- Moved timer, board, token, avatar, condition, and HP bar dynamic presentation to CSS-variable driven classes for stricter UI review compatibility.
 
 ## [1.2.0] - 2026-06-05
 

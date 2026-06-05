@@ -91,7 +91,7 @@ export default class BattleTrackerPlugin extends Plugin {
 			if (!leaf) return;
 			await leaf.setViewState({ type: VIEW_TYPE, active: true });
 		}
-		if (leaf) workspace.revealLeaf(leaf);
+		if (leaf) await workspace.revealLeaf(leaf);
 	}
 
 	async activatePlayerView() {
@@ -105,7 +105,7 @@ export default class BattleTrackerPlugin extends Plugin {
 			if (!leaf) return;
 			await leaf.setViewState({ type: PLAYER_VIEW_TYPE, active: true });
 		}
-		if (leaf) workspace.revealLeaf(leaf);
+		if (leaf) await workspace.revealLeaf(leaf);
 	}
 
 	refreshViews() {

@@ -497,10 +497,10 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 
 	applyCondPreviewStyle(el: HTMLElement, color: string) {
 		const c = color || "var(--text-accent)";
+		el.addClass("bt-settings-cond-preview-custom");
 		el.setCssProps({
-			"color": c,
-			"border-color": c,
-			"background-color": color ? color + "22" : "transparent",
+			"--bt-cond-preview-color": c,
+			"--bt-cond-preview-background": color ? `${color}22` : "transparent",
 		});
 	}
 

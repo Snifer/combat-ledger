@@ -705,10 +705,10 @@ var BattleTrackerSettingTab = class extends import_obsidian.PluginSettingTab {
   }
   applyCondPreviewStyle(el, color) {
     const c = color || "var(--text-accent)";
+    el.addClass("bt-settings-cond-preview-custom");
     el.setCssProps({
-      "color": c,
-      "border-color": c,
-      "background-color": color ? color + "22" : "transparent"
+      "--bt-cond-preview-color": c,
+      "--bt-cond-preview-background": color ? `${color}22` : "transparent"
     });
   }
   refreshView() {
@@ -796,10 +796,11 @@ var ConditionModal = class extends import_obsidian2.Modal {
       durationInput.disabled = !check.checked;
       if (entry.color) {
         btn.setCssProps({
-          "color": check.checked ? "#fff" : entry.color,
-          "border-color": entry.color,
-          "background-color": check.checked ? entry.color : entry.color + "22"
+          "--bt-cond-toggle-color": check.checked ? "#fff" : entry.color,
+          "--bt-cond-toggle-border": entry.color,
+          "--bt-cond-toggle-background": check.checked ? entry.color : `${entry.color}22`
         });
+        btn.addClass("bt-cond-toggle-custom");
       }
       const updateVisual = () => {
         btn.classList.toggle("selected", check.checked);
@@ -808,8 +809,8 @@ var ConditionModal = class extends import_obsidian2.Modal {
           durationInput.value = "";
         if (entry.color) {
           btn.setCssProps({
-            "color": check.checked ? "#fff" : entry.color,
-            "background-color": check.checked ? entry.color : entry.color + "22"
+            "--bt-cond-toggle-color": check.checked ? "#fff" : entry.color,
+            "--bt-cond-toggle-background": check.checked ? entry.color : `${entry.color}22`
           });
         }
       };
@@ -1311,15 +1312,11 @@ var BattleTrackerView = class extends import_obsidian3.ItemView {
     avatarEl.empty();
     if (avatarSrc) {
       avatarEl.addClass("bt-avatar-image");
-      avatarEl.setCssProps({
-        "background-image": `url("${avatarSrc}")`,
-        "background-size": "cover",
-        "background-position": "center"
-      });
+      avatarEl.setCssProps({ "--bt-avatar-image": `url("${avatarSrc}")` });
       return;
     }
     avatarEl.removeClass("bt-avatar-image");
-    avatarEl.setCssProps({ "background-image": "" });
+    avatarEl.setCssProps({ "--bt-avatar-image": "none" });
     avatarEl.setText((combatant.icon || combatant.name.slice(0, 2)).toUpperCase());
   }
   async toggleFullscreen() {
@@ -1491,23 +1488,25 @@ ${logLine}
     if (this.activeLogFile || this.logDismissed || this.logSetupInProgress)
       return;
     this.logSetupInProgress = true;
-    new LogSetupModal(this.app, this.plugin, this, async (file) => {
-      this.logSetupInProgress = false;
-      if (file) {
-        this.activeLogFile = file;
-        this.logDismissed = false;
-        const lang = this.plugin.settings.language;
-        const startMsg = LOCALIZATION[lang].logStarted;
-        const currentQueue = [startMsg, ...this.logQueue];
-        this.logQueue = [];
-        for (const msg of currentQueue) {
-          await this.writeToLog(msg);
+    new LogSetupModal(this.app, this.plugin, this, (file) => {
+      void (async () => {
+        this.logSetupInProgress = false;
+        if (file) {
+          this.activeLogFile = file;
+          this.logDismissed = false;
+          const lang = this.plugin.settings.language;
+          const startMsg = LOCALIZATION[lang].logStarted;
+          const currentQueue = [startMsg, ...this.logQueue];
+          this.logQueue = [];
+          for (const msg of currentQueue) {
+            await this.writeToLog(msg);
+          }
+        } else {
+          this.logDismissed = true;
+          this.logQueue = [];
         }
-      } else {
-        this.logDismissed = true;
-        this.logQueue = [];
-      }
-      this.refresh();
+        this.refresh();
+      })();
     }).open();
   }
   async createNewLogFile() {
@@ -2030,20 +2029,22 @@ ${header}
       }
       files = this.app.vault.getMarkdownFiles().filter((file) => file.path.startsWith(folder + "/"));
     } else {
-      new PickCombatantsModal(this.app, this.plugin, async (picked) => {
-        const loaded2 = await Promise.all(picked.map((file) => this.fileToCombatant(file)));
-        for (const combatant of loaded2) {
-          if (!this.combatants.find((entry) => entry.id === combatant.id)) {
-            this.combatants.push(combatant);
+      new PickCombatantsModal(this.app, this.plugin, (picked) => {
+        void (async () => {
+          const loaded2 = await Promise.all(picked.map((file) => this.fileToCombatant(file)));
+          for (const combatant of loaded2) {
+            if (!this.combatants.find((entry) => entry.id === combatant.id)) {
+              this.combatants.push(combatant);
+            }
           }
-        }
-        this.ensureActiveCombatant();
-        for (const combatant of loaded2) {
-          await this.writeToLog(lang === "es" ? `Combatiente cargado: ${combatant.name} (Iniciativa: ${combatant.initiative}, PV: ${combatant.hp}/${combatant.hpMax})` : `Combatant loaded: ${combatant.name} (Initiative: ${combatant.initiative}, HP: ${combatant.hp}/${combatant.hpMax})`);
-        }
-        this.refresh();
-        if (this.combatants.length > 0)
-          this.triggerLogSetup();
+          this.ensureActiveCombatant();
+          for (const combatant of loaded2) {
+            await this.writeToLog(lang === "es" ? `Combatiente cargado: ${combatant.name} (Iniciativa: ${combatant.initiative}, PV: ${combatant.hp}/${combatant.hpMax})` : `Combatant loaded: ${combatant.name} (Initiative: ${combatant.initiative}, HP: ${combatant.hp}/${combatant.hpMax})`);
+          }
+          this.refresh();
+          if (this.combatants.length > 0)
+            this.triggerLogSetup();
+        })();
       }).open();
       return;
     }
@@ -2096,7 +2097,7 @@ ${header}
       );
       const timerBar = timerWrap.createDiv("bt-turn-timer-bar");
       const timerFill = timerBar.createDiv(`bt-turn-timer-fill${timerState.expired ? " expired" : ""}`);
-      timerFill.setCssProps({ "width": `${Math.max(0, timerState.progress * 100)}%` });
+      timerFill.setCssProps({ "--bt-fill-width": `${Math.max(0, timerState.progress * 100)}%` });
     }
     const topActions = topBar.createDiv("bt-top-actions");
     const fullBtn = topActions.createEl("button", { cls: "bt-btn" });
@@ -2164,7 +2165,8 @@ ${header}
     const board = boardSection.createDiv(`bt-board${this.boardGridEnabled ? " has-grid" : ""}`);
     const backgroundSrc = this.resolveBackgroundSrc(this.boardBackground);
     if (backgroundSrc) {
-      board.setCssProps({ "background-image": `url("${backgroundSrc}")` });
+      board.addClass("bt-board-has-background");
+      board.setCssProps({ "--bt-board-background": `url("${backgroundSrc}")` });
     }
     board.setCssProps({ "--bt-grid-size": `${this.boardGridSize}px` });
     alive.forEach((combatant, index) => {
@@ -2173,9 +2175,9 @@ ${header}
         return;
       const token = board.createDiv(`bt-token${combatant.id === this.activeCombatantId ? " active" : ""}${tokenState.hidden ? " is-hidden" : ""}${this.selectedTokenIds.includes(combatant.id) ? " is-selected" : ""}`);
       token.setCssProps({
-        "left": `${tokenState.x}px`,
-        "top": `${tokenState.y}px`,
-        "transform": `scale(${tokenState.scale})`
+        "--bt-token-left": `${tokenState.x}px`,
+        "--bt-token-top": `${tokenState.y}px`,
+        "--bt-token-scale": String(tokenState.scale)
       });
       token.title = combatant.name;
       const avatar = token.createDiv(`bt-token-avatar bt-avatar-${combatant.combatType === "PC" ? "pc" : combatant.combatType === "Enemy" ? "enemy" : "npc"}`);
@@ -2339,10 +2341,10 @@ ${header}
           const entry = conditionEntries.find((item) => item.name === condition.name);
           if (entry == null ? void 0 : entry.color) {
             tag.setCssProps({
-              "color": entry.color,
-              "border-color": entry.color,
-              "background-color": entry.color + "22"
+              "--bt-cond-color": entry.color,
+              "--bt-cond-background": `${entry.color}22`
             });
+            tag.addClass("bt-cond-tag-custom");
           }
         });
       }
@@ -2353,7 +2355,7 @@ ${header}
       hpLabelRow.createEl("span", { cls: "bt-hp-text", text: hpVisible ? `${combatant.hp} / ${combatant.hpMax}` : "\u2022\u2022\u2022" });
       const bar = hpWrap.createDiv("bt-bar");
       const fill = bar.createDiv("bt-bar-fill");
-      fill.setCssProps({ "width": `${Math.max(0, ratio * 100)}%` });
+      fill.setCssProps({ "--bt-fill-width": `${Math.max(0, ratio * 100)}%` });
       fill.className = `bt-bar-fill ${ratio > 0.6 ? "bt-hp-ok" : ratio > 0.3 ? "bt-hp-mid" : "bt-hp-low"}`;
       const extraNames = Object.keys(combatant.extraFields);
       if (this.mode === "gm" && extraNames.length) {
@@ -2553,7 +2555,7 @@ var BattleTrackerPlugin = class extends import_obsidian4.Plugin {
       await leaf.setViewState({ type: VIEW_TYPE, active: true });
     }
     if (leaf)
-      workspace.revealLeaf(leaf);
+      await workspace.revealLeaf(leaf);
   }
   async activatePlayerView() {
     const { workspace } = this.app;
@@ -2568,7 +2570,7 @@ var BattleTrackerPlugin = class extends import_obsidian4.Plugin {
       await leaf.setViewState({ type: PLAYER_VIEW_TYPE, active: true });
     }
     if (leaf)
-      workspace.revealLeaf(leaf);
+      await workspace.revealLeaf(leaf);
   }
   refreshViews() {
     const leaves = [

@@ -103,10 +103,11 @@ export class ConditionModal extends Modal {
 
 			if (entry.color) {
 				btn.setCssProps({
-					"color": check.checked ? "#fff" : entry.color,
-					"border-color": entry.color,
-					"background-color": check.checked ? entry.color : entry.color + "22",
+					"--bt-cond-toggle-color": check.checked ? "#fff" : entry.color,
+					"--bt-cond-toggle-border": entry.color,
+					"--bt-cond-toggle-background": check.checked ? entry.color : `${entry.color}22`,
 				});
+				btn.addClass("bt-cond-toggle-custom");
 			}
 
 			const updateVisual = () => {
@@ -115,8 +116,8 @@ export class ConditionModal extends Modal {
 				if (!check.checked) durationInput.value = "";
 				if (entry.color) {
 					btn.setCssProps({
-						"color": check.checked ? "#fff" : entry.color,
-						"background-color": check.checked ? entry.color : entry.color + "22",
+						"--bt-cond-toggle-color": check.checked ? "#fff" : entry.color,
+						"--bt-cond-toggle-background": check.checked ? entry.color : `${entry.color}22`,
 					});
 				}
 			};
