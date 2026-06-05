@@ -41,6 +41,9 @@ var init_localization = __esm({
         ac: "CA",
         hp: "PV",
         shield: "Escudo",
+        xp: "XP",
+        playerView: "Vista de jugadores",
+        fullscreen: "Pantalla completa",
         damageHeal: "\u2694 Da\xF1o / Curar",
         status: "\u25C8 Estado",
         note: "\u270E Nota",
@@ -67,6 +70,33 @@ var init_localization = __esm({
         actionModalNoCondition: "Sin condici\xF3n",
         actionModalNotePlaceholder: "Efecto o nota contextual",
         actionModalApply: "Aplicar acci\xF3n",
+        graveyardTitle: "Bajas / Cementerio",
+        graveyardEmpty: "No hay combatientes derrotados.",
+        graveyardPendingXp: "XP pendiente",
+        graveyardAssignedXp: "XP repartida",
+        graveyardDistributeAll: "Repartir entre PCs",
+        graveyardGiveTo: "Dar a",
+        graveyardXpPlaceholder: "XP a repartir",
+        graveyardExpiredTurn: "Toca al siguiente",
+        playerViewTitle: "Panel de jugadores",
+        playerViewSubtitle: "Orden de turno, combatiente activo y condiciones visibles",
+        boardTitle: "Tablero",
+        boardCenter: "Centrar tokens",
+        boardSave: "Guardar layout",
+        boardLoad: "Cargar layout",
+        boardClear: "Limpiar layout",
+        boardBackground: "Fondo",
+        boardHide: "Ocultar",
+        boardReveal: "Mostrar",
+        boardHidden: "Oculto a jugadores",
+        boardSavePrompt: "Nombre del layout a guardar",
+        boardLoadPrompt: "Escribe el nombre exacto del layout a cargar",
+        boardDeletePrompt: "Escribe el nombre exacto del layout a eliminar",
+        boardNoLayouts: "No hay layouts guardados.",
+        alertTurnStart: "Turno de",
+        alertConditionExpired: "Condici\xF3n expirada",
+        alertDefeated: "Derrotado",
+        alertTimerExpired: "Tiempo agotado",
         pickModalTitle: "Selecciona combatientes",
         pickModalSearch: "Buscar nota...",
         pickModalLoad: "Cargar al combate",
@@ -86,6 +116,12 @@ var init_localization = __esm({
         settingsHpMaxDesc: "Propiedad para puntos de vida m\xE1ximos",
         settingsShieldName: "Escudo",
         settingsShieldDesc: "Propiedad para el valor de escudo o puntos temporales. D\xE9jalo vac\xEDo si no usas escudo.",
+        settingsXpName: "Experiencia",
+        settingsXpDesc: "Propiedad para la experiencia del personaje o del enemigo.",
+        settingsAvatarName: "Avatar",
+        settingsAvatarDesc: "Propiedad YAML con una ruta o URL de imagen para mostrar en la tarjeta.",
+        settingsIconName: "Icono",
+        settingsIconDesc: "Propiedad YAML con un icono o emoji alternativo para el avatar.",
         settingsAcName: "Clase de Armadura / Defensa",
         settingsAcDesc: "Propiedad para CA o defensa",
         settingsTypeName: "Tipo",
@@ -103,6 +139,22 @@ var init_localization = __esm({
         settingsRealtimeModeAll: "PC y NPC/Enemigos",
         settingsShieldAbsorbName: "El escudo absorbe da\xF1o",
         settingsShieldAbsorbDesc: "Cuando est\xE9 activo, el da\xF1o se resta primero del escudo antes de afectar los PV.",
+        settingsTimerTitle: "Temporizador de turno",
+        settingsTimerEnabledName: "Habilitar temporizador visual",
+        settingsTimerEnabledDesc: "Muestra un temporizador del turno activo en la barra superior.",
+        settingsTimerSecondsName: "Duraci\xF3n del turno (segundos)",
+        settingsTimerSecondsDesc: "Tiempo m\xE1ximo del turno antes de mostrar el aviso para pasar al siguiente.",
+        settingsPlayerHpName: "Mostrar PV en vista de jugadores",
+        settingsPlayerHpDesc: "Si est\xE1 desactivado, la vista de jugadores oculta los valores exactos de PV.",
+        settingsBoardTitle: "Tablero visual",
+        settingsBoardGridName: "Mostrar grid por defecto",
+        settingsBoardGridDesc: "Activa una cuadr\xEDcula visual en el tablero de combate.",
+        settingsBoardSnapName: "Ajustar tokens al grid",
+        settingsBoardSnapDesc: "Al arrastrar tokens, se alinean autom\xE1ticamente a la cuadr\xEDcula.",
+        settingsBoardGridSizeName: "Tama\xF1o del grid",
+        settingsBoardGridSizeDesc: "Tama\xF1o en p\xEDxeles de cada celda del tablero.",
+        settingsBoardBackgroundName: "Fondo por defecto del tablero",
+        settingsBoardBackgroundDesc: "Ruta del vault o URL de imagen usada como fondo inicial del tablero.",
         settingsCondTitle: "Condiciones / Estados",
         settingsCondColorDesc: "Personaliza el nombre y color de cada estado. El color se aplica al badge en la vista de combate.",
         settingsCondAddBtn: "\uFF0B A\xF1adir condici\xF3n",
@@ -156,6 +208,9 @@ var init_localization = __esm({
         ac: "AC",
         hp: "HP",
         shield: "Shield",
+        xp: "XP",
+        playerView: "Player view",
+        fullscreen: "Fullscreen",
         damageHeal: "\u2694 Damage / Heal",
         status: "\u25C8 Status",
         note: "\u270E Note",
@@ -182,6 +237,33 @@ var init_localization = __esm({
         actionModalNoCondition: "No condition",
         actionModalNotePlaceholder: "Effect or contextual note",
         actionModalApply: "Apply action",
+        graveyardTitle: "Graveyard",
+        graveyardEmpty: "There are no defeated combatants.",
+        graveyardPendingXp: "Pending XP",
+        graveyardAssignedXp: "Assigned XP",
+        graveyardDistributeAll: "Split among PCs",
+        graveyardGiveTo: "Give to",
+        graveyardXpPlaceholder: "XP to award",
+        graveyardExpiredTurn: "Next turn",
+        playerViewTitle: "Player dashboard",
+        playerViewSubtitle: "Turn order, active combatant, and visible conditions",
+        boardTitle: "Board",
+        boardCenter: "Center tokens",
+        boardSave: "Save layout",
+        boardLoad: "Load layout",
+        boardClear: "Clear layout",
+        boardBackground: "Background",
+        boardHide: "Hide",
+        boardReveal: "Reveal",
+        boardHidden: "Hidden from players",
+        boardSavePrompt: "Layout name to save",
+        boardLoadPrompt: "Enter the exact layout name to load",
+        boardDeletePrompt: "Enter the exact layout name to delete",
+        boardNoLayouts: "There are no saved layouts.",
+        alertTurnStart: "Turn of",
+        alertConditionExpired: "Condition expired",
+        alertDefeated: "Defeated",
+        alertTimerExpired: "Time expired",
         pickModalTitle: "Select combatants",
         pickModalSearch: "Search note...",
         pickModalLoad: "Load to battle",
@@ -201,6 +283,12 @@ var init_localization = __esm({
         settingsHpMaxDesc: "Property for maximum hit points",
         settingsShieldName: "Shield",
         settingsShieldDesc: "Property for shield or temporary hit points. Leave empty if unused.",
+        settingsXpName: "Experience",
+        settingsXpDesc: "Property for character or enemy experience.",
+        settingsAvatarName: "Avatar",
+        settingsAvatarDesc: "YAML property with an image path or URL to display on the card.",
+        settingsIconName: "Icon",
+        settingsIconDesc: "YAML property with an alternate icon or emoji for the avatar.",
         settingsAcName: "Armor Class / Defense",
         settingsAcDesc: "Property for AC or defense",
         settingsTypeName: "Type",
@@ -218,6 +306,22 @@ var init_localization = __esm({
         settingsRealtimeModeAll: "PC and NPC/Enemies",
         settingsShieldAbsorbName: "Shield absorbs damage",
         settingsShieldAbsorbDesc: "When enabled, damage is removed from shield before it affects HP.",
+        settingsTimerTitle: "Turn timer",
+        settingsTimerEnabledName: "Enable visual timer",
+        settingsTimerEnabledDesc: "Shows a timer for the active turn in the top bar.",
+        settingsTimerSecondsName: "Turn duration (seconds)",
+        settingsTimerSecondsDesc: "Maximum turn time before showing the prompt to move on.",
+        settingsPlayerHpName: "Show HP in player view",
+        settingsPlayerHpDesc: "If disabled, the player view hides exact HP values.",
+        settingsBoardTitle: "Visual board",
+        settingsBoardGridName: "Show grid by default",
+        settingsBoardGridDesc: "Enables a visual grid on the combat board.",
+        settingsBoardSnapName: "Snap tokens to grid",
+        settingsBoardSnapDesc: "Dragging tokens aligns them automatically to the grid.",
+        settingsBoardGridSizeName: "Grid size",
+        settingsBoardGridSizeDesc: "Pixel size of each board cell.",
+        settingsBoardBackgroundName: "Default board background",
+        settingsBoardBackgroundDesc: "Vault path or image URL used as the initial board background.",
         settingsCondTitle: "Conditions / States",
         settingsCondColorDesc: "Customize the name and color of each status. The color is applied to the badge in the combat view.",
         settingsCondAddBtn: "\uFF0B Add condition",
@@ -272,12 +376,12 @@ __export(modals_exports, {
   NoteModal: () => NoteModal,
   PickCombatantsModal: () => PickCombatantsModal
 });
-var import_obsidian, DmgModal, ConditionModal, NoteModal, ActionModal, PickCombatantsModal, LogSetupModal;
+var import_obsidian2, DmgModal, ConditionModal, NoteModal, ActionModal, PickCombatantsModal, LogSetupModal;
 var init_modals = __esm({
   "src/modals.ts"() {
-    import_obsidian = require("obsidian");
+    import_obsidian2 = require("obsidian");
     init_localization();
-    DmgModal = class extends import_obsidian.Modal {
+    DmgModal = class extends import_obsidian2.Modal {
       constructor(app, name, plugin, hasShield, onConfirm) {
         super(app);
         this.name = name;
@@ -317,7 +421,7 @@ var init_modals = __esm({
         this.contentEl.empty();
       }
     };
-    ConditionModal = class extends import_obsidian.Modal {
+    ConditionModal = class extends import_obsidian2.Modal {
       constructor(app, all, current, plugin, onConfirm) {
         super(app);
         this.allConditions = all;
@@ -396,7 +500,7 @@ var init_modals = __esm({
         this.contentEl.empty();
       }
     };
-    NoteModal = class extends import_obsidian.Modal {
+    NoteModal = class extends import_obsidian2.Modal {
       constructor(app, current, plugin, onConfirm) {
         super(app);
         this.current = current;
@@ -423,7 +527,7 @@ var init_modals = __esm({
         this.contentEl.empty();
       }
     };
-    ActionModal = class extends import_obsidian.Modal {
+    ActionModal = class extends import_obsidian2.Modal {
       constructor(app, attacker, targets, conditions, plugin, onConfirm) {
         super(app);
         this.attacker = attacker;
@@ -487,7 +591,7 @@ var init_modals = __esm({
         this.contentEl.empty();
       }
     };
-    PickCombatantsModal = class extends import_obsidian.Modal {
+    PickCombatantsModal = class extends import_obsidian2.Modal {
       constructor(app, plugin, onConfirm) {
         super(app);
         this.selected = /* @__PURE__ */ new Set();
@@ -535,7 +639,7 @@ var init_modals = __esm({
         ok.onclick = () => {
           const picked = files.filter((f) => this.selected.has(f.path));
           if (!picked.length) {
-            new import_obsidian.Notice(t.pickModalSelectMin);
+            new import_obsidian2.Notice(t.pickModalSelectMin);
             return;
           }
           this.onConfirm(picked);
@@ -547,7 +651,7 @@ var init_modals = __esm({
         this.contentEl.empty();
       }
     };
-    LogSetupModal = class extends import_obsidian.Modal {
+    LogSetupModal = class extends import_obsidian2.Modal {
       constructor(app, plugin, view, onChoose) {
         super(app);
         this.plugin = plugin;
@@ -568,11 +672,11 @@ var init_modals = __esm({
         newFileBtn.onclick = async () => {
           try {
             const file = await this.view.createNewLogFile();
-            new import_obsidian.Notice(`${t.logActiveLogFile}: ${file.name}`);
+            new import_obsidian2.Notice(`${t.logActiveLogFile}: ${file.name}`);
             this.onChoose(file);
             this.close();
           } catch (e) {
-            new import_obsidian.Notice(lang === "es" ? "Error al crear la nota de registro." : "Error creating log note.");
+            new import_obsidian2.Notice(lang === "es" ? "Error al crear la nota de registro." : "Error creating log note.");
             console.error(e);
           }
         };
@@ -597,7 +701,7 @@ var init_modals = __esm({
             item.style.padding = "6px 8px";
             item.setText(file.path);
             item.onclick = () => {
-              new import_obsidian.Notice(`${t.logActiveLogFile}: ${file.name}`);
+              new import_obsidian2.Notice(`${t.logActiveLogFile}: ${file.name}`);
               this.onChoose(file);
               this.close();
             };
@@ -629,708 +733,8 @@ module.exports = __toCommonJS(main_exports);
 var import_obsidian4 = require("obsidian");
 
 // src/settings.ts
-var import_obsidian3 = require("obsidian");
+var import_obsidian = require("obsidian");
 init_localization();
-
-// src/view.ts
-var import_obsidian2 = require("obsidian");
-init_localization();
-init_modals();
-var VIEW_TYPE = "combat-ledger-view";
-var BattleTrackerView = class extends import_obsidian2.ItemView {
-  constructor(leaf, plugin) {
-    super(leaf);
-    this.combatants = [];
-    this.round = 1;
-    this.activeCombatantId = null;
-    this.editingInitiativeId = null;
-    this.activeLogFile = null;
-    this.logDismissed = false;
-    this.logQueue = [];
-    this.logSetupInProgress = false;
-    this.plugin = plugin;
-  }
-  getViewType() {
-    return VIEW_TYPE;
-  }
-  getDisplayText() {
-    return "Combat Ledger";
-  }
-  getIcon() {
-    return "sword";
-  }
-  async onOpen() {
-    this.render();
-  }
-  async writeToLog(actionText) {
-    if (!this.plugin.settings.logEnabled)
-      return;
-    if (this.logDismissed)
-      return;
-    if (!this.activeLogFile) {
-      this.logQueue.push(actionText);
-      if (!this.logSetupInProgress) {
-        this.triggerLogSetup();
-      }
-      return;
-    }
-    const lang = this.plugin.settings.language;
-    const now = new Date();
-    const timeStr = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`;
-    const prefix = `[${timeStr}] (${lang === "es" ? "Ronda" : "Round"} ${this.round})`;
-    const logLine = `- ${prefix} ${actionText}`;
-    try {
-      const file = this.activeLogFile;
-      const content = await this.app.vault.read(file);
-      const lines = content.split("\n");
-      const targetHeader = this.plugin.settings.logHeader.trim();
-      const headerRegex = /^(#+)\s+(.*)$/;
-      const targetMatch = targetHeader.match(headerRegex);
-      if (targetMatch) {
-        const targetLevel = targetMatch[1].length;
-        const targetName = targetMatch[2].trim().toLowerCase();
-        let headerIndex = -1;
-        for (let i = 0; i < lines.length; i++) {
-          const match = lines[i].match(headerRegex);
-          if (match && match[2].trim().toLowerCase() === targetName) {
-            headerIndex = i;
-            break;
-          }
-        }
-        if (headerIndex !== -1) {
-          let insertIndex = lines.length;
-          for (let i = headerIndex + 1; i < lines.length; i++) {
-            const match = lines[i].match(headerRegex);
-            if (!match)
-              continue;
-            const level = match[1].length;
-            if (level <= targetLevel) {
-              insertIndex = i;
-              break;
-            }
-          }
-          lines.splice(insertIndex, 0, logLine);
-          await this.app.vault.modify(file, lines.join("\n"));
-          return;
-        }
-      }
-      const newContent = content.trimEnd() + `
-
-${targetHeader}
-${logLine}
-`;
-      await this.app.vault.modify(file, newContent);
-    } catch (e) {
-      console.error("Error writing to combat log:", e);
-      new import_obsidian2.Notice(lang === "es" ? "Error al escribir en el registro de combate." : "Error writing to combat log.");
-    }
-  }
-  triggerLogSetup() {
-    if (this.activeLogFile || this.logDismissed || this.logSetupInProgress)
-      return;
-    this.logSetupInProgress = true;
-    const { LogSetupModal: LogSetupModal2 } = (init_modals(), __toCommonJS(modals_exports));
-    new LogSetupModal2(this.app, this.plugin, this, async (file) => {
-      this.logSetupInProgress = false;
-      if (file) {
-        this.activeLogFile = file;
-        this.logDismissed = false;
-        const lang = this.plugin.settings.language;
-        const startMsg = LOCALIZATION[lang].logStarted;
-        const currentQueue = [startMsg, ...this.logQueue];
-        this.logQueue = [];
-        for (const msg of currentQueue) {
-          await this.writeToLog(msg);
-        }
-      } else {
-        this.logDismissed = true;
-        this.logQueue = [];
-      }
-      this.render();
-    }).open();
-  }
-  async createNewLogFile() {
-    const folderPath = this.plugin.settings.logFolder.trim();
-    if (folderPath) {
-      const folderExists = this.app.vault.getAbstractFileByPath(folderPath);
-      if (!folderExists) {
-        await this.app.vault.createFolder(folderPath);
-      }
-    }
-    const now = new Date();
-    const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")} ${String(now.getHours()).padStart(2, "0")}-${String(now.getMinutes()).padStart(2, "0")}`;
-    let fileName = this.plugin.settings.logFileName.replace("{date}", dateStr);
-    if (!fileName.endsWith(".md"))
-      fileName += ".md";
-    const fullPath = folderPath ? `${folderPath}/${fileName}` : fileName;
-    let uniquePath = fullPath;
-    let counter = 1;
-    while (this.app.vault.getAbstractFileByPath(uniquePath)) {
-      uniquePath = fullPath.replace(/\.md$/, ` (${counter}).md`);
-      counter++;
-    }
-    const header = this.plugin.settings.logHeader;
-    return await this.app.vault.create(uniquePath, `# ${fileName.replace(/\.md$/, "")}
-
-${header}
-`);
-  }
-  parseConditionToken(token) {
-    if (typeof token === "string") {
-      const match = token.match(/^(.*?)(?:\s*\((\d+)\))?$/);
-      if (!match)
-        return null;
-      const name = match[1].trim();
-      if (!name)
-        return null;
-      const duration = match[2] ? Number(match[2]) : null;
-      return { name, duration: duration && duration > 0 ? duration : null };
-    }
-    if (token && typeof token === "object") {
-      const maybe = token;
-      if (typeof maybe.name !== "string" || !maybe.name.trim())
-        return null;
-      const durationValue = Number(maybe.duration);
-      return {
-        name: maybe.name.trim(),
-        duration: Number.isFinite(durationValue) && durationValue > 0 ? durationValue : null
-      };
-    }
-    return null;
-  }
-  parseStoredConditions(raw) {
-    if (Array.isArray(raw)) {
-      return raw.map((entry) => this.parseConditionToken(entry)).filter((entry) => Boolean(entry));
-    }
-    if (typeof raw === "string") {
-      return raw.split(",").map((entry) => this.parseConditionToken(entry.trim())).filter((entry) => Boolean(entry));
-    }
-    const single = this.parseConditionToken(raw);
-    return single ? [single] : [];
-  }
-  serializeConditions(conditions) {
-    return conditions.map((entry) => entry.duration ? `${entry.name} (${entry.duration})` : entry.name);
-  }
-  formatConditionLabel(condition) {
-    return condition.duration ? `${condition.name} \xB7 ${condition.duration}` : condition.name;
-  }
-  async fileToCombatant(file) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _i;
-    const f = this.plugin.settings.fields;
-    const meta = (_b = (_a = this.app.metadataCache.getFileCache(file)) == null ? void 0 : _a.frontmatter) != null ? _b : {};
-    const extraNames = f.extra_fields.split(",").map((s) => s.trim()).filter(Boolean);
-    const extraFields = {};
-    for (const key of extraNames) {
-      if (meta[key] !== void 0)
-        extraFields[key] = Number(meta[key]) || 0;
-    }
-    const hpMax = Number((_d = (_c = meta[f.hp_max]) != null ? _c : meta[f.hp]) != null ? _d : 10) || 10;
-    const hp = Number((_e = meta[f.hp]) != null ? _e : hpMax) || hpMax;
-    const shield = f.shield ? Number((_f = meta[f.shield]) != null ? _f : 0) || 0 : 0;
-    const storedConditions = f.conditions ? this.parseStoredConditions(meta[f.conditions]) : [];
-    return {
-      id: file.path,
-      name: file.basename,
-      initiative: Number((_g = meta[f.initiative]) != null ? _g : 0) || 0,
-      hp,
-      hpMax,
-      shield,
-      ac: Number((_h = meta[f.ac]) != null ? _h : 10) || 10,
-      combatType: String((_i = meta[f.type]) != null ? _i : "NPC"),
-      extraFields,
-      conditions: storedConditions,
-      notes: "",
-      alive: hp > 0,
-      file
-    };
-  }
-  shouldSyncCombatant(combatant) {
-    if (!this.plugin.settings.realtimeSync)
-      return false;
-    if (this.plugin.settings.realtimeSyncMode === "all")
-      return true;
-    return combatant.combatType === "PC";
-  }
-  async syncCombatantToNote(combatant) {
-    if (!this.shouldSyncCombatant(combatant))
-      return;
-    const fields = this.plugin.settings.fields;
-    try {
-      await this.app.fileManager.processFrontMatter(combatant.file, (frontmatter) => {
-        frontmatter[fields.hp] = combatant.hp;
-        if (fields.initiative)
-          frontmatter[fields.initiative] = combatant.initiative;
-        if (fields.shield)
-          frontmatter[fields.shield] = combatant.shield;
-        if (fields.conditions)
-          frontmatter[fields.conditions] = this.serializeConditions(combatant.conditions);
-        Object.entries(combatant.extraFields).forEach(([key, value]) => {
-          frontmatter[key] = value;
-        });
-      });
-    } catch (error) {
-      console.error("Failed to sync combatant note:", error);
-      new import_obsidian2.Notice(this.plugin.settings.language === "es" ? `No se pudo sincronizar ${combatant.name}.` : `Could not sync ${combatant.name}.`);
-    }
-  }
-  ensureActiveCombatant() {
-    const alive = this.aliveSorted();
-    if (!alive.length) {
-      this.activeCombatantId = null;
-      return;
-    }
-    if (!this.activeCombatantId || !alive.some((combatant) => combatant.id === this.activeCombatantId)) {
-      this.activeCombatantId = alive[0].id;
-    }
-  }
-  sorted() {
-    return [...this.combatants].sort((a, b) => b.initiative - a.initiative || a.name.localeCompare(b.name));
-  }
-  aliveSorted() {
-    return this.sorted().filter((combatant) => combatant.alive);
-  }
-  getCurrentTurnIndex(alive = this.aliveSorted()) {
-    if (!alive.length || !this.activeCombatantId)
-      return 0;
-    const index = alive.findIndex((combatant) => combatant.id === this.activeCombatantId);
-    return index >= 0 ? index : 0;
-  }
-  getCombatant(id) {
-    return this.combatants.find((combatant) => combatant.id === id);
-  }
-  async processConditionDurations(combatant) {
-    if (!combatant.conditions.length)
-      return;
-    const lang = this.plugin.settings.language;
-    const retained = [];
-    let changed = false;
-    for (const condition of combatant.conditions) {
-      if (condition.duration == null) {
-        retained.push(condition);
-        continue;
-      }
-      const nextDuration = condition.duration - 1;
-      changed = true;
-      if (nextDuration <= 0) {
-        await this.writeToLog(lang === "es" ? `${combatant.name} pierde la condici\xF3n por expiraci\xF3n: ${condition.name}` : `${combatant.name} loses condition by expiration: ${condition.name}`);
-        continue;
-      }
-      retained.push({ ...condition, duration: nextDuration });
-    }
-    if (changed) {
-      combatant.conditions = retained;
-      await this.syncCombatantToNote(combatant);
-    }
-  }
-  async nextTurn() {
-    const alive = this.aliveSorted();
-    if (!alive.length)
-      return;
-    this.ensureActiveCombatant();
-    const currentIndex = this.getCurrentTurnIndex(alive);
-    const nextIndex = (currentIndex + 1) % alive.length;
-    if (nextIndex === 0)
-      this.round++;
-    this.activeCombatantId = alive[nextIndex].id;
-    const currentCombatant = alive[nextIndex];
-    await this.processConditionDurations(currentCombatant);
-    await this.writeToLog(this.plugin.settings.language === "es" ? `Turno de ${currentCombatant.name}` : `Turn of ${currentCombatant.name}`);
-    this.render();
-  }
-  applyDamage(combatant, amount, heal, useShield) {
-    if (heal) {
-      const previous = combatant.hp;
-      combatant.hp = Math.min(combatant.hpMax, combatant.hp + amount);
-      if (combatant.hp > 0)
-        combatant.alive = true;
-      return {
-        finalDamage: 0,
-        absorbedByShield: 0,
-        defeated: false,
-        healed: combatant.hp - previous
-      };
-    }
-    let remaining = Math.max(0, amount);
-    let absorbedByShield = 0;
-    if (useShield && combatant.shield > 0) {
-      absorbedByShield = Math.min(combatant.shield, remaining);
-      combatant.shield -= absorbedByShield;
-      remaining -= absorbedByShield;
-    }
-    combatant.hp = Math.max(0, combatant.hp - remaining);
-    if (combatant.hp === 0)
-      combatant.alive = false;
-    return {
-      finalDamage: remaining,
-      absorbedByShield,
-      defeated: combatant.hp === 0,
-      healed: 0
-    };
-  }
-  async applyDmg(id, amount, heal, useShield) {
-    const combatant = this.getCombatant(id);
-    if (!combatant)
-      return;
-    const lang = this.plugin.settings.language;
-    const result = this.applyDamage(combatant, amount, heal, useShield);
-    if (heal) {
-      await this.writeToLog(lang === "es" ? `${combatant.name} se cura ${result.healed} PV (PV: ${combatant.hp}/${combatant.hpMax})` : `${combatant.name} heals ${result.healed} HP (HP: ${combatant.hp}/${combatant.hpMax})`);
-    } else {
-      const shieldText = result.absorbedByShield > 0 ? lang === "es" ? `, ${result.absorbedByShield} absorbidos por escudo` : `, ${result.absorbedByShield} absorbed by shield` : "";
-      await this.writeToLog(lang === "es" ? `${combatant.name} recibe ${result.finalDamage} de da\xF1o${shieldText} (PV: ${combatant.hp}/${combatant.hpMax})` : `${combatant.name} takes ${result.finalDamage} damage${shieldText} (HP: ${combatant.hp}/${combatant.hpMax})`);
-      if (result.defeated) {
-        await this.writeToLog(lang === "es" ? `${combatant.name} ha sido derrotado` : `${combatant.name} has been defeated`);
-      }
-    }
-    await this.syncCombatantToNote(combatant);
-    this.ensureActiveCombatant();
-    this.render();
-  }
-  async setInitiative(id, initiative) {
-    const combatant = this.getCombatant(id);
-    if (!combatant)
-      return;
-    combatant.initiative = initiative;
-    this.editingInitiativeId = null;
-    await this.syncCombatantToNote(combatant);
-    await this.writeToLog(this.plugin.settings.language === "es" ? `${combatant.name} cambia su iniciativa a ${initiative}` : `${combatant.name} changes initiative to ${initiative}`);
-    this.ensureActiveCombatant();
-    this.render();
-  }
-  async updateConditions(id, updated) {
-    var _a, _b;
-    const combatant = this.getCombatant(id);
-    if (!combatant)
-      return;
-    const lang = this.plugin.settings.language;
-    const oldMap = new Map(combatant.conditions.map((condition) => [condition.name, condition.duration]));
-    const newMap = new Map(updated.map((condition) => [condition.name, condition.duration]));
-    combatant.conditions = updated;
-    for (const condition of updated) {
-      if (!oldMap.has(condition.name)) {
-        await this.writeToLog(lang === "es" ? `${combatant.name} obtiene la condici\xF3n: ${this.formatConditionLabel(condition)}` : `${combatant.name} gains condition: ${this.formatConditionLabel(condition)}`);
-      } else if (oldMap.get(condition.name) !== condition.duration) {
-        await this.writeToLog(lang === "es" ? `${combatant.name} actualiza la duraci\xF3n de ${condition.name} a ${(_a = condition.duration) != null ? _a : "\u221E"}` : `${combatant.name} updates ${condition.name} duration to ${(_b = condition.duration) != null ? _b : "\u221E"}`);
-      }
-    }
-    for (const [name] of oldMap.entries()) {
-      if (!newMap.has(name)) {
-        await this.writeToLog(lang === "es" ? `${combatant.name} pierde la condici\xF3n: ${name}` : `${combatant.name} loses condition: ${name}`);
-      }
-    }
-    await this.syncCombatantToNote(combatant);
-    this.render();
-  }
-  async modExtra(id, key, delta) {
-    var _a;
-    const combatant = this.getCombatant(id);
-    if (!combatant)
-      return;
-    combatant.extraFields[key] = Math.max(0, ((_a = combatant.extraFields[key]) != null ? _a : 0) + delta);
-    await this.syncCombatantToNote(combatant);
-    await this.writeToLog(this.plugin.settings.language === "es" ? `${combatant.name} - ${key.toUpperCase()} modificado a ${combatant.extraFields[key]}` : `${combatant.name} - ${key.toUpperCase()} modified to ${combatant.extraFields[key]}`);
-    this.render();
-  }
-  async removeCombatant(id) {
-    const combatant = this.getCombatant(id);
-    if (combatant) {
-      await this.writeToLog(this.plugin.settings.language === "es" ? `${combatant.name} retirado del combate` : `${combatant.name} removed from combat`);
-    }
-    this.combatants = this.combatants.filter((entry) => entry.id !== id);
-    if (this.activeCombatantId === id)
-      this.activeCombatantId = null;
-    this.ensureActiveCombatant();
-    this.render();
-  }
-  resetBattle() {
-    void this.writeToLog(LOCALIZATION[this.plugin.settings.language].logEnded);
-    this.combatants = [];
-    this.round = 1;
-    this.activeCombatantId = null;
-    this.activeLogFile = null;
-    this.logDismissed = false;
-    this.logQueue = [];
-    this.editingInitiativeId = null;
-    this.render();
-  }
-  async applyAction(attackerId, payload) {
-    const attacker = this.getCombatant(attackerId);
-    const target = this.getCombatant(payload.targetId);
-    if (!attacker || !target)
-      return;
-    const lang = this.plugin.settings.language;
-    const result = payload.damage > 0 ? this.applyDamage(target, payload.damage, false, payload.useShield) : { finalDamage: 0, absorbedByShield: 0, defeated: false, healed: 0 };
-    if (payload.conditionName) {
-      const existing = target.conditions.find((condition) => condition.name === payload.conditionName);
-      if (existing)
-        existing.duration = payload.conditionDuration;
-      else
-        target.conditions.push({ name: payload.conditionName, duration: payload.conditionDuration });
-    }
-    const parts = [];
-    if (payload.damage > 0) {
-      parts.push(lang === "es" ? `le inflige ${result.finalDamage} de da\xF1o` : `deals ${result.finalDamage} damage`);
-      if (result.absorbedByShield > 0) {
-        parts.push(lang === "es" ? `${result.absorbedByShield} absorbidos por escudo` : `${result.absorbedByShield} absorbed by shield`);
-      }
-    }
-    if (payload.conditionName) {
-      parts.push(lang === "es" ? `aplica ${payload.conditionName}${payload.conditionDuration ? ` (${payload.conditionDuration})` : ""}` : `applies ${payload.conditionName}${payload.conditionDuration ? ` (${payload.conditionDuration})` : ""}`);
-    }
-    if (payload.note)
-      parts.push(payload.note);
-    const actionVerb = lang === "es" ? "ataca a" : "attacks";
-    const suffix = parts.length ? ` ${lang === "es" ? "y" : "and"} ${parts.join(", ")}` : "";
-    await this.writeToLog(lang === "es" ? `${attacker.name} ${actionVerb} ${target.name}${suffix}.` : `${attacker.name} ${actionVerb} ${target.name}${suffix}.`);
-    if (result.defeated) {
-      await this.writeToLog(lang === "es" ? `${target.name} ha sido derrotado` : `${target.name} has been defeated`);
-    }
-    await this.syncCombatantToNote(target);
-    this.ensureActiveCombatant();
-    this.render();
-  }
-  async loadFromVault() {
-    const folder = this.plugin.settings.combatantFolder.trim();
-    const lang = this.plugin.settings.language;
-    let files;
-    if (folder) {
-      const folderObj = this.app.vault.getAbstractFileByPath(folder);
-      if (!folderObj) {
-        new import_obsidian2.Notice(lang === "es" ? `Carpeta "${folder}" no encontrada.` : `Folder "${folder}" not found.`);
-        return;
-      }
-      files = this.app.vault.getMarkdownFiles().filter((file) => file.path.startsWith(folder + "/"));
-    } else {
-      new PickCombatantsModal(this.app, this.plugin, async (picked) => {
-        const loaded2 = await Promise.all(picked.map((file) => this.fileToCombatant(file)));
-        for (const combatant of loaded2) {
-          if (!this.combatants.find((entry) => entry.id === combatant.id)) {
-            this.combatants.push(combatant);
-          }
-        }
-        this.ensureActiveCombatant();
-        for (const combatant of loaded2) {
-          await this.writeToLog(lang === "es" ? `Combatiente cargado: ${combatant.name} (Iniciativa: ${combatant.initiative}, PV: ${combatant.hp}/${combatant.hpMax})` : `Combatant loaded: ${combatant.name} (Initiative: ${combatant.initiative}, HP: ${combatant.hp}/${combatant.hpMax})`);
-        }
-        this.render();
-        if (this.combatants.length > 0)
-          this.triggerLogSetup();
-      }).open();
-      return;
-    }
-    const loaded = await Promise.all(files.map((file) => this.fileToCombatant(file)));
-    for (const combatant of loaded) {
-      if (!this.combatants.find((entry) => entry.id === combatant.id)) {
-        this.combatants.push(combatant);
-      }
-    }
-    this.ensureActiveCombatant();
-    for (const combatant of loaded) {
-      await this.writeToLog(lang === "es" ? `Combatiente cargado: ${combatant.name} (Iniciativa: ${combatant.initiative}, PV: ${combatant.hp}/${combatant.hpMax})` : `Combatant loaded: ${combatant.name} (Initiative: ${combatant.initiative}, HP: ${combatant.hp}/${combatant.hpMax})`);
-    }
-    this.render();
-    if (this.combatants.length > 0)
-      this.triggerLogSetup();
-  }
-  render() {
-    const container = this.containerEl.children[1];
-    container.empty();
-    container.addClass("bt-panel");
-    const lang = this.plugin.settings.language;
-    const t = LOCALIZATION[lang];
-    const conditionEntries = this.plugin.settings.conditions;
-    const alive = this.aliveSorted();
-    const allSorted = this.sorted();
-    this.ensureActiveCombatant();
-    const activeIndex = this.getCurrentTurnIndex(alive);
-    const topBar = container.createDiv("bt-topbar");
-    topBar.createDiv("bt-round-badge", (el) => el.setText(`${t.round} ${this.round}`));
-    const topActions = topBar.createDiv("bt-top-actions");
-    const nextBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-primary" });
-    nextBtn.innerHTML = t.nextTurn;
-    nextBtn.onclick = () => void this.nextTurn();
-    const loadBtn = topActions.createEl("button", { cls: "bt-btn" });
-    loadBtn.innerHTML = t.load;
-    loadBtn.onclick = () => void this.loadFromVault();
-    if (this.plugin.settings.logEnabled) {
-      const logBtn = topActions.createEl("button", {
-        cls: `bt-btn${this.activeLogFile ? " bt-btn-primary" : ""}`,
-        title: t.logSelectLogFileButton
-      });
-      logBtn.innerHTML = `\u{1F4DD} ${this.activeLogFile ? lang === "es" ? "Registrando" : "Logging" : lang === "es" ? "Registro" : "Log"}`;
-      logBtn.onclick = () => this.triggerLogSetup();
-    }
-    const resetBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-danger-soft" });
-    resetBtn.innerHTML = t.reset;
-    resetBtn.onclick = () => {
-      if (confirm(t.resetConfirm))
-        this.resetBattle();
-    };
-    if (alive.length) {
-      const strip = container.createDiv("bt-init-strip");
-      alive.forEach((combatant, index) => {
-        const chip = strip.createDiv(`bt-init-chip${index === activeIndex ? " active" : ""}`);
-        chip.setText(`${combatant.name} (${combatant.initiative})`);
-      });
-    }
-    if (!this.combatants.length) {
-      const empty = container.createDiv("bt-empty");
-      empty.createEl("p", { text: t.emptyState });
-      return;
-    }
-    allSorted.forEach((combatant) => {
-      const isActive = combatant.alive && combatant.id === this.activeCombatantId;
-      const ratio = combatant.hpMax > 0 ? combatant.hp / combatant.hpMax : 0;
-      const card = container.createDiv(`bt-card${isActive ? " bt-card-active" : ""}${!combatant.alive ? " bt-card-dead" : ""}`);
-      const header = card.createDiv("bt-card-header");
-      const avatar = header.createDiv(`bt-avatar bt-avatar-${combatant.combatType === "PC" ? "pc" : combatant.combatType === "Enemy" ? "enemy" : "npc"}`);
-      avatar.setText(combatant.name.slice(0, 2).toUpperCase());
-      const nameWrap = header.createDiv("bt-name-wrap");
-      const nameEl = nameWrap.createEl("span", { cls: "bt-name", text: combatant.name });
-      nameEl.style.cursor = "pointer";
-      nameEl.title = lang === "es" ? "Abrir nota" : "Open note";
-      nameEl.onclick = () => void this.app.workspace.getLeaf(true).openFile(combatant.file);
-      const metaRow = nameWrap.createDiv("bt-sub bt-init-edit-row");
-      if (this.editingInitiativeId === combatant.id) {
-        const initInput = metaRow.createEl("input", {
-          cls: "bt-init-edit-input",
-          type: "number"
-        });
-        initInput.value = String(combatant.initiative);
-        const commit = () => void this.setInitiative(combatant.id, parseInt(initInput.value) || 0);
-        initInput.onblur = commit;
-        initInput.onkeydown = (evt) => {
-          if (evt.key === "Enter")
-            commit();
-          if (evt.key === "Escape") {
-            this.editingInitiativeId = null;
-            this.render();
-          }
-        };
-        setTimeout(() => {
-          initInput.focus();
-          initInput.select();
-        }, 0);
-      } else {
-        const initText = metaRow.createEl("span", { text: `${t.init} ${combatant.initiative} \xB7 ${t.ac} ${combatant.ac}` });
-        initText.ondblclick = () => {
-          this.editingInitiativeId = combatant.id;
-          this.render();
-        };
-        if (combatant.shield > 0) {
-          metaRow.createEl("span", { cls: "bt-sub-shield", text: `${t.shield} ${combatant.shield}` });
-        }
-      }
-      const badge = header.createDiv(`bt-badge bt-badge-${combatant.combatType === "PC" ? "pc" : combatant.combatType === "Enemy" ? "enemy" : "npc"}`);
-      badge.setText(combatant.combatType);
-      const initEditBtn = header.createEl("button", { cls: "bt-btn-icon", title: t.editInitiative });
-      initEditBtn.setText("\u270E");
-      initEditBtn.onclick = () => {
-        this.editingInitiativeId = combatant.id;
-        this.render();
-      };
-      const removeBtn = header.createEl("button", { cls: "bt-btn-icon", title: t.removeTitle });
-      removeBtn.setText("\u2715");
-      removeBtn.onclick = () => void this.removeCombatant(combatant.id);
-      if (combatant.conditions.length) {
-        const condRow = card.createDiv("bt-cond-row");
-        combatant.conditions.forEach((condition) => {
-          const tag = condRow.createDiv("bt-cond-tag");
-          tag.setText(`${this.formatConditionLabel(condition)} \xD7`);
-          const entry = conditionEntries.find((item) => item.name === condition.name);
-          if (entry == null ? void 0 : entry.color) {
-            tag.style.color = entry.color;
-            tag.style.borderColor = entry.color;
-            tag.style.backgroundColor = entry.color + "22";
-          }
-        });
-      }
-      const hpWrap = card.createDiv("bt-hp-wrap");
-      const hpLabelRow = hpWrap.createDiv("bt-hp-label-row");
-      hpLabelRow.createEl("span", { text: t.hp, cls: "bt-label" });
-      hpLabelRow.createEl("span", { cls: "bt-hp-text", text: `${combatant.hp} / ${combatant.hpMax}` });
-      const bar = hpWrap.createDiv("bt-bar");
-      const fill = bar.createDiv("bt-bar-fill");
-      fill.style.width = `${Math.max(0, ratio * 100)}%`;
-      fill.className = `bt-bar-fill ${ratio > 0.6 ? "bt-hp-ok" : ratio > 0.3 ? "bt-hp-mid" : "bt-hp-low"}`;
-      const extraNames = Object.keys(combatant.extraFields);
-      if (extraNames.length) {
-        const extraRow = card.createDiv("bt-extra-row");
-        extraNames.forEach((key) => {
-          const box = extraRow.createDiv("bt-extra-box");
-          box.createEl("span", { cls: "bt-label", text: key.toUpperCase() });
-          const valRow = box.createDiv("bt-extra-val-row");
-          const minusBtn = valRow.createEl("button", { cls: "bt-btn-mini", text: "\u2212" });
-          minusBtn.onclick = () => void this.modExtra(combatant.id, key, -1);
-          valRow.createEl("span", { cls: "bt-extra-val", text: String(combatant.extraFields[key]) });
-          const plusBtn = valRow.createEl("button", { cls: "bt-btn-mini", text: "+" });
-          plusBtn.onclick = () => void this.modExtra(combatant.id, key, 1);
-        });
-      }
-      if (combatant.notes) {
-        card.createEl("p", { cls: "bt-notes", text: combatant.notes });
-      }
-      const actions = card.createDiv("bt-actions");
-      const dmgBtn = actions.createEl("button", { cls: "bt-btn bt-btn-danger-soft" });
-      dmgBtn.setText(t.damageHeal);
-      dmgBtn.onclick = () => new DmgModal(this.app, combatant.name, this.plugin, combatant.shield > 0, (value, heal, useShield) => {
-        void this.applyDmg(combatant.id, value, heal, useShield);
-      }).open();
-      const condBtn = actions.createEl("button", { cls: "bt-btn" });
-      condBtn.setText(t.status);
-      condBtn.onclick = () => new ConditionModal(this.app, conditionEntries, combatant.conditions, this.plugin, (updated) => {
-        void this.updateConditions(combatant.id, updated);
-      }).open();
-      const noteBtn = actions.createEl("button", { cls: "bt-btn" });
-      noteBtn.setText(t.note);
-      noteBtn.onclick = () => new NoteModal(this.app, combatant.notes, this.plugin, (text) => {
-        combatant.notes = text;
-        void this.writeToLog(lang === "es" ? `${combatant.name} - Nota: ${text || "vaciada"}` : `${combatant.name} - Note: ${text || "cleared"}`);
-        this.render();
-      }).open();
-      if (isActive && alive.length > 1) {
-        const actionBtn = actions.createEl("button", { cls: "bt-btn bt-btn-primary" });
-        actionBtn.setText(t.action);
-        actionBtn.onclick = () => new ActionModal(
-          this.app,
-          combatant,
-          alive.filter((entry) => entry.id !== combatant.id),
-          conditionEntries,
-          this.plugin,
-          (payload) => void this.applyAction(combatant.id, payload)
-        ).open();
-      }
-      if (combatant.alive) {
-        const defeatBtn = actions.createEl("button", { cls: "bt-btn bt-btn-ghost" });
-        defeatBtn.setText(t.defeat);
-        defeatBtn.onclick = async () => {
-          combatant.alive = false;
-          combatant.hp = 0;
-          await this.syncCombatantToNote(combatant);
-          await this.writeToLog(lang === "es" ? `${combatant.name} ha sido derrotado` : `${combatant.name} has been defeated`);
-          this.ensureActiveCombatant();
-          this.render();
-        };
-      } else {
-        const reviveBtn = actions.createEl("button", { cls: "bt-btn" });
-        reviveBtn.setText(t.revive);
-        reviveBtn.onclick = async () => {
-          combatant.alive = true;
-          combatant.hp = Math.max(1, combatant.hp);
-          await this.syncCombatantToNote(combatant);
-          await this.writeToLog(lang === "es" ? `${combatant.name} ha resucitado` : `${combatant.name} has been revived`);
-          this.ensureActiveCombatant();
-          this.render();
-        };
-      }
-    });
-  }
-  async onClose() {
-    await Promise.resolve();
-  }
-};
-
-// src/settings.ts
 var DEFAULT_CONDITIONS_ES = [
   { name: "Aturdido", color: "#f59e0b" },
   { name: "Envenenado", color: "#22c55e" },
@@ -1362,6 +766,9 @@ var DEFAULT_SETTINGS = {
     hp: "hp",
     hp_max: "hp_max",
     shield: "shield",
+    xp: "xp",
+    avatar: "avatar",
+    icon: "icon",
     ac: "ac",
     type: "type",
     extra_fields: "mp,stamina",
@@ -1372,13 +779,21 @@ var DEFAULT_SETTINGS = {
   realtimeSync: false,
   realtimeSyncMode: "pc",
   shieldAbsorbsDamage: true,
+  turnTimerEnabled: false,
+  turnTimerSeconds: 60,
+  playerViewShowHp: false,
+  boardGridEnabled: true,
+  boardSnapToGrid: false,
+  boardGridSize: 64,
+  boardDefaultBackground: "",
+  savedBoardLayouts: [],
   logEnabled: true,
   logMode: "ask",
   logHeader: "## Registro de Combate",
   logFileName: "Registro de Combate {date}",
   logFolder: ""
 };
-var BattleTrackerSettingTab = class extends import_obsidian3.PluginSettingTab {
+var BattleTrackerSettingTab = class extends import_obsidian.PluginSettingTab {
   constructor(app, plugin) {
     super(app, plugin);
     this.plugin = plugin;
@@ -1389,7 +804,7 @@ var BattleTrackerSettingTab = class extends import_obsidian3.PluginSettingTab {
     const lang = this.plugin.settings.language;
     const t = LOCALIZATION[lang];
     containerEl.createEl("h2", { text: t.settingsTitle });
-    new import_obsidian3.Setting(containerEl).setName(t.settingsLanguageName).setDesc(t.settingsLanguageDesc).addDropdown(
+    new import_obsidian.Setting(containerEl).setName(t.settingsLanguageName).setDesc(t.settingsLanguageDesc).addDropdown(
       (dropdown) => dropdown.addOption("es", "Espa\xF1ol").addOption("en", "English").setValue(this.plugin.settings.language).onChange(async (value) => {
         const oldLang = this.plugin.settings.language;
         if (oldLang === value)
@@ -1413,51 +828,58 @@ var BattleTrackerSettingTab = class extends import_obsidian3.PluginSettingTab {
         this.plugin.settings.language = value;
         await this.plugin.saveSettings();
         this.display();
-        const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE);
-        leaves.forEach((leaf) => {
-          if (leaf.view instanceof BattleTrackerView) {
-            leaf.view.render();
-          }
-        });
+        this.plugin.refreshViews();
       })
     );
     containerEl.createEl("h3", { text: t.settingsFieldsTitle });
     containerEl.createEl("p", { text: t.settingsFieldsDesc, cls: "setting-item-description" });
     const f = this.plugin.settings.fields;
-    new import_obsidian3.Setting(containerEl).setName(t.settingsInitName).setDesc(t.settingsInitDesc).addText((text) => text.setValue(f.initiative).onChange(async (v) => {
+    new import_obsidian.Setting(containerEl).setName(t.settingsInitName).setDesc(t.settingsInitDesc).addText((text) => text.setValue(f.initiative).onChange(async (v) => {
       f.initiative = v;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian3.Setting(containerEl).setName(t.settingsHpName).setDesc(t.settingsHpDesc).addText((text) => text.setValue(f.hp).onChange(async (v) => {
+    new import_obsidian.Setting(containerEl).setName(t.settingsHpName).setDesc(t.settingsHpDesc).addText((text) => text.setValue(f.hp).onChange(async (v) => {
       f.hp = v;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian3.Setting(containerEl).setName(t.settingsHpMaxName).setDesc(t.settingsHpMaxDesc).addText((text) => text.setValue(f.hp_max).onChange(async (v) => {
+    new import_obsidian.Setting(containerEl).setName(t.settingsHpMaxName).setDesc(t.settingsHpMaxDesc).addText((text) => text.setValue(f.hp_max).onChange(async (v) => {
       f.hp_max = v;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian3.Setting(containerEl).setName(t.settingsShieldName).setDesc(t.settingsShieldDesc).addText((text) => text.setValue(f.shield).onChange(async (v) => {
+    new import_obsidian.Setting(containerEl).setName(t.settingsShieldName).setDesc(t.settingsShieldDesc).addText((text) => text.setValue(f.shield).onChange(async (v) => {
       f.shield = v;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian3.Setting(containerEl).setName(t.settingsAcName).setDesc(t.settingsAcDesc).addText((text) => text.setValue(f.ac).onChange(async (v) => {
+    new import_obsidian.Setting(containerEl).setName(t.settingsXpName).setDesc(t.settingsXpDesc).addText((text) => text.setValue(f.xp).onChange(async (v) => {
+      f.xp = v;
+      await this.plugin.saveSettings();
+    }));
+    new import_obsidian.Setting(containerEl).setName(t.settingsAvatarName).setDesc(t.settingsAvatarDesc).addText((text) => text.setValue(f.avatar).onChange(async (v) => {
+      f.avatar = v;
+      await this.plugin.saveSettings();
+    }));
+    new import_obsidian.Setting(containerEl).setName(t.settingsIconName).setDesc(t.settingsIconDesc).addText((text) => text.setValue(f.icon).onChange(async (v) => {
+      f.icon = v;
+      await this.plugin.saveSettings();
+    }));
+    new import_obsidian.Setting(containerEl).setName(t.settingsAcName).setDesc(t.settingsAcDesc).addText((text) => text.setValue(f.ac).onChange(async (v) => {
       f.ac = v;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian3.Setting(containerEl).setName(t.settingsTypeName).setDesc(t.settingsTypeDesc).addText((text) => text.setValue(f.type).onChange(async (v) => {
+    new import_obsidian.Setting(containerEl).setName(t.settingsTypeName).setDesc(t.settingsTypeDesc).addText((text) => text.setValue(f.type).onChange(async (v) => {
       f.type = v;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian3.Setting(containerEl).setName(t.settingsExtraName).setDesc(t.settingsExtraDesc).addText((text) => text.setValue(f.extra_fields).onChange(async (v) => {
+    new import_obsidian.Setting(containerEl).setName(t.settingsExtraName).setDesc(t.settingsExtraDesc).addText((text) => text.setValue(f.extra_fields).onChange(async (v) => {
       f.extra_fields = v;
       await this.plugin.saveSettings();
     }));
-    new import_obsidian3.Setting(containerEl).setName(t.settingsConditionsFieldName).setDesc(t.settingsConditionsFieldDesc).addText((text) => text.setValue(f.conditions).onChange(async (v) => {
+    new import_obsidian.Setting(containerEl).setName(t.settingsConditionsFieldName).setDesc(t.settingsConditionsFieldDesc).addText((text) => text.setValue(f.conditions).onChange(async (v) => {
       f.conditions = v;
       await this.plugin.saveSettings();
     }));
     containerEl.createEl("h3", { text: t.settingsRealtimeTitle });
-    new import_obsidian3.Setting(containerEl).setName(t.settingsRealtimeSyncName).setDesc(t.settingsRealtimeSyncDesc).addToggle(
+    new import_obsidian.Setting(containerEl).setName(t.settingsRealtimeSyncName).setDesc(t.settingsRealtimeSyncDesc).addToggle(
       (toggle) => toggle.setValue(this.plugin.settings.realtimeSync).onChange(async (v) => {
         this.plugin.settings.realtimeSync = v;
         await this.plugin.saveSettings();
@@ -1465,17 +887,72 @@ var BattleTrackerSettingTab = class extends import_obsidian3.PluginSettingTab {
       })
     );
     if (this.plugin.settings.realtimeSync) {
-      new import_obsidian3.Setting(containerEl).setName(t.settingsRealtimeModeName).setDesc(t.settingsRealtimeModeDesc).addDropdown(
+      new import_obsidian.Setting(containerEl).setName(t.settingsRealtimeModeName).setDesc(t.settingsRealtimeModeDesc).addDropdown(
         (dropdown) => dropdown.addOption("pc", t.settingsRealtimeModePc).addOption("all", t.settingsRealtimeModeAll).setValue(this.plugin.settings.realtimeSyncMode).onChange(async (value) => {
           this.plugin.settings.realtimeSyncMode = value;
           await this.plugin.saveSettings();
         })
       );
     }
-    new import_obsidian3.Setting(containerEl).setName(t.settingsShieldAbsorbName).setDesc(t.settingsShieldAbsorbDesc).addToggle(
+    new import_obsidian.Setting(containerEl).setName(t.settingsShieldAbsorbName).setDesc(t.settingsShieldAbsorbDesc).addToggle(
       (toggle) => toggle.setValue(this.plugin.settings.shieldAbsorbsDamage).onChange(async (v) => {
         this.plugin.settings.shieldAbsorbsDamage = v;
         await this.plugin.saveSettings();
+      })
+    );
+    containerEl.createEl("h3", { text: t.settingsTimerTitle });
+    new import_obsidian.Setting(containerEl).setName(t.settingsTimerEnabledName).setDesc(t.settingsTimerEnabledDesc).addToggle(
+      (toggle) => toggle.setValue(this.plugin.settings.turnTimerEnabled).onChange(async (v) => {
+        this.plugin.settings.turnTimerEnabled = v;
+        await this.plugin.saveSettings();
+        this.display();
+        this.refreshView();
+      })
+    );
+    if (this.plugin.settings.turnTimerEnabled) {
+      new import_obsidian.Setting(containerEl).setName(t.settingsTimerSecondsName).setDesc(t.settingsTimerSecondsDesc).addText(
+        (text) => text.setPlaceholder("60").setValue(String(this.plugin.settings.turnTimerSeconds)).onChange(async (v) => {
+          const seconds = Math.max(5, Number(v) || 60);
+          this.plugin.settings.turnTimerSeconds = seconds;
+          await this.plugin.saveSettings();
+          this.refreshView();
+        })
+      );
+    }
+    new import_obsidian.Setting(containerEl).setName(t.settingsPlayerHpName).setDesc(t.settingsPlayerHpDesc).addToggle(
+      (toggle) => toggle.setValue(this.plugin.settings.playerViewShowHp).onChange(async (v) => {
+        this.plugin.settings.playerViewShowHp = v;
+        await this.plugin.saveSettings();
+        this.refreshView();
+      })
+    );
+    containerEl.createEl("h3", { text: t.settingsBoardTitle });
+    new import_obsidian.Setting(containerEl).setName(t.settingsBoardGridName).setDesc(t.settingsBoardGridDesc).addToggle(
+      (toggle) => toggle.setValue(this.plugin.settings.boardGridEnabled).onChange(async (v) => {
+        this.plugin.settings.boardGridEnabled = v;
+        await this.plugin.saveSettings();
+        this.refreshView();
+      })
+    );
+    new import_obsidian.Setting(containerEl).setName(t.settingsBoardSnapName).setDesc(t.settingsBoardSnapDesc).addToggle(
+      (toggle) => toggle.setValue(this.plugin.settings.boardSnapToGrid).onChange(async (v) => {
+        this.plugin.settings.boardSnapToGrid = v;
+        await this.plugin.saveSettings();
+        this.refreshView();
+      })
+    );
+    new import_obsidian.Setting(containerEl).setName(t.settingsBoardGridSizeName).setDesc(t.settingsBoardGridSizeDesc).addText(
+      (text) => text.setPlaceholder("64").setValue(String(this.plugin.settings.boardGridSize)).onChange(async (v) => {
+        this.plugin.settings.boardGridSize = Math.max(24, Number(v) || 64);
+        await this.plugin.saveSettings();
+        this.refreshView();
+      })
+    );
+    new import_obsidian.Setting(containerEl).setName(t.settingsBoardBackgroundName).setDesc(t.settingsBoardBackgroundDesc).addText(
+      (text) => text.setPlaceholder("https://... o Assets/mapa.png").setValue(this.plugin.settings.boardDefaultBackground).onChange(async (v) => {
+        this.plugin.settings.boardDefaultBackground = v.trim();
+        await this.plugin.saveSettings();
+        this.refreshView();
       })
     );
     containerEl.createEl("h3", { text: t.settingsCondTitle });
@@ -1483,14 +960,14 @@ var BattleTrackerSettingTab = class extends import_obsidian3.PluginSettingTab {
     const condListEl = containerEl.createDiv("bt-settings-cond-list");
     this.renderConditionRows(condListEl, t);
     containerEl.createEl("h3", { text: t.settingsFolderTitle });
-    new import_obsidian3.Setting(containerEl).setName(t.settingsFolderFieldName).setDesc(t.settingsFolderFieldDesc).addText(
+    new import_obsidian.Setting(containerEl).setName(t.settingsFolderFieldName).setDesc(t.settingsFolderFieldDesc).addText(
       (text) => text.setPlaceholder("Campa\xF1a/Criaturas").setValue(this.plugin.settings.combatantFolder).onChange(async (v) => {
         this.plugin.settings.combatantFolder = v;
         await this.plugin.saveSettings();
       })
     );
     containerEl.createEl("h3", { text: t.logTitle });
-    new import_obsidian3.Setting(containerEl).setName(t.logEnabledName).setDesc(t.logEnabledDesc).addToggle(
+    new import_obsidian.Setting(containerEl).setName(t.logEnabledName).setDesc(t.logEnabledDesc).addToggle(
       (toggle) => toggle.setValue(this.plugin.settings.logEnabled).onChange(async (v) => {
         this.plugin.settings.logEnabled = v;
         await this.plugin.saveSettings();
@@ -1498,19 +975,19 @@ var BattleTrackerSettingTab = class extends import_obsidian3.PluginSettingTab {
       })
     );
     if (this.plugin.settings.logEnabled) {
-      new import_obsidian3.Setting(containerEl).setName(t.logHeaderName).setDesc(t.logHeaderDesc).addText(
+      new import_obsidian.Setting(containerEl).setName(t.logHeaderName).setDesc(t.logHeaderDesc).addText(
         (text) => text.setPlaceholder(t.logHeaderPlaceholder).setValue(this.plugin.settings.logHeader).onChange(async (v) => {
           this.plugin.settings.logHeader = v;
           await this.plugin.saveSettings();
         })
       );
-      new import_obsidian3.Setting(containerEl).setName(t.logFileNameName).setDesc(t.logFileNameDesc).addText(
+      new import_obsidian.Setting(containerEl).setName(t.logFileNameName).setDesc(t.logFileNameDesc).addText(
         (text) => text.setValue(this.plugin.settings.logFileName).onChange(async (v) => {
           this.plugin.settings.logFileName = v;
           await this.plugin.saveSettings();
         })
       );
-      new import_obsidian3.Setting(containerEl).setName(lang === "es" ? "Carpeta de notas de registro" : "Folder for log notes").setDesc(lang === "es" ? "Ruta de la carpeta donde se crear\xE1n las nuevas notas de registro (ej. Logs). D\xE9jalo vac\xEDo para el directorio ra\xEDz." : "Path of the folder where new log notes will be created (e.g. Logs). Leave empty for root.").addText(
+      new import_obsidian.Setting(containerEl).setName(lang === "es" ? "Carpeta de notas de registro" : "Folder for log notes").setDesc(lang === "es" ? "Ruta de la carpeta donde se crear\xE1n las nuevas notas de registro (ej. Logs). D\xE9jalo vac\xEDo para el directorio ra\xEDz." : "Path of the folder where new log notes will be created (e.g. Logs). Leave empty for root.").addText(
         (text) => text.setPlaceholder("Logs").setValue(this.plugin.settings.logFolder).onChange(async (v) => {
           this.plugin.settings.logFolder = v;
           await this.plugin.saveSettings();
@@ -1582,34 +1059,1408 @@ var BattleTrackerSettingTab = class extends import_obsidian3.PluginSettingTab {
     el.style.backgroundColor = color ? color + "22" : "transparent";
   }
   refreshView() {
-    const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE);
-    leaves.forEach((leaf) => {
-      if (leaf.view instanceof BattleTrackerView) {
-        leaf.view.render();
+    this.plugin.refreshViews();
+  }
+};
+
+// src/view.ts
+var import_obsidian3 = require("obsidian");
+init_localization();
+init_modals();
+var VIEW_TYPE = "combat-ledger-view";
+var PLAYER_VIEW_TYPE = "combat-ledger-player-view";
+var BattleTrackerView = class extends import_obsidian3.ItemView {
+  constructor(leaf, plugin, mode) {
+    super(leaf);
+    this.turnTimerInterval = null;
+    this.lastTimerExpiredFor = null;
+    this.plugin = plugin;
+    this.mode = mode;
+  }
+  getViewType() {
+    return this.mode === "player" ? PLAYER_VIEW_TYPE : VIEW_TYPE;
+  }
+  getDisplayText() {
+    return this.mode === "player" ? "Combat Ledger Player" : "Combat Ledger";
+  }
+  getIcon() {
+    return this.mode === "player" ? "monitor-up" : "sword";
+  }
+  get combatants() {
+    return this.plugin.session.combatants;
+  }
+  set combatants(value) {
+    this.plugin.session.combatants = value;
+  }
+  get round() {
+    return this.plugin.session.round;
+  }
+  set round(value) {
+    this.plugin.session.round = value;
+  }
+  get activeCombatantId() {
+    return this.plugin.session.activeCombatantId;
+  }
+  set activeCombatantId(value) {
+    this.plugin.session.activeCombatantId = value;
+  }
+  get editingInitiativeId() {
+    return this.plugin.session.editingInitiativeId;
+  }
+  set editingInitiativeId(value) {
+    this.plugin.session.editingInitiativeId = value;
+  }
+  get graveyardExpanded() {
+    return this.plugin.session.graveyardExpanded;
+  }
+  set graveyardExpanded(value) {
+    this.plugin.session.graveyardExpanded = value;
+  }
+  get graveyardAssignedXp() {
+    return this.plugin.session.graveyardAssignedXp;
+  }
+  set graveyardAssignedXp(value) {
+    this.plugin.session.graveyardAssignedXp = value;
+  }
+  get graveyardXpDraft() {
+    return this.plugin.session.graveyardXpDraft;
+  }
+  set graveyardXpDraft(value) {
+    this.plugin.session.graveyardXpDraft = value;
+  }
+  get turnTimerStartedAt() {
+    return this.plugin.session.turnTimerStartedAt;
+  }
+  set turnTimerStartedAt(value) {
+    this.plugin.session.turnTimerStartedAt = value;
+  }
+  get turnTimerCombatantId() {
+    return this.plugin.session.turnTimerCombatantId;
+  }
+  set turnTimerCombatantId(value) {
+    this.plugin.session.turnTimerCombatantId = value;
+  }
+  get boardBackground() {
+    return this.plugin.session.boardBackground;
+  }
+  set boardBackground(value) {
+    this.plugin.session.boardBackground = value;
+  }
+  get boardGridEnabled() {
+    return this.plugin.session.boardGridEnabled;
+  }
+  set boardGridEnabled(value) {
+    this.plugin.session.boardGridEnabled = value;
+  }
+  get boardSnapToGrid() {
+    return this.plugin.session.boardSnapToGrid;
+  }
+  set boardSnapToGrid(value) {
+    this.plugin.session.boardSnapToGrid = value;
+  }
+  get boardGridSize() {
+    return this.plugin.session.boardGridSize;
+  }
+  set boardGridSize(value) {
+    this.plugin.session.boardGridSize = value;
+  }
+  get tokenStates() {
+    return this.plugin.session.tokenStates;
+  }
+  set tokenStates(value) {
+    this.plugin.session.tokenStates = value;
+  }
+  get selectedTokenIds() {
+    return this.plugin.session.selectedTokenIds;
+  }
+  set selectedTokenIds(value) {
+    this.plugin.session.selectedTokenIds = value;
+  }
+  get activeLogFile() {
+    return this.plugin.session.activeLogFile;
+  }
+  set activeLogFile(value) {
+    this.plugin.session.activeLogFile = value;
+  }
+  get logDismissed() {
+    return this.plugin.session.logDismissed;
+  }
+  set logDismissed(value) {
+    this.plugin.session.logDismissed = value;
+  }
+  get logQueue() {
+    return this.plugin.session.logQueue;
+  }
+  set logQueue(value) {
+    this.plugin.session.logQueue = value;
+  }
+  get logSetupInProgress() {
+    return this.plugin.session.logSetupInProgress;
+  }
+  set logSetupInProgress(value) {
+    this.plugin.session.logSetupInProgress = value;
+  }
+  get alerts() {
+    return this.plugin.session.alerts;
+  }
+  set alerts(value) {
+    this.plugin.session.alerts = value;
+  }
+  async onOpen() {
+    this.render();
+  }
+  refresh() {
+    this.plugin.scheduleSessionSave();
+    this.plugin.refreshViews();
+  }
+  pushAlert(type, message) {
+    const now = Date.now();
+    this.alerts = [
+      ...this.alerts.filter((alert) => now - alert.createdAt < 8e3),
+      { id: `${type}-${now}-${Math.random().toString(36).slice(2, 8)}`, type, message, createdAt: now }
+    ];
+  }
+  getVisibleAlerts() {
+    const now = Date.now();
+    const visible = this.alerts.filter((alert) => now - alert.createdAt < 8e3);
+    if (visible.length !== this.alerts.length) {
+      this.alerts = visible;
+    }
+    return visible;
+  }
+  resolveAvatarSrc(combatant) {
+    var _a;
+    const value = (_a = combatant.avatar) == null ? void 0 : _a.trim();
+    if (!value)
+      return "";
+    if (/^(https?:)?\/\//.test(value))
+      return value;
+    const vaultFile = this.app.vault.getAbstractFileByPath(value);
+    if (vaultFile instanceof import_obsidian3.TFile) {
+      return this.app.vault.getResourcePath(vaultFile);
+    }
+    return value;
+  }
+  resolveBackgroundSrc(background) {
+    const value = background.trim();
+    if (!value)
+      return "";
+    if (/^(https?:)?\/\//.test(value))
+      return value;
+    const vaultFile = this.app.vault.getAbstractFileByPath(value);
+    if (vaultFile instanceof import_obsidian3.TFile) {
+      return this.app.vault.getResourcePath(vaultFile);
+    }
+    return value;
+  }
+  applyAvatar(avatarEl, combatant) {
+    const avatarSrc = this.resolveAvatarSrc(combatant);
+    avatarEl.empty();
+    if (avatarSrc) {
+      avatarEl.addClass("bt-avatar-image");
+      avatarEl.style.backgroundImage = `url("${avatarSrc}")`;
+      avatarEl.style.backgroundSize = "cover";
+      avatarEl.style.backgroundPosition = "center";
+      return;
+    }
+    avatarEl.removeClass("bt-avatar-image");
+    avatarEl.style.backgroundImage = "";
+    avatarEl.setText((combatant.icon || combatant.name.slice(0, 2)).toUpperCase());
+  }
+  async toggleFullscreen() {
+    var _a;
+    const target = (_a = this.containerEl.closest(".workspace-leaf-content")) != null ? _a : this.containerEl;
+    if (document.fullscreenElement) {
+      await document.exitFullscreen();
+      return;
+    }
+    if (target instanceof HTMLElement && target.requestFullscreen) {
+      await target.requestFullscreen();
+    }
+  }
+  ensureTokenState(combatant, index) {
+    if (this.tokenStates[combatant.id])
+      return this.tokenStates[combatant.id];
+    const columns = 4;
+    const spacing = this.boardGridSize || 64;
+    const tokenState = {
+      x: 40 + index % columns * (spacing + 20),
+      y: 40 + Math.floor(index / columns) * (spacing + 20),
+      hidden: false,
+      scale: 1
+    };
+    this.tokenStates = { ...this.tokenStates, [combatant.id]: tokenState };
+    return tokenState;
+  }
+  updateTokenState(id, patch) {
+    var _a;
+    const current = (_a = this.tokenStates[id]) != null ? _a : { x: 40, y: 40, hidden: false, scale: 1 };
+    this.tokenStates = {
+      ...this.tokenStates,
+      [id]: { ...current, ...patch }
+    };
+  }
+  centerTokens() {
+    const alive = this.aliveSorted();
+    alive.forEach((combatant, index) => {
+      const columns = Math.max(2, Math.ceil(Math.sqrt(alive.length || 1)));
+      const spacing = this.boardGridSize || 64;
+      this.updateTokenState(combatant.id, {
+        x: 40 + index % columns * (spacing + 24),
+        y: 40 + Math.floor(index / columns) * (spacing + 24)
+      });
+    });
+    this.refresh();
+  }
+  saveBoardLayout() {
+    const name = window.prompt(LOCALIZATION[this.plugin.settings.language].boardSavePrompt);
+    if (!(name == null ? void 0 : name.trim()))
+      return;
+    const layoutName = name.trim();
+    const layouts = this.plugin.settings.savedBoardLayouts.filter((layout) => layout.name !== layoutName);
+    layouts.push({
+      name: layoutName,
+      background: this.boardBackground,
+      gridEnabled: this.boardGridEnabled,
+      snapToGrid: this.boardSnapToGrid,
+      gridSize: this.boardGridSize,
+      tokenStates: this.tokenStates
+    });
+    this.plugin.settings.savedBoardLayouts = layouts;
+    void this.plugin.saveSettings();
+  }
+  loadBoardLayout() {
+    if (!this.plugin.settings.savedBoardLayouts.length) {
+      new import_obsidian3.Notice(LOCALIZATION[this.plugin.settings.language].boardNoLayouts);
+      return;
+    }
+    const name = window.prompt(LOCALIZATION[this.plugin.settings.language].boardLoadPrompt);
+    if (!(name == null ? void 0 : name.trim()))
+      return;
+    const layout = this.plugin.settings.savedBoardLayouts.find((entry) => entry.name === name.trim());
+    if (!layout)
+      return;
+    this.boardBackground = layout.background;
+    this.boardGridEnabled = layout.gridEnabled;
+    this.boardSnapToGrid = layout.snapToGrid;
+    this.boardGridSize = layout.gridSize;
+    this.tokenStates = { ...layout.tokenStates };
+    this.refresh();
+  }
+  clearBoardLayout() {
+    this.boardBackground = this.plugin.settings.boardDefaultBackground;
+    this.boardGridEnabled = this.plugin.settings.boardGridEnabled;
+    this.boardSnapToGrid = this.plugin.settings.boardSnapToGrid;
+    this.boardGridSize = this.plugin.settings.boardGridSize;
+    this.tokenStates = {};
+    this.selectedTokenIds = [];
+    this.centerTokens();
+  }
+  async writeToLog(actionText) {
+    if (!this.plugin.settings.logEnabled)
+      return;
+    if (this.logDismissed)
+      return;
+    if (!this.activeLogFile) {
+      this.logQueue.push(actionText);
+      if (!this.logSetupInProgress) {
+        this.triggerLogSetup();
+      }
+      return;
+    }
+    const lang = this.plugin.settings.language;
+    const now = new Date();
+    const timeStr = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`;
+    const prefix = `[${timeStr}] (${lang === "es" ? "Ronda" : "Round"} ${this.round})`;
+    const logLine = `- ${prefix} ${actionText}`;
+    try {
+      const file = this.activeLogFile;
+      const content = await this.app.vault.read(file);
+      const lines = content.split("\n");
+      const targetHeader = this.plugin.settings.logHeader.trim();
+      const headerRegex = /^(#+)\s+(.*)$/;
+      const targetMatch = targetHeader.match(headerRegex);
+      if (targetMatch) {
+        const targetLevel = targetMatch[1].length;
+        const targetName = targetMatch[2].trim().toLowerCase();
+        let headerIndex = -1;
+        for (let i = 0; i < lines.length; i++) {
+          const match = lines[i].match(headerRegex);
+          if (match && match[2].trim().toLowerCase() === targetName) {
+            headerIndex = i;
+            break;
+          }
+        }
+        if (headerIndex !== -1) {
+          let insertIndex = lines.length;
+          for (let i = headerIndex + 1; i < lines.length; i++) {
+            const match = lines[i].match(headerRegex);
+            if (!match)
+              continue;
+            const level = match[1].length;
+            if (level <= targetLevel) {
+              insertIndex = i;
+              break;
+            }
+          }
+          lines.splice(insertIndex, 0, logLine);
+          await this.app.vault.modify(file, lines.join("\n"));
+          return;
+        }
+      }
+      const newContent = content.trimEnd() + `
+
+${targetHeader}
+${logLine}
+`;
+      await this.app.vault.modify(file, newContent);
+    } catch (e) {
+      console.error("Error writing to combat log:", e);
+      new import_obsidian3.Notice(lang === "es" ? "Error al escribir en el registro de combate." : "Error writing to combat log.");
+    }
+  }
+  triggerLogSetup() {
+    if (this.activeLogFile || this.logDismissed || this.logSetupInProgress)
+      return;
+    this.logSetupInProgress = true;
+    const { LogSetupModal: LogSetupModal2 } = (init_modals(), __toCommonJS(modals_exports));
+    new LogSetupModal2(this.app, this.plugin, this, async (file) => {
+      this.logSetupInProgress = false;
+      if (file) {
+        this.activeLogFile = file;
+        this.logDismissed = false;
+        const lang = this.plugin.settings.language;
+        const startMsg = LOCALIZATION[lang].logStarted;
+        const currentQueue = [startMsg, ...this.logQueue];
+        this.logQueue = [];
+        for (const msg of currentQueue) {
+          await this.writeToLog(msg);
+        }
+      } else {
+        this.logDismissed = true;
+        this.logQueue = [];
+      }
+      this.refresh();
+    }).open();
+  }
+  async createNewLogFile() {
+    const folderPath = this.plugin.settings.logFolder.trim();
+    if (folderPath) {
+      const folderExists = this.app.vault.getAbstractFileByPath(folderPath);
+      if (!folderExists) {
+        await this.app.vault.createFolder(folderPath);
+      }
+    }
+    const now = new Date();
+    const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")} ${String(now.getHours()).padStart(2, "0")}-${String(now.getMinutes()).padStart(2, "0")}`;
+    let fileName = this.plugin.settings.logFileName.replace("{date}", dateStr);
+    if (!fileName.endsWith(".md"))
+      fileName += ".md";
+    const fullPath = folderPath ? `${folderPath}/${fileName}` : fileName;
+    let uniquePath = fullPath;
+    let counter = 1;
+    while (this.app.vault.getAbstractFileByPath(uniquePath)) {
+      uniquePath = fullPath.replace(/\.md$/, ` (${counter}).md`);
+      counter++;
+    }
+    const header = this.plugin.settings.logHeader;
+    return await this.app.vault.create(uniquePath, `# ${fileName.replace(/\.md$/, "")}
+
+${header}
+`);
+  }
+  parseConditionToken(token) {
+    if (typeof token === "string") {
+      const match = token.match(/^(.*?)(?:\s*\((\d+)\))?$/);
+      if (!match)
+        return null;
+      const name = match[1].trim();
+      if (!name)
+        return null;
+      const duration = match[2] ? Number(match[2]) : null;
+      return { name, duration: duration && duration > 0 ? duration : null };
+    }
+    if (token && typeof token === "object") {
+      const maybe = token;
+      if (typeof maybe.name !== "string" || !maybe.name.trim())
+        return null;
+      const durationValue = Number(maybe.duration);
+      return {
+        name: maybe.name.trim(),
+        duration: Number.isFinite(durationValue) && durationValue > 0 ? durationValue : null
+      };
+    }
+    return null;
+  }
+  parseStoredConditions(raw) {
+    if (Array.isArray(raw)) {
+      return raw.map((entry) => this.parseConditionToken(entry)).filter((entry) => Boolean(entry));
+    }
+    if (typeof raw === "string") {
+      return raw.split(",").map((entry) => this.parseConditionToken(entry.trim())).filter((entry) => Boolean(entry));
+    }
+    const single = this.parseConditionToken(raw);
+    return single ? [single] : [];
+  }
+  serializeConditions(conditions) {
+    return conditions.map((entry) => entry.duration ? `${entry.name} (${entry.duration})` : entry.name);
+  }
+  formatConditionLabel(condition) {
+    return condition.duration ? `${condition.name} \xB7 ${condition.duration}` : condition.name;
+  }
+  async fileToCombatant(file) {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l;
+    const f = this.plugin.settings.fields;
+    const meta = (_b = (_a = this.app.metadataCache.getFileCache(file)) == null ? void 0 : _a.frontmatter) != null ? _b : {};
+    const extraNames = f.extra_fields.split(",").map((s) => s.trim()).filter(Boolean);
+    const extraFields = {};
+    for (const key of extraNames) {
+      if (meta[key] !== void 0)
+        extraFields[key] = Number(meta[key]) || 0;
+    }
+    const hpMax = Number((_d = (_c = meta[f.hp_max]) != null ? _c : meta[f.hp]) != null ? _d : 10) || 10;
+    const hp = Number((_e = meta[f.hp]) != null ? _e : hpMax) || hpMax;
+    const shield = f.shield ? Number((_f = meta[f.shield]) != null ? _f : 0) || 0 : 0;
+    const xp = f.xp ? Number((_g = meta[f.xp]) != null ? _g : 0) || 0 : 0;
+    const avatar = f.avatar ? String((_h = meta[f.avatar]) != null ? _h : "") : "";
+    const icon = f.icon ? String((_i = meta[f.icon]) != null ? _i : "") : "";
+    const storedConditions = f.conditions ? this.parseStoredConditions(meta[f.conditions]) : [];
+    return {
+      id: file.path,
+      name: file.basename,
+      initiative: Number((_j = meta[f.initiative]) != null ? _j : 0) || 0,
+      hp,
+      hpMax,
+      shield,
+      xp,
+      avatar,
+      icon,
+      ac: Number((_k = meta[f.ac]) != null ? _k : 10) || 10,
+      combatType: String((_l = meta[f.type]) != null ? _l : "NPC"),
+      extraFields,
+      conditions: storedConditions,
+      notes: "",
+      alive: hp > 0,
+      file
+    };
+  }
+  shouldSyncCombatant(combatant) {
+    if (!this.plugin.settings.realtimeSync)
+      return false;
+    if (this.plugin.settings.realtimeSyncMode === "all")
+      return true;
+    return combatant.combatType === "PC";
+  }
+  async syncCombatantToNote(combatant) {
+    if (!this.shouldSyncCombatant(combatant))
+      return;
+    const fields = this.plugin.settings.fields;
+    try {
+      await this.app.fileManager.processFrontMatter(combatant.file, (frontmatter) => {
+        frontmatter[fields.hp] = combatant.hp;
+        if (fields.initiative)
+          frontmatter[fields.initiative] = combatant.initiative;
+        if (fields.shield)
+          frontmatter[fields.shield] = combatant.shield;
+        if (fields.xp)
+          frontmatter[fields.xp] = combatant.xp;
+        if (fields.conditions)
+          frontmatter[fields.conditions] = this.serializeConditions(combatant.conditions);
+        Object.entries(combatant.extraFields).forEach(([key, value]) => {
+          frontmatter[key] = value;
+        });
+      });
+    } catch (error) {
+      console.error("Failed to sync combatant note:", error);
+      new import_obsidian3.Notice(this.plugin.settings.language === "es" ? `No se pudo sincronizar ${combatant.name}.` : `Could not sync ${combatant.name}.`);
+    }
+  }
+  async syncXpToNote(combatant) {
+    const xpField = this.plugin.settings.fields.xp;
+    if (!xpField)
+      return;
+    try {
+      await this.app.fileManager.processFrontMatter(combatant.file, (frontmatter) => {
+        frontmatter[xpField] = combatant.xp;
+      });
+    } catch (error) {
+      console.error("Failed to sync combatant XP:", error);
+      new import_obsidian3.Notice(this.plugin.settings.language === "es" ? `No se pudo sincronizar la XP de ${combatant.name}.` : `Could not sync ${combatant.name}'s XP.`);
+    }
+  }
+  ensureActiveCombatant() {
+    const alive = this.aliveSorted();
+    if (!alive.length) {
+      this.activeCombatantId = null;
+      this.setupTurnTimer();
+      return;
+    }
+    if (!this.activeCombatantId || !alive.some((combatant) => combatant.id === this.activeCombatantId)) {
+      this.activeCombatantId = alive[0].id;
+      this.setupTurnTimer(true);
+      return;
+    }
+    this.setupTurnTimer();
+  }
+  sorted() {
+    return [...this.combatants].sort((a, b) => b.initiative - a.initiative || a.name.localeCompare(b.name));
+  }
+  aliveSorted() {
+    return this.sorted().filter((combatant) => combatant.alive);
+  }
+  deadSorted() {
+    return this.sorted().filter((combatant) => !combatant.alive);
+  }
+  pcCombatants() {
+    return this.combatants.filter((combatant) => combatant.combatType === "PC");
+  }
+  getDefeatedXpTotal() {
+    return this.deadSorted().reduce((sum, combatant) => sum + Math.max(0, combatant.xp || 0), 0);
+  }
+  getPendingGraveyardXp() {
+    return Math.max(0, this.getDefeatedXpTotal() - this.graveyardAssignedXp);
+  }
+  getTurnTimerState() {
+    if (!this.plugin.settings.turnTimerEnabled || !this.activeCombatantId)
+      return null;
+    const totalMs = Math.max(5, this.plugin.settings.turnTimerSeconds) * 1e3;
+    if (!this.turnTimerStartedAt) {
+      return {
+        totalMs,
+        remainingMs: totalMs,
+        expired: false,
+        progress: 1
+      };
+    }
+    const elapsed = Date.now() - this.turnTimerStartedAt;
+    const remainingMs = Math.max(0, totalMs - elapsed);
+    if (remainingMs <= 0 && this.activeCombatantId && this.lastTimerExpiredFor !== this.activeCombatantId) {
+      this.lastTimerExpiredFor = this.activeCombatantId;
+      this.pushAlert("timer", LOCALIZATION[this.plugin.settings.language].alertTimerExpired);
+    }
+    if (remainingMs > 0) {
+      this.lastTimerExpiredFor = null;
+    }
+    return {
+      totalMs,
+      remainingMs,
+      expired: remainingMs <= 0,
+      progress: totalMs > 0 ? remainingMs / totalMs : 0
+    };
+  }
+  getCurrentTurnIndex(alive = this.aliveSorted()) {
+    if (!alive.length || !this.activeCombatantId)
+      return 0;
+    const index = alive.findIndex((combatant) => combatant.id === this.activeCombatantId);
+    return index >= 0 ? index : 0;
+  }
+  getCombatant(id) {
+    return this.combatants.find((combatant) => combatant.id === id);
+  }
+  clearTurnTimer() {
+    if (this.turnTimerInterval !== null) {
+      window.clearInterval(this.turnTimerInterval);
+      this.turnTimerInterval = null;
+    }
+  }
+  setupTurnTimer(reset = false) {
+    if (!this.plugin.settings.turnTimerEnabled || !this.activeCombatantId) {
+      this.turnTimerCombatantId = null;
+      this.turnTimerStartedAt = 0;
+      this.clearTurnTimer();
+      return;
+    }
+    if (reset || this.turnTimerCombatantId !== this.activeCombatantId) {
+      this.turnTimerCombatantId = this.activeCombatantId;
+      this.turnTimerStartedAt = Date.now();
+      this.lastTimerExpiredFor = null;
+    }
+    if (this.turnTimerInterval === null) {
+      this.turnTimerInterval = window.setInterval(() => {
+        if (!this.plugin.settings.turnTimerEnabled || !this.activeCombatantId) {
+          this.clearTurnTimer();
+          return;
+        }
+        this.refresh();
+      }, 1e3);
+    }
+  }
+  async processConditionDurations(combatant) {
+    if (!combatant.conditions.length)
+      return;
+    const lang = this.plugin.settings.language;
+    const retained = [];
+    let changed = false;
+    for (const condition of combatant.conditions) {
+      if (condition.duration == null) {
+        retained.push(condition);
+        continue;
+      }
+      const nextDuration = condition.duration - 1;
+      changed = true;
+      if (nextDuration <= 0) {
+        this.pushAlert("condition", `${LOCALIZATION[lang].alertConditionExpired}: ${condition.name}`);
+        await this.writeToLog(lang === "es" ? `${combatant.name} pierde la condici\xF3n por expiraci\xF3n: ${condition.name}` : `${combatant.name} loses condition by expiration: ${condition.name}`);
+        continue;
+      }
+      retained.push({ ...condition, duration: nextDuration });
+    }
+    if (changed) {
+      combatant.conditions = retained;
+      await this.syncCombatantToNote(combatant);
+    }
+  }
+  async nextTurn() {
+    const alive = this.aliveSorted();
+    if (!alive.length)
+      return;
+    this.ensureActiveCombatant();
+    const currentIndex = this.getCurrentTurnIndex(alive);
+    const nextIndex = (currentIndex + 1) % alive.length;
+    if (nextIndex === 0)
+      this.round++;
+    this.activeCombatantId = alive[nextIndex].id;
+    this.setupTurnTimer(true);
+    const currentCombatant = alive[nextIndex];
+    await this.processConditionDurations(currentCombatant);
+    this.pushAlert("turn", `${LOCALIZATION[this.plugin.settings.language].alertTurnStart} ${currentCombatant.name}`);
+    await this.writeToLog(this.plugin.settings.language === "es" ? `Turno de ${currentCombatant.name}` : `Turn of ${currentCombatant.name}`);
+    this.refresh();
+  }
+  async markCombatantDefeated(combatant, message) {
+    combatant.alive = false;
+    combatant.hp = 0;
+    await this.syncCombatantToNote(combatant);
+    await this.writeToLog(message != null ? message : this.plugin.settings.language === "es" ? `${combatant.name} ha sido derrotado` : `${combatant.name} has been defeated`);
+    this.pushAlert("defeat", `${LOCALIZATION[this.plugin.settings.language].alertDefeated}: ${combatant.name}`);
+    this.graveyardXpDraft = String(this.getPendingGraveyardXp());
+    this.ensureActiveCombatant();
+  }
+  getGraveyardAwardAmount() {
+    const pending = this.getPendingGraveyardXp();
+    if (this.graveyardXpDraft == null || this.graveyardXpDraft.trim() === "")
+      return pending;
+    return Math.max(0, Number(this.graveyardXpDraft) || 0);
+  }
+  async awardXp(amount, recipients, split) {
+    const lang = this.plugin.settings.language;
+    const normalizedAmount = Math.max(0, Math.floor(amount));
+    if (!normalizedAmount) {
+      new import_obsidian3.Notice(lang === "es" ? "No hay XP para repartir." : "There is no XP to award.");
+      return;
+    }
+    if (!recipients.length) {
+      new import_obsidian3.Notice(lang === "es" ? "No hay PCs cargados para recibir XP." : "There are no loaded PCs to receive XP.");
+      return;
+    }
+    if (split) {
+      const baseAmount = Math.floor(normalizedAmount / recipients.length);
+      let remainder = normalizedAmount % recipients.length;
+      const awarded = [];
+      for (const recipient of recipients) {
+        const xpDelta = baseAmount + (remainder > 0 ? 1 : 0);
+        if (remainder > 0)
+          remainder--;
+        if (xpDelta <= 0)
+          continue;
+        recipient.xp += xpDelta;
+        await this.syncXpToNote(recipient);
+        await this.syncCombatantToNote(recipient);
+        awarded.push(`${recipient.name} +${xpDelta} XP`);
+      }
+      this.graveyardAssignedXp += normalizedAmount;
+      this.graveyardXpDraft = String(this.getPendingGraveyardXp());
+      await this.writeToLog(lang === "es" ? `XP repartida desde el cementerio: ${awarded.join(", ")}` : `XP awarded from the graveyard: ${awarded.join(", ")}`);
+    } else {
+      const recipient = recipients[0];
+      recipient.xp += normalizedAmount;
+      this.graveyardAssignedXp += normalizedAmount;
+      this.graveyardXpDraft = String(this.getPendingGraveyardXp());
+      await this.syncXpToNote(recipient);
+      await this.syncCombatantToNote(recipient);
+      await this.writeToLog(lang === "es" ? `${recipient.name} recibe ${normalizedAmount} XP desde el cementerio` : `${recipient.name} receives ${normalizedAmount} XP from the graveyard`);
+    }
+    this.refresh();
+  }
+  applyDamage(combatant, amount, heal, useShield) {
+    if (heal) {
+      const previous = combatant.hp;
+      combatant.hp = Math.min(combatant.hpMax, combatant.hp + amount);
+      if (combatant.hp > 0)
+        combatant.alive = true;
+      return {
+        finalDamage: 0,
+        absorbedByShield: 0,
+        defeated: false,
+        healed: combatant.hp - previous
+      };
+    }
+    let remaining = Math.max(0, amount);
+    let absorbedByShield = 0;
+    if (useShield && combatant.shield > 0) {
+      absorbedByShield = Math.min(combatant.shield, remaining);
+      combatant.shield -= absorbedByShield;
+      remaining -= absorbedByShield;
+    }
+    combatant.hp = Math.max(0, combatant.hp - remaining);
+    if (combatant.hp === 0)
+      combatant.alive = false;
+    return {
+      finalDamage: remaining,
+      absorbedByShield,
+      defeated: combatant.hp === 0,
+      healed: 0
+    };
+  }
+  async applyDmg(id, amount, heal, useShield) {
+    const combatant = this.getCombatant(id);
+    if (!combatant)
+      return;
+    const lang = this.plugin.settings.language;
+    const result = this.applyDamage(combatant, amount, heal, useShield);
+    if (heal) {
+      await this.writeToLog(lang === "es" ? `${combatant.name} se cura ${result.healed} PV (PV: ${combatant.hp}/${combatant.hpMax})` : `${combatant.name} heals ${result.healed} HP (HP: ${combatant.hp}/${combatant.hpMax})`);
+    } else {
+      const shieldText = result.absorbedByShield > 0 ? lang === "es" ? `, ${result.absorbedByShield} absorbidos por escudo` : `, ${result.absorbedByShield} absorbed by shield` : "";
+      await this.writeToLog(lang === "es" ? `${combatant.name} recibe ${result.finalDamage} de da\xF1o${shieldText} (PV: ${combatant.hp}/${combatant.hpMax})` : `${combatant.name} takes ${result.finalDamage} damage${shieldText} (HP: ${combatant.hp}/${combatant.hpMax})`);
+      if (result.defeated) {
+        await this.markCombatantDefeated(combatant);
+        this.refresh();
+        return;
+      }
+    }
+    await this.syncCombatantToNote(combatant);
+    this.ensureActiveCombatant();
+    this.refresh();
+  }
+  async setInitiative(id, initiative) {
+    const combatant = this.getCombatant(id);
+    if (!combatant)
+      return;
+    combatant.initiative = initiative;
+    this.editingInitiativeId = null;
+    await this.syncCombatantToNote(combatant);
+    await this.writeToLog(this.plugin.settings.language === "es" ? `${combatant.name} cambia su iniciativa a ${initiative}` : `${combatant.name} changes initiative to ${initiative}`);
+    this.ensureActiveCombatant();
+    this.refresh();
+  }
+  async updateConditions(id, updated) {
+    var _a, _b;
+    const combatant = this.getCombatant(id);
+    if (!combatant)
+      return;
+    const lang = this.plugin.settings.language;
+    const oldMap = new Map(combatant.conditions.map((condition) => [condition.name, condition.duration]));
+    const newMap = new Map(updated.map((condition) => [condition.name, condition.duration]));
+    combatant.conditions = updated;
+    for (const condition of updated) {
+      if (!oldMap.has(condition.name)) {
+        await this.writeToLog(lang === "es" ? `${combatant.name} obtiene la condici\xF3n: ${this.formatConditionLabel(condition)}` : `${combatant.name} gains condition: ${this.formatConditionLabel(condition)}`);
+      } else if (oldMap.get(condition.name) !== condition.duration) {
+        await this.writeToLog(lang === "es" ? `${combatant.name} actualiza la duraci\xF3n de ${condition.name} a ${(_a = condition.duration) != null ? _a : "\u221E"}` : `${combatant.name} updates ${condition.name} duration to ${(_b = condition.duration) != null ? _b : "\u221E"}`);
+      }
+    }
+    for (const [name] of oldMap.entries()) {
+      if (!newMap.has(name)) {
+        await this.writeToLog(lang === "es" ? `${combatant.name} pierde la condici\xF3n: ${name}` : `${combatant.name} loses condition: ${name}`);
+      }
+    }
+    await this.syncCombatantToNote(combatant);
+    this.refresh();
+  }
+  async modExtra(id, key, delta) {
+    var _a;
+    const combatant = this.getCombatant(id);
+    if (!combatant)
+      return;
+    combatant.extraFields[key] = Math.max(0, ((_a = combatant.extraFields[key]) != null ? _a : 0) + delta);
+    await this.syncCombatantToNote(combatant);
+    await this.writeToLog(this.plugin.settings.language === "es" ? `${combatant.name} - ${key.toUpperCase()} modificado a ${combatant.extraFields[key]}` : `${combatant.name} - ${key.toUpperCase()} modified to ${combatant.extraFields[key]}`);
+    this.refresh();
+  }
+  async removeCombatant(id) {
+    const combatant = this.getCombatant(id);
+    if (combatant) {
+      await this.writeToLog(this.plugin.settings.language === "es" ? `${combatant.name} retirado del combate` : `${combatant.name} removed from combat`);
+    }
+    this.combatants = this.combatants.filter((entry) => entry.id !== id);
+    if (this.activeCombatantId === id)
+      this.activeCombatantId = null;
+    this.ensureActiveCombatant();
+    this.refresh();
+  }
+  resetBattle() {
+    void this.writeToLog(LOCALIZATION[this.plugin.settings.language].logEnded);
+    this.combatants = [];
+    this.round = 1;
+    this.activeCombatantId = null;
+    this.activeLogFile = null;
+    this.logDismissed = false;
+    this.logQueue = [];
+    this.editingInitiativeId = null;
+    this.graveyardAssignedXp = 0;
+    this.graveyardXpDraft = null;
+    this.turnTimerStartedAt = 0;
+    this.turnTimerCombatantId = null;
+    this.boardBackground = this.plugin.settings.boardDefaultBackground;
+    this.boardGridEnabled = this.plugin.settings.boardGridEnabled;
+    this.boardSnapToGrid = this.plugin.settings.boardSnapToGrid;
+    this.boardGridSize = this.plugin.settings.boardGridSize;
+    this.tokenStates = {};
+    this.selectedTokenIds = [];
+    this.alerts = [];
+    this.clearTurnTimer();
+    this.refresh();
+  }
+  async applyAction(attackerId, payload) {
+    const attacker = this.getCombatant(attackerId);
+    const target = this.getCombatant(payload.targetId);
+    if (!attacker || !target)
+      return;
+    const lang = this.plugin.settings.language;
+    const result = payload.damage > 0 ? this.applyDamage(target, payload.damage, false, payload.useShield) : { finalDamage: 0, absorbedByShield: 0, defeated: false, healed: 0 };
+    if (payload.conditionName) {
+      const existing = target.conditions.find((condition) => condition.name === payload.conditionName);
+      if (existing)
+        existing.duration = payload.conditionDuration;
+      else
+        target.conditions.push({ name: payload.conditionName, duration: payload.conditionDuration });
+    }
+    const parts = [];
+    if (payload.damage > 0) {
+      parts.push(lang === "es" ? `le inflige ${result.finalDamage} de da\xF1o` : `deals ${result.finalDamage} damage`);
+      if (result.absorbedByShield > 0) {
+        parts.push(lang === "es" ? `${result.absorbedByShield} absorbidos por escudo` : `${result.absorbedByShield} absorbed by shield`);
+      }
+    }
+    if (payload.conditionName) {
+      parts.push(lang === "es" ? `aplica ${payload.conditionName}${payload.conditionDuration ? ` (${payload.conditionDuration})` : ""}` : `applies ${payload.conditionName}${payload.conditionDuration ? ` (${payload.conditionDuration})` : ""}`);
+    }
+    if (payload.note)
+      parts.push(payload.note);
+    const actionVerb = lang === "es" ? "ataca a" : "attacks";
+    const suffix = parts.length ? ` ${lang === "es" ? "y" : "and"} ${parts.join(", ")}` : "";
+    await this.writeToLog(lang === "es" ? `${attacker.name} ${actionVerb} ${target.name}${suffix}.` : `${attacker.name} ${actionVerb} ${target.name}${suffix}.`);
+    if (result.defeated) {
+      await this.markCombatantDefeated(target);
+    } else {
+      await this.syncCombatantToNote(target);
+    }
+    this.ensureActiveCombatant();
+    this.refresh();
+  }
+  async loadFromVault() {
+    const folder = this.plugin.settings.combatantFolder.trim();
+    const lang = this.plugin.settings.language;
+    let files;
+    if (folder) {
+      const folderObj = this.app.vault.getAbstractFileByPath(folder);
+      if (!folderObj) {
+        new import_obsidian3.Notice(lang === "es" ? `Carpeta "${folder}" no encontrada.` : `Folder "${folder}" not found.`);
+        return;
+      }
+      files = this.app.vault.getMarkdownFiles().filter((file) => file.path.startsWith(folder + "/"));
+    } else {
+      new PickCombatantsModal(this.app, this.plugin, async (picked) => {
+        const loaded2 = await Promise.all(picked.map((file) => this.fileToCombatant(file)));
+        for (const combatant of loaded2) {
+          if (!this.combatants.find((entry) => entry.id === combatant.id)) {
+            this.combatants.push(combatant);
+          }
+        }
+        this.ensureActiveCombatant();
+        for (const combatant of loaded2) {
+          await this.writeToLog(lang === "es" ? `Combatiente cargado: ${combatant.name} (Iniciativa: ${combatant.initiative}, PV: ${combatant.hp}/${combatant.hpMax})` : `Combatant loaded: ${combatant.name} (Initiative: ${combatant.initiative}, HP: ${combatant.hp}/${combatant.hpMax})`);
+        }
+        this.refresh();
+        if (this.combatants.length > 0)
+          this.triggerLogSetup();
+      }).open();
+      return;
+    }
+    const loaded = await Promise.all(files.map((file) => this.fileToCombatant(file)));
+    for (const combatant of loaded) {
+      if (!this.combatants.find((entry) => entry.id === combatant.id)) {
+        this.combatants.push(combatant);
+      }
+    }
+    this.ensureActiveCombatant();
+    for (const combatant of loaded) {
+      await this.writeToLog(lang === "es" ? `Combatiente cargado: ${combatant.name} (Iniciativa: ${combatant.initiative}, PV: ${combatant.hp}/${combatant.hpMax})` : `Combatant loaded: ${combatant.name} (Initiative: ${combatant.initiative}, HP: ${combatant.hp}/${combatant.hpMax})`);
+    }
+    this.refresh();
+    if (this.combatants.length > 0)
+      this.triggerLogSetup();
+  }
+  render() {
+    var _a, _b, _c, _d;
+    const container = this.containerEl.children[1];
+    container.empty();
+    container.className = `bt-panel${this.mode === "player" ? " bt-panel-player" : ""}`;
+    const lang = this.plugin.settings.language;
+    const t = LOCALIZATION[lang];
+    const conditionEntries = this.plugin.settings.conditions;
+    const alive = this.aliveSorted();
+    const dead = this.deadSorted();
+    this.ensureActiveCombatant();
+    if (this.graveyardXpDraft == null) {
+      this.graveyardXpDraft = String(this.getPendingGraveyardXp());
+    }
+    const activeIndex = this.getCurrentTurnIndex(alive);
+    const timerState = this.getTurnTimerState();
+    const visibleAlerts = this.getVisibleAlerts();
+    const topBar = container.createDiv("bt-topbar");
+    topBar.createDiv("bt-round-badge", (el) => el.setText(`${t.round} ${this.round}`));
+    if (this.mode === "player") {
+      const playerMeta = topBar.createDiv("bt-player-header");
+      playerMeta.createDiv("bt-player-title").setText(t.playerViewTitle);
+      playerMeta.createDiv("bt-player-subtitle").setText(t.playerViewSubtitle);
+    }
+    if (timerState) {
+      const timerWrap = topBar.createDiv("bt-turn-timer");
+      const activeName = (_c = (_b = this.getCombatant((_a = this.activeCombatantId) != null ? _a : "")) == null ? void 0 : _b.name) != null ? _c : "";
+      timerWrap.createDiv("bt-turn-timer-label").setText(
+        timerState.expired ? `${t.graveyardExpiredTurn}${activeName ? ` \xB7 ${activeName}` : ""}` : `${activeName} \xB7 ${Math.ceil(timerState.remainingMs / 1e3)}s`
+      );
+      const timerBar = timerWrap.createDiv("bt-turn-timer-bar");
+      const timerFill = timerBar.createDiv(`bt-turn-timer-fill${timerState.expired ? " expired" : ""}`);
+      timerFill.style.width = `${Math.max(0, timerState.progress * 100)}%`;
+    }
+    const topActions = topBar.createDiv("bt-top-actions");
+    const fullBtn = topActions.createEl("button", { cls: "bt-btn" });
+    fullBtn.setText(t.fullscreen);
+    fullBtn.onclick = () => void this.toggleFullscreen();
+    if (this.mode === "gm") {
+      const nextBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-primary" });
+      nextBtn.innerHTML = t.nextTurn;
+      nextBtn.onclick = () => void this.nextTurn();
+      const loadBtn = topActions.createEl("button", { cls: "bt-btn" });
+      loadBtn.innerHTML = t.load;
+      loadBtn.onclick = () => void this.loadFromVault();
+      const playerBtn = topActions.createEl("button", { cls: "bt-btn" });
+      playerBtn.setText(t.playerView);
+      playerBtn.onclick = () => void this.plugin.activatePlayerView();
+      if (this.plugin.settings.logEnabled) {
+        const logBtn = topActions.createEl("button", {
+          cls: `bt-btn${this.activeLogFile ? " bt-btn-primary" : ""}`,
+          title: t.logSelectLogFileButton
+        });
+        logBtn.innerHTML = `\u{1F4DD} ${this.activeLogFile ? lang === "es" ? "Registrando" : "Logging" : lang === "es" ? "Registro" : "Log"}`;
+        logBtn.onclick = () => this.triggerLogSetup();
+      }
+      const resetBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-danger-soft" });
+      resetBtn.innerHTML = t.reset;
+      resetBtn.onclick = () => {
+        if (confirm(t.resetConfirm))
+          this.resetBattle();
+      };
+    }
+    if (visibleAlerts.length) {
+      const alertsWrap = container.createDiv("bt-alerts");
+      visibleAlerts.slice().reverse().forEach((alert) => {
+        alertsWrap.createDiv(`bt-alert bt-alert-${alert.type}`).setText(alert.message);
+      });
+    }
+    const boardSection = container.createDiv("bt-board-section");
+    if (this.mode === "gm") {
+      const boardControls = boardSection.createDiv("bt-board-controls");
+      boardControls.createEl("span", { cls: "bt-label", text: t.boardTitle });
+      const centerBtn = boardControls.createEl("button", { cls: "bt-btn" });
+      centerBtn.setText(t.boardCenter);
+      centerBtn.onclick = () => this.centerTokens();
+      const saveBtn = boardControls.createEl("button", { cls: "bt-btn" });
+      saveBtn.setText(t.boardSave);
+      saveBtn.onclick = () => this.saveBoardLayout();
+      const loadLayoutBtn = boardControls.createEl("button", { cls: "bt-btn" });
+      loadLayoutBtn.setText(t.boardLoad);
+      loadLayoutBtn.onclick = () => this.loadBoardLayout();
+      const clearLayoutBtn = boardControls.createEl("button", { cls: "bt-btn" });
+      clearLayoutBtn.setText(t.boardClear);
+      clearLayoutBtn.onclick = () => this.clearBoardLayout();
+      const backgroundInput = boardControls.createEl("input", {
+        cls: "bt-board-background-input",
+        type: "text",
+        placeholder: t.boardBackground
+      });
+      backgroundInput.value = this.boardBackground;
+      backgroundInput.onchange = () => {
+        this.boardBackground = backgroundInput.value.trim();
+        this.refresh();
+      };
+    }
+    const board = boardSection.createDiv(`bt-board${this.boardGridEnabled ? " has-grid" : ""}`);
+    const backgroundSrc = this.resolveBackgroundSrc(this.boardBackground);
+    if (backgroundSrc) {
+      board.style.backgroundImage = `url("${backgroundSrc}")`;
+    }
+    board.style.setProperty("--bt-grid-size", `${this.boardGridSize}px`);
+    alive.forEach((combatant, index) => {
+      const tokenState = this.ensureTokenState(combatant, index);
+      if (this.mode === "player" && tokenState.hidden)
+        return;
+      const token = board.createDiv(`bt-token${combatant.id === this.activeCombatantId ? " active" : ""}${tokenState.hidden ? " is-hidden" : ""}${this.selectedTokenIds.includes(combatant.id) ? " is-selected" : ""}`);
+      token.style.left = `${tokenState.x}px`;
+      token.style.top = `${tokenState.y}px`;
+      token.style.transform = `scale(${tokenState.scale})`;
+      token.title = combatant.name;
+      const avatar = token.createDiv(`bt-token-avatar bt-avatar-${combatant.combatType === "PC" ? "pc" : combatant.combatType === "Enemy" ? "enemy" : "npc"}`);
+      this.applyAvatar(avatar, combatant);
+      token.createDiv("bt-token-name").setText(combatant.name);
+      if (combatant.conditions.length) {
+        const conditionList = token.createDiv("bt-token-conditions");
+        combatant.conditions.forEach((condition) => {
+          const cond = conditionList.createDiv("bt-token-condition");
+          cond.setText(this.formatConditionLabel(condition));
+        });
+      }
+      if (this.mode === "gm") {
+        token.onmousedown = (evt) => {
+          if (evt.button !== 0)
+            return;
+          evt.preventDefault();
+          this.selectedTokenIds = evt.metaKey || evt.ctrlKey ? Array.from(/* @__PURE__ */ new Set([...this.selectedTokenIds, combatant.id])) : [combatant.id];
+          const boardRect = board.getBoundingClientRect();
+          const startX = evt.clientX;
+          const startY = evt.clientY;
+          const selectedIds = [...this.selectedTokenIds];
+          const starts = selectedIds.map((id) => {
+            var _a2, _b2, _c2, _d2;
+            return {
+              id,
+              x: (_b2 = (_a2 = this.tokenStates[id]) == null ? void 0 : _a2.x) != null ? _b2 : 0,
+              y: (_d2 = (_c2 = this.tokenStates[id]) == null ? void 0 : _c2.y) != null ? _d2 : 0
+            };
+          });
+          const move = (moveEvt) => {
+            const dx = moveEvt.clientX - startX;
+            const dy = moveEvt.clientY - startY;
+            starts.forEach((start) => {
+              let nextX = Math.max(0, start.x + dx);
+              let nextY = Math.max(0, start.y + dy);
+              if (this.boardSnapToGrid) {
+                const grid = this.boardGridSize || 64;
+                nextX = Math.round(nextX / grid) * grid;
+                nextY = Math.round(nextY / grid) * grid;
+              }
+              this.updateTokenState(start.id, {
+                x: Math.min(nextX, Math.max(0, boardRect.width - 80)),
+                y: Math.min(nextY, Math.max(0, boardRect.height - 80))
+              });
+            });
+            this.refresh();
+          };
+          const up = () => {
+            window.removeEventListener("mousemove", move);
+            window.removeEventListener("mouseup", up);
+          };
+          window.addEventListener("mousemove", move);
+          window.addEventListener("mouseup", up);
+        };
+        token.onclick = (evt) => {
+          evt.stopPropagation();
+          if (evt.metaKey || evt.ctrlKey) {
+            this.selectedTokenIds = this.selectedTokenIds.includes(combatant.id) ? this.selectedTokenIds.filter((id) => id !== combatant.id) : [...this.selectedTokenIds, combatant.id];
+          } else {
+            this.selectedTokenIds = [combatant.id];
+          }
+          this.refresh();
+        };
+        const tools = token.createDiv("bt-token-tools");
+        const hideBtn = tools.createEl("button", { cls: "bt-token-tool" });
+        hideBtn.setText(tokenState.hidden ? t.boardReveal : t.boardHide);
+        hideBtn.onclick = (evt) => {
+          evt.stopPropagation();
+          this.updateTokenState(combatant.id, { hidden: !tokenState.hidden });
+          this.refresh();
+        };
       }
     });
+    if (this.mode === "gm") {
+      board.onclick = () => {
+        this.selectedTokenIds = [];
+        this.refresh();
+      };
+    }
+    if (alive.length) {
+      const strip = container.createDiv("bt-init-strip");
+      alive.forEach((combatant, index) => {
+        const chip = strip.createDiv(`bt-init-chip${index === activeIndex ? " active" : ""}`);
+        chip.setText(`${combatant.name} (${combatant.initiative})`);
+      });
+    }
+    if (!this.combatants.length) {
+      const empty = container.createDiv("bt-empty");
+      empty.createEl("p", { text: t.emptyState });
+      return;
+    }
+    alive.forEach((combatant) => {
+      const isActive = combatant.id === this.activeCombatantId;
+      const ratio = combatant.hpMax > 0 ? combatant.hp / combatant.hpMax : 0;
+      const card = container.createDiv(`bt-card${isActive ? " bt-card-active" : ""}${this.mode === "player" ? " bt-card-player" : ""}`);
+      const header = card.createDiv("bt-card-header");
+      const avatar = header.createDiv(`bt-avatar bt-avatar-${combatant.combatType === "PC" ? "pc" : combatant.combatType === "Enemy" ? "enemy" : "npc"}`);
+      this.applyAvatar(avatar, combatant);
+      const nameWrap = header.createDiv("bt-name-wrap");
+      const nameEl = nameWrap.createEl("span", { cls: "bt-name", text: combatant.name });
+      if (this.mode === "gm") {
+        nameEl.style.cursor = "pointer";
+        nameEl.title = lang === "es" ? "Abrir nota" : "Open note";
+        nameEl.onclick = () => void this.app.workspace.getLeaf(true).openFile(combatant.file);
+      }
+      const metaRow = nameWrap.createDiv("bt-sub bt-init-edit-row");
+      if (this.mode === "gm" && this.editingInitiativeId === combatant.id) {
+        const initInput = metaRow.createEl("input", {
+          cls: "bt-init-edit-input",
+          type: "number"
+        });
+        initInput.value = String(combatant.initiative);
+        const commit = () => void this.setInitiative(combatant.id, parseInt(initInput.value) || 0);
+        initInput.onblur = commit;
+        initInput.onkeydown = (evt) => {
+          if (evt.key === "Enter")
+            commit();
+          if (evt.key === "Escape") {
+            this.editingInitiativeId = null;
+            this.refresh();
+          }
+        };
+        setTimeout(() => {
+          initInput.focus();
+          initInput.select();
+        }, 0);
+      } else {
+        const initText = metaRow.createEl("span", { text: `${t.init} ${combatant.initiative} \xB7 ${t.ac} ${combatant.ac}` });
+        if (this.mode === "gm") {
+          initText.ondblclick = () => {
+            this.editingInitiativeId = combatant.id;
+            this.refresh();
+          };
+        }
+        if (combatant.shield > 0) {
+          metaRow.createEl("span", { cls: "bt-sub-shield", text: `${t.shield} ${combatant.shield}` });
+        }
+        if (combatant.xp > 0) {
+          metaRow.createEl("span", { cls: "bt-sub-shield", text: `${t.xp} ${combatant.xp}` });
+        }
+      }
+      const badge = header.createDiv(`bt-badge bt-badge-${combatant.combatType === "PC" ? "pc" : combatant.combatType === "Enemy" ? "enemy" : "npc"}`);
+      badge.setText(combatant.combatType);
+      if (this.mode === "gm") {
+        const initEditBtn = header.createEl("button", { cls: "bt-btn-icon", title: t.editInitiative });
+        initEditBtn.setText("\u270E");
+        initEditBtn.onclick = () => {
+          this.editingInitiativeId = combatant.id;
+          this.refresh();
+        };
+        const removeBtn = header.createEl("button", { cls: "bt-btn-icon", title: t.removeTitle });
+        removeBtn.setText("\u2715");
+        removeBtn.onclick = () => void this.removeCombatant(combatant.id);
+      }
+      if (combatant.conditions.length) {
+        const condRow = card.createDiv("bt-cond-row");
+        combatant.conditions.forEach((condition) => {
+          const tag = condRow.createDiv("bt-cond-tag");
+          tag.setText(this.formatConditionLabel(condition));
+          const entry = conditionEntries.find((item) => item.name === condition.name);
+          if (entry == null ? void 0 : entry.color) {
+            tag.style.color = entry.color;
+            tag.style.borderColor = entry.color;
+            tag.style.backgroundColor = entry.color + "22";
+          }
+        });
+      }
+      const hpWrap = card.createDiv("bt-hp-wrap");
+      const hpLabelRow = hpWrap.createDiv("bt-hp-label-row");
+      hpLabelRow.createEl("span", { text: t.hp, cls: "bt-label" });
+      const hpVisible = this.mode === "gm" || this.plugin.settings.playerViewShowHp;
+      hpLabelRow.createEl("span", { cls: "bt-hp-text", text: hpVisible ? `${combatant.hp} / ${combatant.hpMax}` : "\u2022\u2022\u2022" });
+      const bar = hpWrap.createDiv("bt-bar");
+      const fill = bar.createDiv("bt-bar-fill");
+      fill.style.width = `${Math.max(0, ratio * 100)}%`;
+      fill.className = `bt-bar-fill ${ratio > 0.6 ? "bt-hp-ok" : ratio > 0.3 ? "bt-hp-mid" : "bt-hp-low"}`;
+      const extraNames = Object.keys(combatant.extraFields);
+      if (this.mode === "gm" && extraNames.length) {
+        const extraRow = card.createDiv("bt-extra-row");
+        extraNames.forEach((key) => {
+          const box = extraRow.createDiv("bt-extra-box");
+          box.createEl("span", { cls: "bt-label", text: key.toUpperCase() });
+          const valRow = box.createDiv("bt-extra-val-row");
+          const minusBtn = valRow.createEl("button", { cls: "bt-btn-mini", text: "\u2212" });
+          minusBtn.onclick = () => void this.modExtra(combatant.id, key, -1);
+          valRow.createEl("span", { cls: "bt-extra-val", text: String(combatant.extraFields[key]) });
+          const plusBtn = valRow.createEl("button", { cls: "bt-btn-mini", text: "+" });
+          plusBtn.onclick = () => void this.modExtra(combatant.id, key, 1);
+        });
+      }
+      if (this.mode === "gm" && combatant.notes) {
+        card.createEl("p", { cls: "bt-notes", text: combatant.notes });
+      }
+      if (this.mode === "gm") {
+        const actions = card.createDiv("bt-actions");
+        const dmgBtn = actions.createEl("button", { cls: "bt-btn bt-btn-danger-soft" });
+        dmgBtn.setText(t.damageHeal);
+        dmgBtn.onclick = () => new DmgModal(this.app, combatant.name, this.plugin, combatant.shield > 0, (value, heal, useShield) => {
+          void this.applyDmg(combatant.id, value, heal, useShield);
+        }).open();
+        const condBtn = actions.createEl("button", { cls: "bt-btn" });
+        condBtn.setText(t.status);
+        condBtn.onclick = () => new ConditionModal(this.app, conditionEntries, combatant.conditions, this.plugin, (updated) => {
+          void this.updateConditions(combatant.id, updated);
+        }).open();
+        const noteBtn = actions.createEl("button", { cls: "bt-btn" });
+        noteBtn.setText(t.note);
+        noteBtn.onclick = () => new NoteModal(this.app, combatant.notes, this.plugin, (text) => {
+          combatant.notes = text;
+          void this.writeToLog(lang === "es" ? `${combatant.name} - Nota: ${text || "vaciada"}` : `${combatant.name} - Note: ${text || "cleared"}`);
+          this.refresh();
+        }).open();
+        if (isActive && alive.length > 1) {
+          const actionBtn = actions.createEl("button", { cls: "bt-btn bt-btn-primary" });
+          actionBtn.setText(t.action);
+          actionBtn.onclick = () => new ActionModal(
+            this.app,
+            combatant,
+            alive.filter((entry) => entry.id !== combatant.id),
+            conditionEntries,
+            this.plugin,
+            (payload) => void this.applyAction(combatant.id, payload)
+          ).open();
+        }
+        const defeatBtn = actions.createEl("button", { cls: "bt-btn bt-btn-ghost" });
+        defeatBtn.setText(t.defeat);
+        defeatBtn.onclick = async () => {
+          await this.markCombatantDefeated(combatant);
+          this.refresh();
+        };
+      }
+    });
+    if (this.mode === "player")
+      return;
+    const graveyard = container.createEl("details", {
+      cls: "bt-graveyard"
+    });
+    graveyard.open = this.graveyardExpanded;
+    graveyard.ontoggle = () => {
+      this.graveyardExpanded = graveyard.open;
+    };
+    const graveyardSummary = graveyard.createEl("summary", { cls: "bt-graveyard-summary" });
+    graveyardSummary.setText(`${t.graveyardTitle} (${dead.length})`);
+    if (!dead.length) {
+      graveyard.createDiv("bt-graveyard-empty").setText(t.graveyardEmpty);
+      return;
+    }
+    const xpPanel = graveyard.createDiv("bt-graveyard-xp-panel");
+    xpPanel.createDiv("bt-graveyard-xp-stat").setText(`${t.xp}: ${this.getDefeatedXpTotal()}`);
+    xpPanel.createDiv("bt-graveyard-xp-stat").setText(`${t.graveyardPendingXp}: ${this.getPendingGraveyardXp()}`);
+    xpPanel.createDiv("bt-graveyard-xp-stat").setText(`${t.graveyardAssignedXp}: ${this.graveyardAssignedXp}`);
+    const xpControls = graveyard.createDiv("bt-graveyard-controls");
+    const xpInput = xpControls.createEl("input", {
+      cls: "bt-graveyard-input",
+      type: "number",
+      placeholder: t.graveyardXpPlaceholder
+    });
+    xpInput.min = "0";
+    xpInput.value = (_d = this.graveyardXpDraft) != null ? _d : String(this.getPendingGraveyardXp());
+    xpInput.onchange = () => {
+      this.graveyardXpDraft = xpInput.value;
+    };
+    const pcs = this.pcCombatants();
+    const splitBtn = xpControls.createEl("button", { cls: "bt-btn bt-btn-primary" });
+    splitBtn.setText(t.graveyardDistributeAll);
+    splitBtn.onclick = () => void this.awardXp(this.getGraveyardAwardAmount(), pcs, true);
+    pcs.forEach((pc) => {
+      const giveBtn = xpControls.createEl("button", { cls: "bt-btn" });
+      giveBtn.setText(`${t.graveyardGiveTo} ${pc.name}`);
+      giveBtn.onclick = () => void this.awardXp(this.getGraveyardAwardAmount(), [pc], false);
+    });
+    dead.forEach((combatant) => {
+      const card = graveyard.createDiv("bt-card bt-card-dead bt-graveyard-card");
+      const header = card.createDiv("bt-card-header");
+      const avatar = header.createDiv(`bt-avatar bt-avatar-${combatant.combatType === "PC" ? "pc" : combatant.combatType === "Enemy" ? "enemy" : "npc"}`);
+      this.applyAvatar(avatar, combatant);
+      const nameWrap = header.createDiv("bt-name-wrap");
+      nameWrap.createEl("span", { cls: "bt-name", text: combatant.name });
+      nameWrap.createEl("span", {
+        cls: "bt-sub",
+        text: `${t.xp} ${combatant.xp} \xB7 ${t.init} ${combatant.initiative} \xB7 ${t.ac} ${combatant.ac}`
+      });
+      const reviveBtn = header.createEl("button", { cls: "bt-btn", title: t.revive });
+      reviveBtn.setText(t.revive);
+      reviveBtn.onclick = async () => {
+        combatant.alive = true;
+        combatant.hp = Math.max(1, combatant.hpMax > 0 ? 1 : combatant.hp);
+        await this.syncCombatantToNote(combatant);
+        await this.writeToLog(lang === "es" ? `${combatant.name} ha resucitado` : `${combatant.name} has been revived`);
+        this.graveyardXpDraft = String(this.getPendingGraveyardXp());
+        this.ensureActiveCombatant();
+        this.refresh();
+      };
+    });
+  }
+  async onClose() {
+    this.clearTurnTimer();
   }
 };
 
 // src/main.ts
 var BattleTrackerPlugin = class extends import_obsidian4.Plugin {
+  constructor() {
+    super(...arguments);
+    this.session = this.createDefaultSession();
+    this.sessionSaveTimeout = null;
+  }
+  createDefaultSession() {
+    return {
+      combatants: [],
+      round: 1,
+      activeCombatantId: null,
+      editingInitiativeId: null,
+      graveyardExpanded: true,
+      graveyardAssignedXp: 0,
+      graveyardXpDraft: null,
+      turnTimerStartedAt: 0,
+      turnTimerCombatantId: null,
+      boardBackground: "",
+      boardGridEnabled: true,
+      boardSnapToGrid: false,
+      boardGridSize: 64,
+      tokenStates: {},
+      selectedTokenIds: [],
+      activeLogFile: null,
+      logDismissed: false,
+      logQueue: [],
+      logSetupInProgress: false,
+      alerts: []
+    };
+  }
   async onload() {
     await this.loadSettings();
     const registry = this.app.viewRegistry;
     if (registry && registry.viewByType && registry.viewByType[VIEW_TYPE]) {
       delete registry.viewByType[VIEW_TYPE];
     }
-    this.registerView(VIEW_TYPE, (leaf) => new BattleTrackerView(leaf, this));
+    if (registry && registry.viewByType && registry.viewByType[PLAYER_VIEW_TYPE]) {
+      delete registry.viewByType[PLAYER_VIEW_TYPE];
+    }
+    this.registerView(VIEW_TYPE, (leaf) => new BattleTrackerView(leaf, this, "gm"));
+    this.registerView(PLAYER_VIEW_TYPE, (leaf) => new BattleTrackerView(leaf, this, "player"));
     this.addRibbonIcon("sword", "Combat Ledger", () => this.activateView());
     this.addCommand({
       id: "open-combat-ledger",
       name: this.settings.language === "es" ? "Abrir Combat Ledger" : "Open Combat Ledger",
       callback: () => this.activateView()
     });
+    this.addCommand({
+      id: "open-combat-ledger-player-view",
+      name: this.settings.language === "es" ? "Abrir vista de jugadores" : "Open player view",
+      callback: () => this.activatePlayerView()
+    });
     this.addSettingTab(new BattleTrackerSettingTab(this.app, this));
   }
   onunload() {
+    void this.persistData();
     this.app.workspace.detachLeavesOfType(VIEW_TYPE);
+    this.app.workspace.detachLeavesOfType(PLAYER_VIEW_TYPE);
   }
   async activateView() {
     const { workspace } = this.app;
@@ -1626,16 +2477,89 @@ var BattleTrackerPlugin = class extends import_obsidian4.Plugin {
     if (leaf)
       workspace.revealLeaf(leaf);
   }
+  async activatePlayerView() {
+    const { workspace } = this.app;
+    let leaf = null;
+    const existing = workspace.getLeavesOfType(PLAYER_VIEW_TYPE);
+    if (existing.length) {
+      leaf = existing[0];
+    } else {
+      leaf = workspace.getRightLeaf(false);
+      if (!leaf)
+        return;
+      await leaf.setViewState({ type: PLAYER_VIEW_TYPE, active: true });
+    }
+    if (leaf)
+      workspace.revealLeaf(leaf);
+  }
+  refreshViews() {
+    const leaves = [
+      ...this.app.workspace.getLeavesOfType(VIEW_TYPE),
+      ...this.app.workspace.getLeavesOfType(PLAYER_VIEW_TYPE)
+    ];
+    leaves.forEach((leaf) => {
+      if (leaf.view instanceof BattleTrackerView) {
+        leaf.view.render();
+      }
+    });
+  }
+  scheduleSessionSave() {
+    if (this.sessionSaveTimeout !== null) {
+      window.clearTimeout(this.sessionSaveTimeout);
+    }
+    this.sessionSaveTimeout = window.setTimeout(() => {
+      this.sessionSaveTimeout = null;
+      void this.persistData();
+    }, 150);
+  }
+  async persistData() {
+    var _a, _b;
+    const serializedCombatants = this.session.combatants.map((combatant) => ({
+      ...combatant,
+      file: combatant.file.path
+    }));
+    const serializableSession = {
+      ...this.session,
+      combatants: serializedCombatants,
+      activeLogFile: (_b = (_a = this.session.activeLogFile) == null ? void 0 : _a.path) != null ? _b : null
+    };
+    await this.saveData({
+      settings: this.settings,
+      session: serializableSession
+    });
+  }
   async loadSettings() {
-    var _a;
-    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-    this.settings.fields = Object.assign({}, DEFAULT_SETTINGS.fields, (_a = this.settings.fields) != null ? _a : {});
+    var _a, _b, _c, _d;
+    const rawData = await this.loadData();
+    const storedSettings = (_b = (_a = rawData == null ? void 0 : rawData.settings) != null ? _a : rawData) != null ? _b : {};
+    const storedSession = (_c = rawData == null ? void 0 : rawData.session) != null ? _c : null;
+    this.settings = Object.assign({}, DEFAULT_SETTINGS, storedSettings);
+    this.settings.fields = Object.assign({}, DEFAULT_SETTINGS.fields, (_d = this.settings.fields) != null ? _d : {});
+    const session = Object.assign(this.createDefaultSession(), storedSession != null ? storedSession : {});
+    const activeLogPath = storedSession == null ? void 0 : storedSession.activeLogFile;
+    const activeLogFile = typeof activeLogPath === "string" ? this.app.vault.getAbstractFileByPath(activeLogPath) : null;
+    session.activeLogFile = activeLogFile instanceof import_obsidian4.TFile ? activeLogFile : null;
+    const restoredCombatants = Array.isArray(storedSession == null ? void 0 : storedSession.combatants) ? storedSession.combatants.map((entry) => {
+      const file = typeof (entry == null ? void 0 : entry.file) === "string" ? this.app.vault.getAbstractFileByPath(entry.file) : null;
+      if (!(file instanceof import_obsidian4.TFile))
+        return null;
+      return {
+        ...entry,
+        file
+      };
+    }).filter((entry) => Boolean(entry)) : [];
+    session.combatants = restoredCombatants;
+    session.boardBackground = session.boardBackground || this.settings.boardDefaultBackground;
+    session.boardGridEnabled = typeof session.boardGridEnabled === "boolean" ? session.boardGridEnabled : this.settings.boardGridEnabled;
+    session.boardSnapToGrid = typeof session.boardSnapToGrid === "boolean" ? session.boardSnapToGrid : this.settings.boardSnapToGrid;
+    session.boardGridSize = session.boardGridSize || this.settings.boardGridSize;
+    this.session = session;
     if (typeof this.settings.conditions === "string") {
       this.settings.conditions = this.settings.conditions.split(",").map((s) => s.trim()).filter(Boolean).map((name) => ({ name, color: "" }));
       await this.saveSettings();
     }
   }
   async saveSettings() {
-    await this.saveData(this.settings);
+    await this.persistData();
   }
 };

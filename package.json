@@ -1,6 +1,6 @@
 {
   "name": "combat-ledger",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Track combat encounters and manage initiative for your tabletop RPG sessions using YAML properties from combatant notes.",
   "main": "main.js",
   "scripts": {

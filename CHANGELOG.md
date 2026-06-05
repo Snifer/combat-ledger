@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.2.0] - 2026-06-05
+
+### Added
+- A synchronized player-facing dashboard view with turn order, active combatant, visible conditions, optional HP display, and fullscreen support.
+- Visual alert banners for turn start, defeated combatants, expired conditions, and turn timer expiration.
+- Board mode for both GM and player views with draggable tokens, optional grid, snap-to-grid, background image support, token hiding, and layout save/load tools.
+- New YAML field mappings for `avatar` and `icon` so notes can provide richer visual tokens and cards.
+- Full combat session persistence, including loaded combatants, active turn, timer state, graveyard state, board background, token positions, hidden tokens, selected tokens, and active log file path.
+- An English feature summary document in `IMPLEMENTED_FEATURES_EN.md`.
+
+### Changed
+- Refactored the combat state into a shared session so GM and player views stay synchronized in real time.
+- Board and player-view settings now provide defaults for grid visibility, snapping, grid size, background image, and HP visibility.
+
+### Fixed
+- Persisted sessions now restore combatants and the active combat log safely after reloading the plugin.
+
 ## [1.1.0] - 2026-05-26
 
 ### Added

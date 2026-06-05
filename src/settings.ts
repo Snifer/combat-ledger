@@ -2,7 +2,6 @@ import { App, PluginSettingTab, Setting } from "obsidian";
 import BattleTrackerPlugin from "./main";
 import { BattleTrackerSettings, ConditionEntry } from "./types";
 import { LOCALIZATION } from "./localization";
-import { VIEW_TYPE, BattleTrackerView } from "./view";
 
 export const DEFAULT_CONDITIONS_ES: ConditionEntry[] = [
 	{ name: "Aturdido",       color: "#f59e0b" },
@@ -37,6 +36,9 @@ export const DEFAULT_SETTINGS: BattleTrackerSettings = {
 		hp: "hp",
 		hp_max: "hp_max",
 		shield: "shield",
+		xp: "xp",
+		avatar: "avatar",
+		icon: "icon",
 		ac: "ac",
 		type: "type",
 		extra_fields: "mp,stamina",
@@ -47,6 +49,14 @@ export const DEFAULT_SETTINGS: BattleTrackerSettings = {
 	realtimeSync: false,
 	realtimeSyncMode: "pc",
 	shieldAbsorbsDamage: true,
+	turnTimerEnabled: false,
+	turnTimerSeconds: 60,
+	playerViewShowHp: false,
+	boardGridEnabled: true,
+	boardSnapToGrid: false,
+	boardGridSize: 64,
+	boardDefaultBackground: "",
+	savedBoardLayouts: [],
 	logEnabled: true,
 	logMode: "ask",
 	logHeader: "## Registro de Combate",
@@ -111,13 +121,7 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 						// Re-render setting tab
 						this.display();
 
-						// Re-render view
-						const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE);
-						leaves.forEach((leaf) => {
-							if (leaf.view instanceof BattleTrackerView) {
-								leaf.view.render();
-							}
-						});
+						this.plugin.refreshViews();
 					})
 			);
 
@@ -145,6 +149,21 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 			.setName(t.settingsShieldName)
 			.setDesc(t.settingsShieldDesc)
 			.addText((text) => text.setValue(f.shield).onChange(async (v) => { f.shield = v; await this.plugin.saveSettings(); }));
+
+		new Setting(containerEl)
+			.setName(t.settingsXpName)
+			.setDesc(t.settingsXpDesc)
+			.addText((text) => text.setValue(f.xp).onChange(async (v) => { f.xp = v; await this.plugin.saveSettings(); }));
+
+		new Setting(containerEl)
+			.setName(t.settingsAvatarName)
+			.setDesc(t.settingsAvatarDesc)
+			.addText((text) => text.setValue(f.avatar).onChange(async (v) => { f.avatar = v; await this.plugin.saveSettings(); }));
+
+		new Setting(containerEl)
+			.setName(t.settingsIconName)
+			.setDesc(t.settingsIconDesc)
+			.addText((text) => text.setValue(f.icon).onChange(async (v) => { f.icon = v; await this.plugin.saveSettings(); }));
 			
 		new Setting(containerEl)
 			.setName(t.settingsAcName)
@@ -205,6 +224,106 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 					.onChange(async (v) => {
 						this.plugin.settings.shieldAbsorbsDamage = v;
 						await this.plugin.saveSettings();
+					})
+			);
+
+		containerEl.createEl("h3", { text: t.settingsTimerTitle });
+		new Setting(containerEl)
+			.setName(t.settingsTimerEnabledName)
+			.setDesc(t.settingsTimerEnabledDesc)
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.turnTimerEnabled)
+					.onChange(async (v) => {
+						this.plugin.settings.turnTimerEnabled = v;
+						await this.plugin.saveSettings();
+						this.display();
+						this.refreshView();
+					})
+			);
+
+		if (this.plugin.settings.turnTimerEnabled) {
+			new Setting(containerEl)
+				.setName(t.settingsTimerSecondsName)
+				.setDesc(t.settingsTimerSecondsDesc)
+				.addText((text) =>
+					text
+						.setPlaceholder("60")
+						.setValue(String(this.plugin.settings.turnTimerSeconds))
+						.onChange(async (v) => {
+							const seconds = Math.max(5, Number(v) || 60);
+							this.plugin.settings.turnTimerSeconds = seconds;
+							await this.plugin.saveSettings();
+							this.refreshView();
+						})
+				);
+		}
+
+		new Setting(containerEl)
+			.setName(t.settingsPlayerHpName)
+			.setDesc(t.settingsPlayerHpDesc)
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.playerViewShowHp)
+					.onChange(async (v) => {
+						this.plugin.settings.playerViewShowHp = v;
+						await this.plugin.saveSettings();
+						this.refreshView();
+					})
+			);
+
+		containerEl.createEl("h3", { text: t.settingsBoardTitle });
+		new Setting(containerEl)
+			.setName(t.settingsBoardGridName)
+			.setDesc(t.settingsBoardGridDesc)
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.boardGridEnabled)
+					.onChange(async (v) => {
+						this.plugin.settings.boardGridEnabled = v;
+						await this.plugin.saveSettings();
+						this.refreshView();
+					})
+			);
+
+		new Setting(containerEl)
+			.setName(t.settingsBoardSnapName)
+			.setDesc(t.settingsBoardSnapDesc)
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.boardSnapToGrid)
+					.onChange(async (v) => {
+						this.plugin.settings.boardSnapToGrid = v;
+						await this.plugin.saveSettings();
+						this.refreshView();
+					})
+			);
+
+		new Setting(containerEl)
+			.setName(t.settingsBoardGridSizeName)
+			.setDesc(t.settingsBoardGridSizeDesc)
+			.addText((text) =>
+				text
+					.setPlaceholder("64")
+					.setValue(String(this.plugin.settings.boardGridSize))
+					.onChange(async (v) => {
+						this.plugin.settings.boardGridSize = Math.max(24, Number(v) || 64);
+						await this.plugin.saveSettings();
+						this.refreshView();
+					})
+			);
+
+		new Setting(containerEl)
+			.setName(t.settingsBoardBackgroundName)
+			.setDesc(t.settingsBoardBackgroundDesc)
+			.addText((text) =>
+				text
+					.setPlaceholder("https://... o Assets/mapa.png")
+					.setValue(this.plugin.settings.boardDefaultBackground)
+					.onChange(async (v) => {
+						this.plugin.settings.boardDefaultBackground = v.trim();
+						await this.plugin.saveSettings();
+						this.refreshView();
 					})
 			);
 
@@ -367,11 +486,6 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 	}
 
 	refreshView() {
-		const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE);
-		leaves.forEach((leaf) => {
-			if (leaf.view instanceof BattleTrackerView) {
-				leaf.view.render();
-			}
-		});
+		this.plugin.refreshViews();
 	}
 }
