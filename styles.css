@@ -424,6 +424,10 @@
 	text-overflow: ellipsis;
 }
 
+.bt-clickable-name {
+	cursor: pointer;
+}
+
 .bt-sub {
 	font-size: 11px;
 	color: var(--text-muted);
@@ -675,6 +679,35 @@
 .bt-modal-content textarea {
 	min-height: 80px;
 	resize: vertical;
+}
+
+.bt-modal-search-input {
+	margin-bottom: 8px;
+}
+
+.bt-log-new-file-btn {
+	width: 100%;
+	padding: 8px;
+	margin-bottom: 15px;
+}
+
+.bt-log-divider {
+	text-align: center;
+	margin: 10px 0;
+	color: var(--text-muted);
+	font-size: 11px;
+}
+
+.bt-log-pick-list {
+	max-height: 180px;
+}
+
+.bt-log-pick-item {
+	padding: 6px 8px;
+}
+
+.bt-log-footer-actions {
+	margin-top: 15px;
 }
 
 .bt-modal-checkbox-row {

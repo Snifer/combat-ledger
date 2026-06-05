@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.2.1] - 2026-06-05
+
+### Changed
+- Updated the minimum supported Obsidian version to `1.13.0`.
+- Aligned settings, modal, and view code with current Obsidian review guidance for UI structure, popout compatibility, and safer DOM updates.
+
+### Fixed
+- Removed leaf detachment during plugin unload so moved views keep their workspace placement.
+- Replaced direct `innerHTML`, `prompt`, `confirm`, and `require()` usage with safer UI flows and static imports.
+- Reworked dynamic styling to rely on CSS classes and `setCssProps()` instead of direct static style assignments.
+- Reduced unsafe typing around persisted session data, frontmatter synchronization, and modal element access.
+
 ## [1.2.0] - 2026-06-05
 
 ### Added
@@ -15,7 +27,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Board mode for both GM and player views with draggable tokens, optional grid, snap-to-grid, background image support, token hiding, and layout save/load tools.
 - New YAML field mappings for `avatar` and `icon` so notes can provide richer visual tokens and cards.
 - Full combat session persistence, including loaded combatants, active turn, timer state, graveyard state, board background, token positions, hidden tokens, selected tokens, and active log file path.
-- An English feature summary document in `IMPLEMENTED_FEATURES_EN.md`.
 
 ### Changed
 - Refactored the combat state into a shared session so GM and player views stay synchronized in real time.

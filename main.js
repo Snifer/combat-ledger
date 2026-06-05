@@ -6,9 +6,6 @@ var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __esm = (fn, res) => function __init() {
-  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-};
 var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
@@ -23,707 +20,6 @@ var __copyProps = (to, from, except, desc) => {
 };
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// src/localization.ts
-var LOCALIZATION;
-var init_localization = __esm({
-  "src/localization.ts"() {
-    LOCALIZATION = {
-      es: {
-        viewTitle: "Combat Ledger",
-        openCommand: "Abrir Combat Ledger",
-        round: "Ronda",
-        nextTurn: "\u25B6 Siguiente turno",
-        load: "\uFF0B Cargar",
-        reset: "\u21BA Reset",
-        resetConfirm: "\xBFReiniciar batalla? Se perder\xE1 el estado actual.",
-        emptyState: "Sin combatientes. Pulsa \xABCargar\xBB para a\xF1adir notas.",
-        init: "Init",
-        ac: "CA",
-        hp: "PV",
-        shield: "Escudo",
-        xp: "XP",
-        playerView: "Vista de jugadores",
-        fullscreen: "Pantalla completa",
-        damageHeal: "\u2694 Da\xF1o / Curar",
-        status: "\u25C8 Estado",
-        note: "\u270E Nota",
-        action: "\u26A1 Acci\xF3n",
-        defeat: "Derrotar",
-        revive: "Revivir",
-        editInitiative: "Editar iniciativa",
-        removeTitle: "Quitar del combate",
-        dmgModalTitle: "Da\xF1o / Curaci\xF3n",
-        dmgModalQty: "Cantidad",
-        dmgModalHeal: "\u2665 Curar",
-        dmgModalDmg: "\u2694 Da\xF1o",
-        dmgModalUseShield: "Absorber da\xF1o con escudo",
-        dmgModalNoShield: "Sin escudo disponible",
-        condModalTitle: "Condiciones",
-        condModalApply: "Aplicar",
-        condModalDurationPlaceholder: "Duraci\xF3n en rondas",
-        noteModalTitle: "Nota r\xE1pida",
-        noteModalPlaceholder: "Anota algo sobre este combatiente...",
-        noteModalSave: "Guardar",
-        actionModalTitle: "Acci\xF3n",
-        actionModalDamagePlaceholder: "Da\xF1o a aplicar",
-        actionModalShieldLabel: "Permitir que el escudo absorba da\xF1o",
-        actionModalNoCondition: "Sin condici\xF3n",
-        actionModalNotePlaceholder: "Efecto o nota contextual",
-        actionModalApply: "Aplicar acci\xF3n",
-        graveyardTitle: "Bajas / Cementerio",
-        graveyardEmpty: "No hay combatientes derrotados.",
-        graveyardPendingXp: "XP pendiente",
-        graveyardAssignedXp: "XP repartida",
-        graveyardDistributeAll: "Repartir entre PCs",
-        graveyardGiveTo: "Dar a",
-        graveyardXpPlaceholder: "XP a repartir",
-        graveyardExpiredTurn: "Toca al siguiente",
-        playerViewTitle: "Panel de jugadores",
-        playerViewSubtitle: "Orden de turno, combatiente activo y condiciones visibles",
-        boardTitle: "Tablero",
-        boardCenter: "Centrar tokens",
-        boardSave: "Guardar layout",
-        boardLoad: "Cargar layout",
-        boardClear: "Limpiar layout",
-        boardBackground: "Fondo",
-        boardHide: "Ocultar",
-        boardReveal: "Mostrar",
-        boardHidden: "Oculto a jugadores",
-        boardSavePrompt: "Nombre del layout a guardar",
-        boardLoadPrompt: "Escribe el nombre exacto del layout a cargar",
-        boardDeletePrompt: "Escribe el nombre exacto del layout a eliminar",
-        boardNoLayouts: "No hay layouts guardados.",
-        alertTurnStart: "Turno de",
-        alertConditionExpired: "Condici\xF3n expirada",
-        alertDefeated: "Derrotado",
-        alertTimerExpired: "Tiempo agotado",
-        pickModalTitle: "Selecciona combatientes",
-        pickModalSearch: "Buscar nota...",
-        pickModalLoad: "Cargar al combate",
-        pickModalCancel: "Cancelar",
-        pickModalSelectMin: "Selecciona al menos una nota.",
-        // Settings
-        settingsTitle: "Combat Ledger \u2014 Configuraci\xF3n",
-        settingsLanguageName: "Idioma / Language",
-        settingsLanguageDesc: "Selecciona el idioma de la interfaz (Select the interface language)",
-        settingsFieldsTitle: "Campos de combatiente",
-        settingsFieldsDesc: "Escribe el nombre exacto de la propiedad YAML que usas en tus notas.",
-        settingsInitName: "Iniciativa",
-        settingsInitDesc: "Propiedad para el valor de iniciativa",
-        settingsHpName: "PV actuales",
-        settingsHpDesc: "Propiedad para puntos de vida actuales (se usa tambi\xE9n como m\xE1ximo si no hay hp_max)",
-        settingsHpMaxName: "PV m\xE1ximos",
-        settingsHpMaxDesc: "Propiedad para puntos de vida m\xE1ximos",
-        settingsShieldName: "Escudo",
-        settingsShieldDesc: "Propiedad para el valor de escudo o puntos temporales. D\xE9jalo vac\xEDo si no usas escudo.",
-        settingsXpName: "Experiencia",
-        settingsXpDesc: "Propiedad para la experiencia del personaje o del enemigo.",
-        settingsAvatarName: "Avatar",
-        settingsAvatarDesc: "Propiedad YAML con una ruta o URL de imagen para mostrar en la tarjeta.",
-        settingsIconName: "Icono",
-        settingsIconDesc: "Propiedad YAML con un icono o emoji alternativo para el avatar.",
-        settingsAcName: "Clase de Armadura / Defensa",
-        settingsAcDesc: "Propiedad para CA o defensa",
-        settingsTypeName: "Tipo",
-        settingsTypeDesc: 'Propiedad para el tipo: "PC", "Enemy" o "NPC"',
-        settingsExtraName: "Campos extra",
-        settingsExtraDesc: "Propiedades num\xE9ricas adicionales separadas por comas (ej. mp,stamina,stress)",
-        settingsConditionsFieldName: "Campo de condiciones",
-        settingsConditionsFieldDesc: "Propiedad YAML donde se sincronizan las condiciones activas.",
-        settingsRealtimeTitle: "Sincronizaci\xF3n y da\xF1o",
-        settingsRealtimeSyncName: "Sincronizaci\xF3n en tiempo real",
-        settingsRealtimeSyncDesc: "Actualiza autom\xE1ticamente la nota original al cambiar PV, iniciativa, condiciones, escudo o extras.",
-        settingsRealtimeModeName: "Sincronizar a",
-        settingsRealtimeModeDesc: "Limita la sincronizaci\xF3n a personajes jugadores o apl\xEDcala a todos los combatientes.",
-        settingsRealtimeModePc: "Solo PC",
-        settingsRealtimeModeAll: "PC y NPC/Enemigos",
-        settingsShieldAbsorbName: "El escudo absorbe da\xF1o",
-        settingsShieldAbsorbDesc: "Cuando est\xE9 activo, el da\xF1o se resta primero del escudo antes de afectar los PV.",
-        settingsTimerTitle: "Temporizador de turno",
-        settingsTimerEnabledName: "Habilitar temporizador visual",
-        settingsTimerEnabledDesc: "Muestra un temporizador del turno activo en la barra superior.",
-        settingsTimerSecondsName: "Duraci\xF3n del turno (segundos)",
-        settingsTimerSecondsDesc: "Tiempo m\xE1ximo del turno antes de mostrar el aviso para pasar al siguiente.",
-        settingsPlayerHpName: "Mostrar PV en vista de jugadores",
-        settingsPlayerHpDesc: "Si est\xE1 desactivado, la vista de jugadores oculta los valores exactos de PV.",
-        settingsBoardTitle: "Tablero visual",
-        settingsBoardGridName: "Mostrar grid por defecto",
-        settingsBoardGridDesc: "Activa una cuadr\xEDcula visual en el tablero de combate.",
-        settingsBoardSnapName: "Ajustar tokens al grid",
-        settingsBoardSnapDesc: "Al arrastrar tokens, se alinean autom\xE1ticamente a la cuadr\xEDcula.",
-        settingsBoardGridSizeName: "Tama\xF1o del grid",
-        settingsBoardGridSizeDesc: "Tama\xF1o en p\xEDxeles de cada celda del tablero.",
-        settingsBoardBackgroundName: "Fondo por defecto del tablero",
-        settingsBoardBackgroundDesc: "Ruta del vault o URL de imagen usada como fondo inicial del tablero.",
-        settingsCondTitle: "Condiciones / Estados",
-        settingsCondColorDesc: "Personaliza el nombre y color de cada estado. El color se aplica al badge en la vista de combate.",
-        settingsCondAddBtn: "\uFF0B A\xF1adir condici\xF3n",
-        settingsCondDeleteBtn: "Eliminar",
-        settingsCondNamePlaceholder: "Nombre del estado",
-        settingsCondColorLabel: "Color",
-        settingsFolderTitle: "Carpeta de combatientes (opcional)",
-        settingsFolderFieldName: "Ruta de carpeta",
-        settingsFolderFieldDesc: "Si indicas una carpeta (ej. Campa\xF1a/Criaturas), al pulsar \xABCargar\xBB cargar\xE1 todas las notas de esa carpeta autom\xE1ticamente. D\xE9jalo vac\xEDo para seleccionar manualmente.",
-        // Logging Settings & UI
-        logTitle: "Registro de Combate (Log)",
-        logEnabledName: "Habilitar registro de combate",
-        logEnabledDesc: "Registra el progreso del combate en una nota de Markdown.",
-        logModeName: "Modo de registro",
-        logModeDesc: "Elige si registrar en una nota nueva o en una existente.",
-        logModeNew: "Nueva nota",
-        logModeExisting: "Nota existente",
-        logModeAsk: "Preguntar siempre",
-        logHeaderName: "Encabezado del Registro",
-        logHeaderDesc: "El encabezado Markdown (ej. ## Registro de Combate) debajo del cual se guardar\xE1 el log.",
-        logFileNameName: "Nombre de archivo para nuevas notas",
-        logFileNameDesc: "Nombre/Ruta del archivo para nuevas notas de log (puedes usar {date} para la fecha actual).",
-        logSelectFile: "Selecciona la nota para el log",
-        logHeaderPlaceholder: "## Registro de Combate",
-        logStarted: "Combate iniciado.",
-        logEnded: "Combate finalizado/reiniciado.",
-        logActiveLogFile: "Archivo de registro activo",
-        logSelectLogFileButton: "Configurar Registro",
-        logConfigureTitle: "Configurar Registro de Combate",
-        logChooseExistingFile: "Buscar nota existente...",
-        logExistingFilePath: "Ruta de la nota existente",
-        logCreateNewFile: "Crear nueva nota de registro",
-        logSelectNoteNotice: "Por favor selecciona o crea una nota para el registro.",
-        logNewNoteDefaultName: "Registro de Combate {date}",
-        logModalHeading: "Nota de Registro",
-        logHeadingDesc: "Selecciona d\xF3nde quieres registrar este combate:",
-        logButtonNew: "Crear Nueva Nota",
-        logButtonExisting: "Usar Nota Existente",
-        logButtonNoLog: "No registrar"
-      },
-      en: {
-        viewTitle: "Combat Ledger",
-        openCommand: "Open Combat Ledger",
-        round: "Round",
-        nextTurn: "\u25B6 Next turn",
-        load: "\uFF0B Load",
-        reset: "\u21BA Reset",
-        resetConfirm: "Reset battle? Current state will be lost.",
-        emptyState: "No combatants. Click 'Load' to add notes.",
-        init: "Init",
-        ac: "AC",
-        hp: "HP",
-        shield: "Shield",
-        xp: "XP",
-        playerView: "Player view",
-        fullscreen: "Fullscreen",
-        damageHeal: "\u2694 Damage / Heal",
-        status: "\u25C8 Status",
-        note: "\u270E Note",
-        action: "\u26A1 Action",
-        defeat: "Defeat",
-        revive: "Revive",
-        editInitiative: "Edit initiative",
-        removeTitle: "Remove from battle",
-        dmgModalTitle: "Damage / Healing",
-        dmgModalQty: "Amount",
-        dmgModalHeal: "\u2665 Heal",
-        dmgModalDmg: "\u2694 Damage",
-        dmgModalUseShield: "Let shield absorb damage",
-        dmgModalNoShield: "No shield available",
-        condModalTitle: "Conditions",
-        condModalApply: "Apply",
-        condModalDurationPlaceholder: "Duration in rounds",
-        noteModalTitle: "Quick note",
-        noteModalPlaceholder: "Write something about this combatant...",
-        noteModalSave: "Save",
-        actionModalTitle: "Action",
-        actionModalDamagePlaceholder: "Damage to apply",
-        actionModalShieldLabel: "Allow shield to absorb damage",
-        actionModalNoCondition: "No condition",
-        actionModalNotePlaceholder: "Effect or contextual note",
-        actionModalApply: "Apply action",
-        graveyardTitle: "Graveyard",
-        graveyardEmpty: "There are no defeated combatants.",
-        graveyardPendingXp: "Pending XP",
-        graveyardAssignedXp: "Assigned XP",
-        graveyardDistributeAll: "Split among PCs",
-        graveyardGiveTo: "Give to",
-        graveyardXpPlaceholder: "XP to award",
-        graveyardExpiredTurn: "Next turn",
-        playerViewTitle: "Player dashboard",
-        playerViewSubtitle: "Turn order, active combatant, and visible conditions",
-        boardTitle: "Board",
-        boardCenter: "Center tokens",
-        boardSave: "Save layout",
-        boardLoad: "Load layout",
-        boardClear: "Clear layout",
-        boardBackground: "Background",
-        boardHide: "Hide",
-        boardReveal: "Reveal",
-        boardHidden: "Hidden from players",
-        boardSavePrompt: "Layout name to save",
-        boardLoadPrompt: "Enter the exact layout name to load",
-        boardDeletePrompt: "Enter the exact layout name to delete",
-        boardNoLayouts: "There are no saved layouts.",
-        alertTurnStart: "Turn of",
-        alertConditionExpired: "Condition expired",
-        alertDefeated: "Defeated",
-        alertTimerExpired: "Time expired",
-        pickModalTitle: "Select combatants",
-        pickModalSearch: "Search note...",
-        pickModalLoad: "Load to battle",
-        pickModalCancel: "Cancel",
-        pickModalSelectMin: "Select at least one note.",
-        // Settings
-        settingsTitle: "Combat Ledger \u2014 Settings",
-        settingsLanguageName: "Idioma / Language",
-        settingsLanguageDesc: "Selecciona el idioma de la interfaz (Select the interface language)",
-        settingsFieldsTitle: "Combatant Fields",
-        settingsFieldsDesc: "Write the exact name of the YAML property you use in your notes.",
-        settingsInitName: "Initiative",
-        settingsInitDesc: "Property for the initiative value",
-        settingsHpName: "Current HP",
-        settingsHpDesc: "Property for current hit points (also used as max if hp_max is missing)",
-        settingsHpMaxName: "Max HP",
-        settingsHpMaxDesc: "Property for maximum hit points",
-        settingsShieldName: "Shield",
-        settingsShieldDesc: "Property for shield or temporary hit points. Leave empty if unused.",
-        settingsXpName: "Experience",
-        settingsXpDesc: "Property for character or enemy experience.",
-        settingsAvatarName: "Avatar",
-        settingsAvatarDesc: "YAML property with an image path or URL to display on the card.",
-        settingsIconName: "Icon",
-        settingsIconDesc: "YAML property with an alternate icon or emoji for the avatar.",
-        settingsAcName: "Armor Class / Defense",
-        settingsAcDesc: "Property for AC or defense",
-        settingsTypeName: "Type",
-        settingsTypeDesc: 'Property for type: "PC", "Enemy" or "NPC"',
-        settingsExtraName: "Extra fields",
-        settingsExtraDesc: "Additional numeric properties separated by commas (e.g. mp,stamina,stress)",
-        settingsConditionsFieldName: "Conditions field",
-        settingsConditionsFieldDesc: "YAML property where active conditions are synchronized.",
-        settingsRealtimeTitle: "Sync and damage",
-        settingsRealtimeSyncName: "Real-time sync",
-        settingsRealtimeSyncDesc: "Automatically updates the original note when HP, initiative, conditions, shield, or extras change.",
-        settingsRealtimeModeName: "Sync targets",
-        settingsRealtimeModeDesc: "Limit synchronization to player characters or apply it to all combatants.",
-        settingsRealtimeModePc: "PC only",
-        settingsRealtimeModeAll: "PC and NPC/Enemies",
-        settingsShieldAbsorbName: "Shield absorbs damage",
-        settingsShieldAbsorbDesc: "When enabled, damage is removed from shield before it affects HP.",
-        settingsTimerTitle: "Turn timer",
-        settingsTimerEnabledName: "Enable visual timer",
-        settingsTimerEnabledDesc: "Shows a timer for the active turn in the top bar.",
-        settingsTimerSecondsName: "Turn duration (seconds)",
-        settingsTimerSecondsDesc: "Maximum turn time before showing the prompt to move on.",
-        settingsPlayerHpName: "Show HP in player view",
-        settingsPlayerHpDesc: "If disabled, the player view hides exact HP values.",
-        settingsBoardTitle: "Visual board",
-        settingsBoardGridName: "Show grid by default",
-        settingsBoardGridDesc: "Enables a visual grid on the combat board.",
-        settingsBoardSnapName: "Snap tokens to grid",
-        settingsBoardSnapDesc: "Dragging tokens aligns them automatically to the grid.",
-        settingsBoardGridSizeName: "Grid size",
-        settingsBoardGridSizeDesc: "Pixel size of each board cell.",
-        settingsBoardBackgroundName: "Default board background",
-        settingsBoardBackgroundDesc: "Vault path or image URL used as the initial board background.",
-        settingsCondTitle: "Conditions / States",
-        settingsCondColorDesc: "Customize the name and color of each status. The color is applied to the badge in the combat view.",
-        settingsCondAddBtn: "\uFF0B Add condition",
-        settingsCondDeleteBtn: "Delete",
-        settingsCondNamePlaceholder: "Status name",
-        settingsCondColorLabel: "Color",
-        settingsFolderTitle: "Combatant Folder (optional)",
-        settingsFolderFieldName: "Folder path",
-        settingsFolderFieldDesc: "If you specify a folder (e.g. Campaign/Creatures), clicking 'Load' will load all notes in that folder automatically. Leave empty to select manually.",
-        // Logging Settings & UI
-        logTitle: "Combat Log (Log)",
-        logEnabledName: "Enable combat logging",
-        logEnabledDesc: "Log combat progress into a Markdown note.",
-        logModeName: "Logging mode",
-        logModeDesc: "Choose whether to log in a new note or an existing one.",
-        logModeNew: "New note",
-        logModeExisting: "Existing note",
-        logModeAsk: "Always ask",
-        logHeaderName: "Log Header",
-        logHeaderDesc: "The Markdown header (e.g. ## Combat Log) under which the log will be saved.",
-        logFileNameName: "File name for new notes",
-        logFileNameDesc: "File name/path for new log notes (you can use {date} for current date).",
-        logSelectFile: "Select note for log",
-        logHeaderPlaceholder: "## Combat Log",
-        logStarted: "Combat started.",
-        logEnded: "Combat ended/reset.",
-        logActiveLogFile: "Active log file",
-        logSelectLogFileButton: "Configure Log",
-        logConfigureTitle: "Configure Combat Log",
-        logChooseExistingFile: "Search existing note...",
-        logExistingFilePath: "Existing note path",
-        logCreateNewFile: "Create new log note",
-        logSelectNoteNotice: "Please select or create a note for logging.",
-        logNewNoteDefaultName: "Combat Log {date}",
-        logModalHeading: "Log Note",
-        logHeadingDesc: "Select where you want to log this combat:",
-        logButtonNew: "Create New Note",
-        logButtonExisting: "Use Existing Note",
-        logButtonNoLog: "Do not log"
-      }
-    };
-  }
-});
-
-// src/modals.ts
-var modals_exports = {};
-__export(modals_exports, {
-  ActionModal: () => ActionModal,
-  ConditionModal: () => ConditionModal,
-  DmgModal: () => DmgModal,
-  LogSetupModal: () => LogSetupModal,
-  NoteModal: () => NoteModal,
-  PickCombatantsModal: () => PickCombatantsModal
-});
-var import_obsidian2, DmgModal, ConditionModal, NoteModal, ActionModal, PickCombatantsModal, LogSetupModal;
-var init_modals = __esm({
-  "src/modals.ts"() {
-    import_obsidian2 = require("obsidian");
-    init_localization();
-    DmgModal = class extends import_obsidian2.Modal {
-      constructor(app, name, plugin, hasShield, onConfirm) {
-        super(app);
-        this.name = name;
-        this.plugin = plugin;
-        this.hasShield = hasShield;
-        this.onConfirm = onConfirm;
-      }
-      onOpen() {
-        const { contentEl } = this;
-        const lang = this.plugin.settings.language;
-        const t = LOCALIZATION[lang];
-        contentEl.createEl("h3", { text: `${t.dmgModalTitle} \u2014 ${this.name}` });
-        const wrap = contentEl.createDiv("bt-modal-content");
-        const input = wrap.createEl("input", { type: "number", placeholder: t.dmgModalQty });
-        input.min = "0";
-        const shieldRow = wrap.createDiv("bt-modal-checkbox-row");
-        const shieldToggle = shieldRow.createEl("input", { type: "checkbox" });
-        shieldToggle.checked = this.plugin.settings.shieldAbsorbsDamage;
-        shieldToggle.disabled = !this.hasShield;
-        shieldRow.createEl("label", {
-          text: this.hasShield ? t.dmgModalUseShield : t.dmgModalNoShield
-        });
-        const row = wrap.createDiv("bt-modal-actions");
-        const healBtn = row.createEl("button", { cls: "bt-btn", text: t.dmgModalHeal });
-        healBtn.onclick = () => {
-          this.onConfirm(parseInt(input.value) || 0, true, false);
-          this.close();
-        };
-        const dmgBtn = row.createEl("button", { cls: "bt-btn bt-btn-danger-soft", text: t.dmgModalDmg });
-        dmgBtn.onclick = () => {
-          this.onConfirm(parseInt(input.value) || 0, false, this.hasShield && shieldToggle.checked);
-          this.close();
-        };
-        setTimeout(() => input.focus(), 50);
-      }
-      onClose() {
-        this.contentEl.empty();
-      }
-    };
-    ConditionModal = class extends import_obsidian2.Modal {
-      constructor(app, all, current, plugin, onConfirm) {
-        super(app);
-        this.allConditions = all;
-        this.current = current.map((entry) => ({ ...entry }));
-        this.plugin = plugin;
-        this.onConfirm = onConfirm;
-      }
-      onOpen() {
-        const { contentEl } = this;
-        const lang = this.plugin.settings.language;
-        const t = LOCALIZATION[lang];
-        contentEl.createEl("h3", { text: t.condModalTitle });
-        const grid = contentEl.createDiv("bt-cond-edit-grid");
-        const selected = new Map(this.current.map((entry) => [entry.name, entry.duration]));
-        this.allConditions.forEach((entry) => {
-          const row2 = grid.createDiv("bt-cond-edit-row");
-          const left = row2.createDiv("bt-cond-edit-main");
-          const check = left.createEl("input", { type: "checkbox" });
-          check.checked = selected.has(entry.name);
-          const btn = left.createEl("button", {
-            cls: `bt-cond-toggle${check.checked ? " selected" : ""}`,
-            text: entry.name
-          });
-          const durationInput = row2.createEl("input", {
-            cls: "bt-cond-duration-input",
-            type: "number",
-            placeholder: t.condModalDurationPlaceholder
-          });
-          durationInput.min = "1";
-          const currentDuration = selected.get(entry.name);
-          durationInput.value = currentDuration ? String(currentDuration) : "";
-          durationInput.disabled = !check.checked;
-          if (entry.color) {
-            btn.style.color = check.checked ? "#fff" : entry.color;
-            btn.style.borderColor = entry.color;
-            btn.style.backgroundColor = check.checked ? entry.color : entry.color + "22";
-          }
-          const updateVisual = () => {
-            btn.classList.toggle("selected", check.checked);
-            durationInput.disabled = !check.checked;
-            if (!check.checked)
-              durationInput.value = "";
-            if (entry.color) {
-              btn.style.color = check.checked ? "#fff" : entry.color;
-              btn.style.backgroundColor = check.checked ? entry.color : entry.color + "22";
-            }
-          };
-          btn.onclick = () => {
-            check.checked = !check.checked;
-            updateVisual();
-          };
-          check.onchange = updateVisual;
-        });
-        const row = contentEl.createDiv("bt-modal-actions");
-        const ok = row.createEl("button", { cls: "bt-btn bt-btn-primary", text: t.condModalApply });
-        ok.onclick = () => {
-          const updated = [];
-          const rows = Array.from(grid.querySelectorAll(".bt-cond-edit-row"));
-          rows.forEach((rowEl, idx) => {
-            const check = rowEl.querySelector("input[type='checkbox']");
-            const durationInput = rowEl.querySelector(".bt-cond-duration-input");
-            const condition = this.allConditions[idx];
-            if (!(check == null ? void 0 : check.checked) || !condition)
-              return;
-            const parsedDuration = Number(durationInput == null ? void 0 : durationInput.value);
-            updated.push({
-              name: condition.name,
-              duration: Number.isFinite(parsedDuration) && parsedDuration > 0 ? parsedDuration : null
-            });
-          });
-          this.onConfirm(updated);
-          this.close();
-        };
-      }
-      onClose() {
-        this.contentEl.empty();
-      }
-    };
-    NoteModal = class extends import_obsidian2.Modal {
-      constructor(app, current, plugin, onConfirm) {
-        super(app);
-        this.current = current;
-        this.plugin = plugin;
-        this.onConfirm = onConfirm;
-      }
-      onOpen() {
-        const { contentEl } = this;
-        const lang = this.plugin.settings.language;
-        const t = LOCALIZATION[lang];
-        contentEl.createEl("h3", { text: t.noteModalTitle });
-        const wrap = contentEl.createDiv("bt-modal-content");
-        const ta = wrap.createEl("textarea", { placeholder: t.noteModalPlaceholder });
-        ta.value = this.current;
-        const row = wrap.createDiv("bt-modal-actions");
-        const ok = row.createEl("button", { cls: "bt-btn bt-btn-primary", text: t.noteModalSave });
-        ok.onclick = () => {
-          this.onConfirm(ta.value);
-          this.close();
-        };
-        setTimeout(() => ta.focus(), 50);
-      }
-      onClose() {
-        this.contentEl.empty();
-      }
-    };
-    ActionModal = class extends import_obsidian2.Modal {
-      constructor(app, attacker, targets, conditions, plugin, onConfirm) {
-        super(app);
-        this.attacker = attacker;
-        this.targets = targets;
-        this.conditions = conditions;
-        this.plugin = plugin;
-        this.onConfirm = onConfirm;
-      }
-      onOpen() {
-        const { contentEl } = this;
-        const lang = this.plugin.settings.language;
-        const t = LOCALIZATION[lang];
-        contentEl.createEl("h3", { text: `${t.actionModalTitle} \u2014 ${this.attacker.name}` });
-        const wrap = contentEl.createDiv("bt-modal-content");
-        const targetSelect = wrap.createEl("select");
-        this.targets.forEach((target) => {
-          targetSelect.createEl("option", {
-            value: target.id,
-            text: `${target.name} (${t.hp} ${target.hp}/${target.hpMax})`
-          });
-        });
-        const damageInput = wrap.createEl("input", {
-          type: "number",
-          placeholder: t.actionModalDamagePlaceholder
-        });
-        damageInput.min = "0";
-        const shieldRow = wrap.createDiv("bt-modal-checkbox-row");
-        const shieldToggle = shieldRow.createEl("input", { type: "checkbox" });
-        shieldToggle.checked = this.plugin.settings.shieldAbsorbsDamage;
-        shieldRow.createEl("label", { text: t.actionModalShieldLabel });
-        const conditionSelect = wrap.createEl("select");
-        conditionSelect.createEl("option", { value: "", text: t.actionModalNoCondition });
-        this.conditions.forEach((entry) => {
-          conditionSelect.createEl("option", { value: entry.name, text: entry.name });
-        });
-        const durationInput = wrap.createEl("input", {
-          type: "number",
-          placeholder: t.condModalDurationPlaceholder
-        });
-        durationInput.min = "1";
-        const noteInput = wrap.createEl("textarea", {
-          placeholder: t.actionModalNotePlaceholder
-        });
-        const row = wrap.createDiv("bt-modal-actions");
-        const ok = row.createEl("button", { cls: "bt-btn bt-btn-primary", text: t.actionModalApply });
-        ok.onclick = () => {
-          const parsedDuration = Number(durationInput.value);
-          this.onConfirm({
-            targetId: targetSelect.value,
-            damage: parseInt(damageInput.value) || 0,
-            useShield: shieldToggle.checked,
-            conditionName: conditionSelect.value,
-            conditionDuration: Number.isFinite(parsedDuration) && parsedDuration > 0 ? parsedDuration : null,
-            note: noteInput.value.trim()
-          });
-          this.close();
-        };
-        setTimeout(() => targetSelect.focus(), 50);
-      }
-      onClose() {
-        this.contentEl.empty();
-      }
-    };
-    PickCombatantsModal = class extends import_obsidian2.Modal {
-      constructor(app, plugin, onConfirm) {
-        super(app);
-        this.selected = /* @__PURE__ */ new Set();
-        this.plugin = plugin;
-        this.onConfirm = onConfirm;
-      }
-      onOpen() {
-        const { contentEl } = this;
-        const lang = this.plugin.settings.language;
-        const t = LOCALIZATION[lang];
-        contentEl.createEl("h3", { text: t.pickModalTitle });
-        const searchInput = contentEl.createEl("input", {
-          type: "text",
-          placeholder: t.pickModalSearch,
-          cls: "bt-modal-content"
-        });
-        searchInput.style.marginBottom = "8px";
-        const list = contentEl.createDiv("bt-pick-list");
-        const files = this.app.vault.getMarkdownFiles().sort((a, b) => a.basename.localeCompare(b.basename));
-        const renderList = (filter) => {
-          list.empty();
-          files.filter((f) => !filter || f.basename.toLowerCase().includes(filter.toLowerCase())).forEach((file) => {
-            const item = list.createDiv("bt-pick-item");
-            const cb = item.createEl("input", { type: "checkbox" });
-            cb.checked = this.selected.has(file.path);
-            cb.onchange = () => {
-              if (cb.checked)
-                this.selected.add(file.path);
-              else
-                this.selected.delete(file.path);
-            };
-            const lbl = item.createEl("label", { text: file.basename });
-            lbl.onclick = () => {
-              cb.checked = !cb.checked;
-              cb.dispatchEvent(new Event("change"));
-            };
-          });
-        };
-        renderList("");
-        searchInput.oninput = () => renderList(searchInput.value);
-        const row = contentEl.createDiv("bt-modal-actions");
-        const cancel = row.createEl("button", { cls: "bt-btn", text: t.pickModalCancel });
-        cancel.onclick = () => this.close();
-        const ok = row.createEl("button", { cls: "bt-btn bt-btn-primary", text: t.pickModalLoad });
-        ok.onclick = () => {
-          const picked = files.filter((f) => this.selected.has(f.path));
-          if (!picked.length) {
-            new import_obsidian2.Notice(t.pickModalSelectMin);
-            return;
-          }
-          this.onConfirm(picked);
-          this.close();
-        };
-        setTimeout(() => searchInput.focus(), 50);
-      }
-      onClose() {
-        this.contentEl.empty();
-      }
-    };
-    LogSetupModal = class extends import_obsidian2.Modal {
-      constructor(app, plugin, view, onChoose) {
-        super(app);
-        this.plugin = plugin;
-        this.view = view;
-        this.onChoose = onChoose;
-      }
-      onOpen() {
-        const { contentEl } = this;
-        const lang = this.plugin.settings.language;
-        const t = LOCALIZATION[lang];
-        contentEl.createEl("h3", { text: t.logConfigureTitle });
-        contentEl.createEl("p", { text: t.logHeadingDesc, cls: "setting-item-description" });
-        const container = contentEl.createDiv("bt-modal-content");
-        const newFileBtn = container.createEl("button", { cls: "bt-btn bt-btn-primary", text: `\u{1F4DD} ${t.logCreateNewFile}` });
-        newFileBtn.style.width = "100%";
-        newFileBtn.style.padding = "8px";
-        newFileBtn.style.marginBottom = "15px";
-        newFileBtn.onclick = async () => {
-          try {
-            const file = await this.view.createNewLogFile();
-            new import_obsidian2.Notice(`${t.logActiveLogFile}: ${file.name}`);
-            this.onChoose(file);
-            this.close();
-          } catch (e) {
-            new import_obsidian2.Notice(lang === "es" ? "Error al crear la nota de registro." : "Error creating log note.");
-            console.error(e);
-          }
-        };
-        const divider = container.createDiv();
-        divider.style.textAlign = "center";
-        divider.style.margin = "10px 0";
-        divider.style.color = "var(--text-muted)";
-        divider.style.fontSize = "11px";
-        divider.setText("\u2500\u2500\u2500 " + (lang === "es" ? "O SELECCIONAR EXISTENTE" : "OR SELECT EXISTING") + " \u2500\u2500\u2500");
-        const searchInput = container.createEl("input", {
-          type: "text",
-          placeholder: t.pickModalSearch
-        });
-        searchInput.style.marginBottom = "8px";
-        const list = container.createDiv("bt-pick-list");
-        list.style.maxHeight = "180px";
-        const files = this.app.vault.getMarkdownFiles().sort((a, b) => a.basename.localeCompare(b.basename));
-        const renderList = (filter) => {
-          list.empty();
-          files.filter((f) => !filter || f.basename.toLowerCase().includes(filter.toLowerCase())).slice(0, 50).forEach((file) => {
-            const item = list.createDiv("bt-pick-item");
-            item.style.padding = "6px 8px";
-            item.setText(file.path);
-            item.onclick = () => {
-              new import_obsidian2.Notice(`${t.logActiveLogFile}: ${file.name}`);
-              this.onChoose(file);
-              this.close();
-            };
-          });
-        };
-        renderList("");
-        searchInput.oninput = () => renderList(searchInput.value);
-        const row = contentEl.createDiv("bt-modal-actions");
-        row.style.marginTop = "15px";
-        const cancelBtn = row.createEl("button", { cls: "bt-btn", text: t.logButtonNoLog });
-        cancelBtn.onclick = () => {
-          this.onChoose(null);
-          this.close();
-        };
-      }
-      onClose() {
-        this.contentEl.empty();
-      }
-    };
-  }
-});
-
 // src/main.ts
 var main_exports = {};
 __export(main_exports, {
@@ -734,7 +30,346 @@ var import_obsidian4 = require("obsidian");
 
 // src/settings.ts
 var import_obsidian = require("obsidian");
-init_localization();
+
+// src/localization.ts
+var LOCALIZATION = {
+  es: {
+    viewTitle: "Combat Ledger",
+    openCommand: "Abrir Combat Ledger",
+    round: "Ronda",
+    nextTurn: "\u25B6 Siguiente turno",
+    load: "\uFF0B Cargar",
+    reset: "\u21BA Reset",
+    resetConfirm: "\xBFReiniciar batalla? Se perder\xE1 el estado actual.",
+    emptyState: "Sin combatientes. Pulsa \xABCargar\xBB para a\xF1adir notas.",
+    init: "Init",
+    ac: "CA",
+    hp: "PV",
+    shield: "Escudo",
+    xp: "XP",
+    playerView: "Vista de jugadores",
+    fullscreen: "Pantalla completa",
+    damageHeal: "\u2694 Da\xF1o / Curar",
+    status: "\u25C8 Estado",
+    note: "\u270E Nota",
+    action: "\u26A1 Acci\xF3n",
+    defeat: "Derrotar",
+    revive: "Revivir",
+    editInitiative: "Editar iniciativa",
+    removeTitle: "Quitar del combate",
+    dmgModalTitle: "Da\xF1o / Curaci\xF3n",
+    dmgModalQty: "Cantidad",
+    dmgModalHeal: "\u2665 Curar",
+    dmgModalDmg: "\u2694 Da\xF1o",
+    dmgModalUseShield: "Absorber da\xF1o con escudo",
+    dmgModalNoShield: "Sin escudo disponible",
+    condModalTitle: "Condiciones",
+    condModalApply: "Aplicar",
+    condModalDurationPlaceholder: "Duraci\xF3n en rondas",
+    noteModalTitle: "Nota r\xE1pida",
+    noteModalPlaceholder: "Anota algo sobre este combatiente...",
+    noteModalSave: "Guardar",
+    actionModalTitle: "Acci\xF3n",
+    actionModalDamagePlaceholder: "Da\xF1o a aplicar",
+    actionModalShieldLabel: "Permitir que el escudo absorba da\xF1o",
+    actionModalNoCondition: "Sin condici\xF3n",
+    actionModalNotePlaceholder: "Efecto o nota contextual",
+    actionModalApply: "Aplicar acci\xF3n",
+    graveyardTitle: "Bajas / Cementerio",
+    graveyardEmpty: "No hay combatientes derrotados.",
+    graveyardPendingXp: "XP pendiente",
+    graveyardAssignedXp: "XP repartida",
+    graveyardDistributeAll: "Repartir entre PCs",
+    graveyardGiveTo: "Dar a",
+    graveyardXpPlaceholder: "XP a repartir",
+    graveyardExpiredTurn: "Toca al siguiente",
+    playerViewTitle: "Panel de jugadores",
+    playerViewSubtitle: "Orden de turno, combatiente activo y condiciones visibles",
+    boardTitle: "Tablero",
+    boardCenter: "Centrar tokens",
+    boardSave: "Guardar layout",
+    boardLoad: "Cargar layout",
+    boardClear: "Limpiar layout",
+    boardBackground: "Fondo",
+    boardHide: "Ocultar",
+    boardReveal: "Mostrar",
+    boardHidden: "Oculto a jugadores",
+    boardSavePrompt: "Nombre del layout a guardar",
+    boardLoadPrompt: "Escribe el nombre exacto del layout a cargar",
+    boardDeletePrompt: "Escribe el nombre exacto del layout a eliminar",
+    boardNoLayouts: "No hay layouts guardados.",
+    alertTurnStart: "Turno de",
+    alertConditionExpired: "Condici\xF3n expirada",
+    alertDefeated: "Derrotado",
+    alertTimerExpired: "Tiempo agotado",
+    pickModalTitle: "Selecciona combatientes",
+    pickModalSearch: "Buscar nota...",
+    pickModalLoad: "Cargar al combate",
+    pickModalCancel: "Cancelar",
+    pickModalSelectMin: "Selecciona al menos una nota.",
+    // Settings
+    settingsTitle: "Combat Ledger \u2014 Configuraci\xF3n",
+    settingsLanguageName: "Idioma / Language",
+    settingsLanguageDesc: "Selecciona el idioma de la interfaz (Select the interface language)",
+    settingsFieldsTitle: "Campos de combatiente",
+    settingsFieldsDesc: "Escribe el nombre exacto de la propiedad YAML que usas en tus notas.",
+    settingsInitName: "Iniciativa",
+    settingsInitDesc: "Propiedad para el valor de iniciativa",
+    settingsHpName: "PV actuales",
+    settingsHpDesc: "Propiedad para puntos de vida actuales (se usa tambi\xE9n como m\xE1ximo si no hay hp_max)",
+    settingsHpMaxName: "PV m\xE1ximos",
+    settingsHpMaxDesc: "Propiedad para puntos de vida m\xE1ximos",
+    settingsShieldName: "Escudo",
+    settingsShieldDesc: "Propiedad para el valor de escudo o puntos temporales. D\xE9jalo vac\xEDo si no usas escudo.",
+    settingsXpName: "Experiencia",
+    settingsXpDesc: "Propiedad para la experiencia del personaje o del enemigo.",
+    settingsAvatarName: "Avatar",
+    settingsAvatarDesc: "Propiedad YAML con una ruta o URL de imagen para mostrar en la tarjeta.",
+    settingsIconName: "Icono",
+    settingsIconDesc: "Propiedad YAML con un icono o emoji alternativo para el avatar.",
+    settingsAcName: "Clase de Armadura / Defensa",
+    settingsAcDesc: "Propiedad para CA o defensa",
+    settingsTypeName: "Tipo",
+    settingsTypeDesc: 'Propiedad para el tipo: "PC", "Enemy" o "NPC"',
+    settingsExtraName: "Campos extra",
+    settingsExtraDesc: "Propiedades num\xE9ricas adicionales separadas por comas (ej. mp,stamina,stress)",
+    settingsConditionsFieldName: "Campo de condiciones",
+    settingsConditionsFieldDesc: "Propiedad YAML donde se sincronizan las condiciones activas.",
+    settingsRealtimeTitle: "Sincronizaci\xF3n y da\xF1o",
+    settingsRealtimeSyncName: "Sincronizaci\xF3n en tiempo real",
+    settingsRealtimeSyncDesc: "Actualiza autom\xE1ticamente la nota original al cambiar PV, iniciativa, condiciones, escudo o extras.",
+    settingsRealtimeModeName: "Sincronizar a",
+    settingsRealtimeModeDesc: "Limita la sincronizaci\xF3n a personajes jugadores o apl\xEDcala a todos los combatientes.",
+    settingsRealtimeModePc: "Solo PC",
+    settingsRealtimeModeAll: "PC y NPC/Enemigos",
+    settingsShieldAbsorbName: "El escudo absorbe da\xF1o",
+    settingsShieldAbsorbDesc: "Cuando est\xE9 activo, el da\xF1o se resta primero del escudo antes de afectar los PV.",
+    settingsTimerTitle: "Temporizador de turno",
+    settingsTimerEnabledName: "Habilitar temporizador visual",
+    settingsTimerEnabledDesc: "Muestra un temporizador del turno activo en la barra superior.",
+    settingsTimerSecondsName: "Duraci\xF3n del turno (segundos)",
+    settingsTimerSecondsDesc: "Tiempo m\xE1ximo del turno antes de mostrar el aviso para pasar al siguiente.",
+    settingsPlayerHpName: "Mostrar PV en vista de jugadores",
+    settingsPlayerHpDesc: "Si est\xE1 desactivado, la vista de jugadores oculta los valores exactos de PV.",
+    settingsBoardTitle: "Tablero visual",
+    settingsBoardGridName: "Mostrar grid por defecto",
+    settingsBoardGridDesc: "Activa una cuadr\xEDcula visual en el tablero de combate.",
+    settingsBoardSnapName: "Ajustar tokens al grid",
+    settingsBoardSnapDesc: "Al arrastrar tokens, se alinean autom\xE1ticamente a la cuadr\xEDcula.",
+    settingsBoardGridSizeName: "Tama\xF1o del grid",
+    settingsBoardGridSizeDesc: "Tama\xF1o en p\xEDxeles de cada celda del tablero.",
+    settingsBoardBackgroundName: "Fondo por defecto del tablero",
+    settingsBoardBackgroundDesc: "Ruta del vault o URL de imagen usada como fondo inicial del tablero.",
+    settingsCondTitle: "Condiciones / Estados",
+    settingsCondColorDesc: "Personaliza el nombre y color de cada estado. El color se aplica al badge en la vista de combate.",
+    settingsCondAddBtn: "\uFF0B A\xF1adir condici\xF3n",
+    settingsCondDeleteBtn: "Eliminar",
+    settingsCondNamePlaceholder: "Nombre del estado",
+    settingsCondColorLabel: "Color",
+    settingsFolderTitle: "Carpeta de combatientes (opcional)",
+    settingsFolderFieldName: "Ruta de carpeta",
+    settingsFolderFieldDesc: "Si indicas una carpeta (ej. Campa\xF1a/Criaturas), al pulsar \xABCargar\xBB cargar\xE1 todas las notas de esa carpeta autom\xE1ticamente. D\xE9jalo vac\xEDo para seleccionar manualmente.",
+    // Logging Settings & UI
+    logTitle: "Registro de Combate (Log)",
+    logEnabledName: "Habilitar registro de combate",
+    logEnabledDesc: "Registra el progreso del combate en una nota de Markdown.",
+    logModeName: "Modo de registro",
+    logModeDesc: "Elige si registrar en una nota nueva o en una existente.",
+    logModeNew: "Nueva nota",
+    logModeExisting: "Nota existente",
+    logModeAsk: "Preguntar siempre",
+    logHeaderName: "Encabezado del Registro",
+    logHeaderDesc: "El encabezado Markdown (ej. ## Registro de Combate) debajo del cual se guardar\xE1 el log.",
+    logFileNameName: "Nombre de archivo para nuevas notas",
+    logFileNameDesc: "Nombre/Ruta del archivo para nuevas notas de log (puedes usar {date} para la fecha actual).",
+    logSelectFile: "Selecciona la nota para el log",
+    logHeaderPlaceholder: "## Registro de Combate",
+    logStarted: "Combate iniciado.",
+    logEnded: "Combate finalizado/reiniciado.",
+    logActiveLogFile: "Archivo de registro activo",
+    logSelectLogFileButton: "Configurar Registro",
+    logConfigureTitle: "Configurar Registro de Combate",
+    logChooseExistingFile: "Buscar nota existente...",
+    logExistingFilePath: "Ruta de la nota existente",
+    logCreateNewFile: "Crear nueva nota de registro",
+    logSelectNoteNotice: "Por favor selecciona o crea una nota para el registro.",
+    logNewNoteDefaultName: "Registro de Combate {date}",
+    logModalHeading: "Nota de Registro",
+    logHeadingDesc: "Selecciona d\xF3nde quieres registrar este combate:",
+    logButtonNew: "Crear Nueva Nota",
+    logButtonExisting: "Usar Nota Existente",
+    logButtonNoLog: "No registrar"
+  },
+  en: {
+    viewTitle: "Combat Ledger",
+    openCommand: "Open Combat Ledger",
+    round: "Round",
+    nextTurn: "\u25B6 Next turn",
+    load: "\uFF0B Load",
+    reset: "\u21BA Reset",
+    resetConfirm: "Reset battle? Current state will be lost.",
+    emptyState: "No combatants. Click 'Load' to add notes.",
+    init: "Init",
+    ac: "AC",
+    hp: "HP",
+    shield: "Shield",
+    xp: "XP",
+    playerView: "Player view",
+    fullscreen: "Fullscreen",
+    damageHeal: "\u2694 Damage / Heal",
+    status: "\u25C8 Status",
+    note: "\u270E Note",
+    action: "\u26A1 Action",
+    defeat: "Defeat",
+    revive: "Revive",
+    editInitiative: "Edit initiative",
+    removeTitle: "Remove from battle",
+    dmgModalTitle: "Damage / Healing",
+    dmgModalQty: "Amount",
+    dmgModalHeal: "\u2665 Heal",
+    dmgModalDmg: "\u2694 Damage",
+    dmgModalUseShield: "Let shield absorb damage",
+    dmgModalNoShield: "No shield available",
+    condModalTitle: "Conditions",
+    condModalApply: "Apply",
+    condModalDurationPlaceholder: "Duration in rounds",
+    noteModalTitle: "Quick note",
+    noteModalPlaceholder: "Write something about this combatant...",
+    noteModalSave: "Save",
+    actionModalTitle: "Action",
+    actionModalDamagePlaceholder: "Damage to apply",
+    actionModalShieldLabel: "Allow shield to absorb damage",
+    actionModalNoCondition: "No condition",
+    actionModalNotePlaceholder: "Effect or contextual note",
+    actionModalApply: "Apply action",
+    graveyardTitle: "Graveyard",
+    graveyardEmpty: "There are no defeated combatants.",
+    graveyardPendingXp: "Pending XP",
+    graveyardAssignedXp: "Assigned XP",
+    graveyardDistributeAll: "Split among PCs",
+    graveyardGiveTo: "Give to",
+    graveyardXpPlaceholder: "XP to award",
+    graveyardExpiredTurn: "Next turn",
+    playerViewTitle: "Player dashboard",
+    playerViewSubtitle: "Turn order, active combatant, and visible conditions",
+    boardTitle: "Board",
+    boardCenter: "Center tokens",
+    boardSave: "Save layout",
+    boardLoad: "Load layout",
+    boardClear: "Clear layout",
+    boardBackground: "Background",
+    boardHide: "Hide",
+    boardReveal: "Reveal",
+    boardHidden: "Hidden from players",
+    boardSavePrompt: "Layout name to save",
+    boardLoadPrompt: "Enter the exact layout name to load",
+    boardDeletePrompt: "Enter the exact layout name to delete",
+    boardNoLayouts: "There are no saved layouts.",
+    alertTurnStart: "Turn of",
+    alertConditionExpired: "Condition expired",
+    alertDefeated: "Defeated",
+    alertTimerExpired: "Time expired",
+    pickModalTitle: "Select combatants",
+    pickModalSearch: "Search note...",
+    pickModalLoad: "Load to battle",
+    pickModalCancel: "Cancel",
+    pickModalSelectMin: "Select at least one note.",
+    // Settings
+    settingsTitle: "Combat Ledger \u2014 Settings",
+    settingsLanguageName: "Idioma / Language",
+    settingsLanguageDesc: "Selecciona el idioma de la interfaz (Select the interface language)",
+    settingsFieldsTitle: "Combatant Fields",
+    settingsFieldsDesc: "Write the exact name of the YAML property you use in your notes.",
+    settingsInitName: "Initiative",
+    settingsInitDesc: "Property for the initiative value",
+    settingsHpName: "Current HP",
+    settingsHpDesc: "Property for current hit points (also used as max if hp_max is missing)",
+    settingsHpMaxName: "Max HP",
+    settingsHpMaxDesc: "Property for maximum hit points",
+    settingsShieldName: "Shield",
+    settingsShieldDesc: "Property for shield or temporary hit points. Leave empty if unused.",
+    settingsXpName: "Experience",
+    settingsXpDesc: "Property for character or enemy experience.",
+    settingsAvatarName: "Avatar",
+    settingsAvatarDesc: "YAML property with an image path or URL to display on the card.",
+    settingsIconName: "Icon",
+    settingsIconDesc: "YAML property with an alternate icon or emoji for the avatar.",
+    settingsAcName: "Armor Class / Defense",
+    settingsAcDesc: "Property for AC or defense",
+    settingsTypeName: "Type",
+    settingsTypeDesc: 'Property for type: "PC", "Enemy" or "NPC"',
+    settingsExtraName: "Extra fields",
+    settingsExtraDesc: "Additional numeric properties separated by commas (e.g. mp,stamina,stress)",
+    settingsConditionsFieldName: "Conditions field",
+    settingsConditionsFieldDesc: "YAML property where active conditions are synchronized.",
+    settingsRealtimeTitle: "Sync and damage",
+    settingsRealtimeSyncName: "Real-time sync",
+    settingsRealtimeSyncDesc: "Automatically updates the original note when HP, initiative, conditions, shield, or extras change.",
+    settingsRealtimeModeName: "Sync targets",
+    settingsRealtimeModeDesc: "Limit synchronization to player characters or apply it to all combatants.",
+    settingsRealtimeModePc: "PC only",
+    settingsRealtimeModeAll: "PC and NPC/Enemies",
+    settingsShieldAbsorbName: "Shield absorbs damage",
+    settingsShieldAbsorbDesc: "When enabled, damage is removed from shield before it affects HP.",
+    settingsTimerTitle: "Turn timer",
+    settingsTimerEnabledName: "Enable visual timer",
+    settingsTimerEnabledDesc: "Shows a timer for the active turn in the top bar.",
+    settingsTimerSecondsName: "Turn duration (seconds)",
+    settingsTimerSecondsDesc: "Maximum turn time before showing the prompt to move on.",
+    settingsPlayerHpName: "Show HP in player view",
+    settingsPlayerHpDesc: "If disabled, the player view hides exact HP values.",
+    settingsBoardTitle: "Visual board",
+    settingsBoardGridName: "Show grid by default",
+    settingsBoardGridDesc: "Enables a visual grid on the combat board.",
+    settingsBoardSnapName: "Snap tokens to grid",
+    settingsBoardSnapDesc: "Dragging tokens aligns them automatically to the grid.",
+    settingsBoardGridSizeName: "Grid size",
+    settingsBoardGridSizeDesc: "Pixel size of each board cell.",
+    settingsBoardBackgroundName: "Default board background",
+    settingsBoardBackgroundDesc: "Vault path or image URL used as the initial board background.",
+    settingsCondTitle: "Conditions / States",
+    settingsCondColorDesc: "Customize the name and color of each status. The color is applied to the badge in the combat view.",
+    settingsCondAddBtn: "\uFF0B Add condition",
+    settingsCondDeleteBtn: "Delete",
+    settingsCondNamePlaceholder: "Status name",
+    settingsCondColorLabel: "Color",
+    settingsFolderTitle: "Combatant Folder (optional)",
+    settingsFolderFieldName: "Folder path",
+    settingsFolderFieldDesc: "If you specify a folder (e.g. Campaign/Creatures), clicking 'Load' will load all notes in that folder automatically. Leave empty to select manually.",
+    // Logging Settings & UI
+    logTitle: "Combat Log (Log)",
+    logEnabledName: "Enable combat logging",
+    logEnabledDesc: "Log combat progress into a Markdown note.",
+    logModeName: "Logging mode",
+    logModeDesc: "Choose whether to log in a new note or an existing one.",
+    logModeNew: "New note",
+    logModeExisting: "Existing note",
+    logModeAsk: "Always ask",
+    logHeaderName: "Log Header",
+    logHeaderDesc: "The Markdown header (e.g. ## Combat Log) under which the log will be saved.",
+    logFileNameName: "File name for new notes",
+    logFileNameDesc: "File name/path for new log notes (you can use {date} for current date).",
+    logSelectFile: "Select note for log",
+    logHeaderPlaceholder: "## Combat Log",
+    logStarted: "Combat started.",
+    logEnded: "Combat ended/reset.",
+    logActiveLogFile: "Active log file",
+    logSelectLogFileButton: "Configure Log",
+    logConfigureTitle: "Configure Combat Log",
+    logChooseExistingFile: "Search existing note...",
+    logExistingFilePath: "Existing note path",
+    logCreateNewFile: "Create new log note",
+    logSelectNoteNotice: "Please select or create a note for logging.",
+    logNewNoteDefaultName: "Combat Log {date}",
+    logModalHeading: "Log Note",
+    logHeadingDesc: "Select where you want to log this combat:",
+    logButtonNew: "Create New Note",
+    logButtonExisting: "Use Existing Note",
+    logButtonNoLog: "Do not log"
+  }
+};
+
+// src/settings.ts
 var DEFAULT_CONDITIONS_ES = [
   { name: "Aturdido", color: "#f59e0b" },
   { name: "Envenenado", color: "#22c55e" },
@@ -799,11 +434,20 @@ var BattleTrackerSettingTab = class extends import_obsidian.PluginSettingTab {
     this.plugin = plugin;
   }
   display() {
+    this.renderSettings();
+  }
+  addHeading(containerEl, name, desc) {
+    new import_obsidian.Setting(containerEl).setName(name).setHeading();
+    if (desc) {
+      containerEl.createEl("p", { text: desc, cls: "setting-item-description" });
+    }
+  }
+  renderSettings() {
     const { containerEl } = this;
     containerEl.empty();
     const lang = this.plugin.settings.language;
     const t = LOCALIZATION[lang];
-    containerEl.createEl("h2", { text: t.settingsTitle });
+    this.addHeading(containerEl, t.settingsTitle);
     new import_obsidian.Setting(containerEl).setName(t.settingsLanguageName).setDesc(t.settingsLanguageDesc).addDropdown(
       (dropdown) => dropdown.addOption("es", "Espa\xF1ol").addOption("en", "English").setValue(this.plugin.settings.language).onChange(async (value) => {
         const oldLang = this.plugin.settings.language;
@@ -827,12 +471,11 @@ var BattleTrackerSettingTab = class extends import_obsidian.PluginSettingTab {
         }
         this.plugin.settings.language = value;
         await this.plugin.saveSettings();
-        this.display();
+        this.renderSettings();
         this.plugin.refreshViews();
       })
     );
-    containerEl.createEl("h3", { text: t.settingsFieldsTitle });
-    containerEl.createEl("p", { text: t.settingsFieldsDesc, cls: "setting-item-description" });
+    this.addHeading(containerEl, t.settingsFieldsTitle, t.settingsFieldsDesc);
     const f = this.plugin.settings.fields;
     new import_obsidian.Setting(containerEl).setName(t.settingsInitName).setDesc(t.settingsInitDesc).addText((text) => text.setValue(f.initiative).onChange(async (v) => {
       f.initiative = v;
@@ -878,12 +521,12 @@ var BattleTrackerSettingTab = class extends import_obsidian.PluginSettingTab {
       f.conditions = v;
       await this.plugin.saveSettings();
     }));
-    containerEl.createEl("h3", { text: t.settingsRealtimeTitle });
+    this.addHeading(containerEl, t.settingsRealtimeTitle);
     new import_obsidian.Setting(containerEl).setName(t.settingsRealtimeSyncName).setDesc(t.settingsRealtimeSyncDesc).addToggle(
       (toggle) => toggle.setValue(this.plugin.settings.realtimeSync).onChange(async (v) => {
         this.plugin.settings.realtimeSync = v;
         await this.plugin.saveSettings();
-        this.display();
+        this.renderSettings();
       })
     );
     if (this.plugin.settings.realtimeSync) {
@@ -900,12 +543,12 @@ var BattleTrackerSettingTab = class extends import_obsidian.PluginSettingTab {
         await this.plugin.saveSettings();
       })
     );
-    containerEl.createEl("h3", { text: t.settingsTimerTitle });
+    this.addHeading(containerEl, t.settingsTimerTitle);
     new import_obsidian.Setting(containerEl).setName(t.settingsTimerEnabledName).setDesc(t.settingsTimerEnabledDesc).addToggle(
       (toggle) => toggle.setValue(this.plugin.settings.turnTimerEnabled).onChange(async (v) => {
         this.plugin.settings.turnTimerEnabled = v;
         await this.plugin.saveSettings();
-        this.display();
+        this.renderSettings();
         this.refreshView();
       })
     );
@@ -926,7 +569,7 @@ var BattleTrackerSettingTab = class extends import_obsidian.PluginSettingTab {
         this.refreshView();
       })
     );
-    containerEl.createEl("h3", { text: t.settingsBoardTitle });
+    this.addHeading(containerEl, t.settingsBoardTitle);
     new import_obsidian.Setting(containerEl).setName(t.settingsBoardGridName).setDesc(t.settingsBoardGridDesc).addToggle(
       (toggle) => toggle.setValue(this.plugin.settings.boardGridEnabled).onChange(async (v) => {
         this.plugin.settings.boardGridEnabled = v;
@@ -955,23 +598,22 @@ var BattleTrackerSettingTab = class extends import_obsidian.PluginSettingTab {
         this.refreshView();
       })
     );
-    containerEl.createEl("h3", { text: t.settingsCondTitle });
-    containerEl.createEl("p", { text: t.settingsCondColorDesc, cls: "setting-item-description" });
+    this.addHeading(containerEl, t.settingsCondTitle, t.settingsCondColorDesc);
     const condListEl = containerEl.createDiv("bt-settings-cond-list");
     this.renderConditionRows(condListEl, t);
-    containerEl.createEl("h3", { text: t.settingsFolderTitle });
+    this.addHeading(containerEl, t.settingsFolderTitle);
     new import_obsidian.Setting(containerEl).setName(t.settingsFolderFieldName).setDesc(t.settingsFolderFieldDesc).addText(
       (text) => text.setPlaceholder("Campa\xF1a/Criaturas").setValue(this.plugin.settings.combatantFolder).onChange(async (v) => {
         this.plugin.settings.combatantFolder = v;
         await this.plugin.saveSettings();
       })
     );
-    containerEl.createEl("h3", { text: t.logTitle });
+    this.addHeading(containerEl, t.logTitle);
     new import_obsidian.Setting(containerEl).setName(t.logEnabledName).setDesc(t.logEnabledDesc).addToggle(
       (toggle) => toggle.setValue(this.plugin.settings.logEnabled).onChange(async (v) => {
         this.plugin.settings.logEnabled = v;
         await this.plugin.saveSettings();
-        this.display();
+        this.renderSettings();
       })
     );
     if (this.plugin.settings.logEnabled) {
@@ -1010,11 +652,13 @@ var BattleTrackerSettingTab = class extends import_obsidian.PluginSettingTab {
       });
       nameInput.value = entry.name;
       nameInput.placeholder = t.settingsCondNamePlaceholder;
-      nameInput.addEventListener("change", async () => {
-        conditions[idx].name = nameInput.value.trim();
-        preview.setText(conditions[idx].name.slice(0, 2).toUpperCase() || "??");
-        await this.plugin.saveSettings();
-        this.refreshView();
+      nameInput.addEventListener("change", () => {
+        void (async () => {
+          conditions[idx].name = nameInput.value.trim();
+          preview.setText(conditions[idx].name.slice(0, 2).toUpperCase() || "??");
+          await this.plugin.saveSettings();
+          this.refreshView();
+        })();
       });
       row.createEl("span", { cls: "bt-settings-color-label", text: t.settingsCondColorLabel });
       const colorInput = row.createEl("input", {
@@ -1022,41 +666,50 @@ var BattleTrackerSettingTab = class extends import_obsidian.PluginSettingTab {
         type: "color"
       });
       colorInput.value = entry.color || "#888888";
-      colorInput.addEventListener("input", async () => {
-        conditions[idx].color = colorInput.value;
-        this.applyCondPreviewStyle(preview, colorInput.value);
-        await this.plugin.saveSettings();
-        this.refreshView();
+      colorInput.addEventListener("input", () => {
+        void (async () => {
+          conditions[idx].color = colorInput.value;
+          this.applyCondPreviewStyle(preview, colorInput.value);
+          await this.plugin.saveSettings();
+          this.refreshView();
+        })();
       });
       const delBtn = row.createEl("button", {
         cls: "bt-settings-cond-del",
         text: t.settingsCondDeleteBtn
       });
-      delBtn.onclick = async () => {
-        conditions.splice(idx, 1);
-        await this.plugin.saveSettings();
-        this.renderConditionRows(condListEl, t);
-        this.refreshView();
+      delBtn.onclick = () => {
+        void (async () => {
+          conditions.splice(idx, 1);
+          await this.plugin.saveSettings();
+          this.renderConditionRows(condListEl, t);
+          this.refreshView();
+        })();
       };
     });
     const addBtn = condListEl.createEl("button", {
       cls: "bt-settings-cond-add",
       text: t.settingsCondAddBtn
     });
-    addBtn.onclick = async () => {
-      conditions.push({ name: "", color: "#888888" });
-      await this.plugin.saveSettings();
-      this.renderConditionRows(condListEl, t);
-      const rows = condListEl.querySelectorAll(".bt-settings-cond-name");
-      if (rows.length)
-        rows[rows.length - 1].focus();
+    addBtn.onclick = () => {
+      void (async () => {
+        conditions.push({ name: "", color: "#888888" });
+        await this.plugin.saveSettings();
+        this.renderConditionRows(condListEl, t);
+        const rows = condListEl.querySelectorAll(".bt-settings-cond-name");
+        const lastRow = rows[rows.length - 1];
+        if (lastRow == null ? void 0 : lastRow.instanceOf(HTMLInputElement))
+          lastRow.focus();
+      })();
     };
   }
   applyCondPreviewStyle(el, color) {
     const c = color || "var(--text-accent)";
-    el.style.color = c;
-    el.style.borderColor = c;
-    el.style.backgroundColor = color ? color + "22" : "transparent";
+    el.setCssProps({
+      "color": c,
+      "border-color": c,
+      "background-color": color ? color + "22" : "transparent"
+    });
   }
   refreshView() {
     this.plugin.refreshViews();
@@ -1065,8 +718,408 @@ var BattleTrackerSettingTab = class extends import_obsidian.PluginSettingTab {
 
 // src/view.ts
 var import_obsidian3 = require("obsidian");
-init_localization();
-init_modals();
+
+// src/modals.ts
+var import_obsidian2 = require("obsidian");
+var DmgModal = class extends import_obsidian2.Modal {
+  constructor(app, name, plugin, hasShield, onConfirm) {
+    super(app);
+    this.name = name;
+    this.plugin = plugin;
+    this.hasShield = hasShield;
+    this.onConfirm = onConfirm;
+  }
+  onOpen() {
+    const { contentEl } = this;
+    const lang = this.plugin.settings.language;
+    const t = LOCALIZATION[lang];
+    contentEl.createEl("h3", { text: `${t.dmgModalTitle} \u2014 ${this.name}` });
+    const wrap = contentEl.createDiv("bt-modal-content");
+    const input = wrap.createEl("input", { type: "number", placeholder: t.dmgModalQty });
+    input.min = "0";
+    const shieldRow = wrap.createDiv("bt-modal-checkbox-row");
+    const shieldToggle = shieldRow.createEl("input", { type: "checkbox" });
+    shieldToggle.checked = this.plugin.settings.shieldAbsorbsDamage;
+    shieldToggle.disabled = !this.hasShield;
+    shieldRow.createEl("label", {
+      text: this.hasShield ? t.dmgModalUseShield : t.dmgModalNoShield
+    });
+    const row = wrap.createDiv("bt-modal-actions");
+    const healBtn = row.createEl("button", { cls: "bt-btn", text: t.dmgModalHeal });
+    healBtn.onclick = () => {
+      this.onConfirm(parseInt(input.value) || 0, true, false);
+      this.close();
+    };
+    const dmgBtn = row.createEl("button", { cls: "bt-btn bt-btn-danger-soft", text: t.dmgModalDmg });
+    dmgBtn.onclick = () => {
+      this.onConfirm(parseInt(input.value) || 0, false, this.hasShield && shieldToggle.checked);
+      this.close();
+    };
+    window.setTimeout(() => input.focus(), 50);
+  }
+  onClose() {
+    this.contentEl.empty();
+  }
+};
+var ConditionModal = class extends import_obsidian2.Modal {
+  constructor(app, all, current, plugin, onConfirm) {
+    super(app);
+    this.allConditions = all;
+    this.current = current.map((entry) => ({ ...entry }));
+    this.plugin = plugin;
+    this.onConfirm = onConfirm;
+  }
+  onOpen() {
+    const { contentEl } = this;
+    const lang = this.plugin.settings.language;
+    const t = LOCALIZATION[lang];
+    contentEl.createEl("h3", { text: t.condModalTitle });
+    const grid = contentEl.createDiv("bt-cond-edit-grid");
+    const selected = new Map(this.current.map((entry) => [entry.name, entry.duration]));
+    this.allConditions.forEach((entry) => {
+      const row2 = grid.createDiv("bt-cond-edit-row");
+      const left = row2.createDiv("bt-cond-edit-main");
+      const check = left.createEl("input", { type: "checkbox" });
+      check.checked = selected.has(entry.name);
+      const btn = left.createEl("button", {
+        cls: `bt-cond-toggle${check.checked ? " selected" : ""}`,
+        text: entry.name
+      });
+      const durationInput = row2.createEl("input", {
+        cls: "bt-cond-duration-input",
+        type: "number",
+        placeholder: t.condModalDurationPlaceholder
+      });
+      durationInput.min = "1";
+      const currentDuration = selected.get(entry.name);
+      durationInput.value = currentDuration ? String(currentDuration) : "";
+      durationInput.disabled = !check.checked;
+      if (entry.color) {
+        btn.setCssProps({
+          "color": check.checked ? "#fff" : entry.color,
+          "border-color": entry.color,
+          "background-color": check.checked ? entry.color : entry.color + "22"
+        });
+      }
+      const updateVisual = () => {
+        btn.classList.toggle("selected", check.checked);
+        durationInput.disabled = !check.checked;
+        if (!check.checked)
+          durationInput.value = "";
+        if (entry.color) {
+          btn.setCssProps({
+            "color": check.checked ? "#fff" : entry.color,
+            "background-color": check.checked ? entry.color : entry.color + "22"
+          });
+        }
+      };
+      btn.onclick = () => {
+        check.checked = !check.checked;
+        updateVisual();
+      };
+      check.onchange = updateVisual;
+    });
+    const row = contentEl.createDiv("bt-modal-actions");
+    const ok = row.createEl("button", { cls: "bt-btn bt-btn-primary", text: t.condModalApply });
+    ok.onclick = () => {
+      const updated = [];
+      const rows = Array.from(grid.querySelectorAll(".bt-cond-edit-row"));
+      rows.forEach((rowEl, idx) => {
+        const checkNode = rowEl.querySelector("input[type='checkbox']");
+        const durationNode = rowEl.querySelector(".bt-cond-duration-input");
+        const check = (checkNode == null ? void 0 : checkNode.instanceOf(HTMLInputElement)) ? checkNode : null;
+        const durationInput = (durationNode == null ? void 0 : durationNode.instanceOf(HTMLInputElement)) ? durationNode : null;
+        const condition = this.allConditions[idx];
+        if (!(check == null ? void 0 : check.checked) || !condition)
+          return;
+        const parsedDuration = Number(durationInput == null ? void 0 : durationInput.value);
+        updated.push({
+          name: condition.name,
+          duration: Number.isFinite(parsedDuration) && parsedDuration > 0 ? parsedDuration : null
+        });
+      });
+      this.onConfirm(updated);
+      this.close();
+    };
+  }
+  onClose() {
+    this.contentEl.empty();
+  }
+};
+var NoteModal = class extends import_obsidian2.Modal {
+  constructor(app, current, plugin, onConfirm) {
+    super(app);
+    this.current = current;
+    this.plugin = plugin;
+    this.onConfirm = onConfirm;
+  }
+  onOpen() {
+    const { contentEl } = this;
+    const lang = this.plugin.settings.language;
+    const t = LOCALIZATION[lang];
+    contentEl.createEl("h3", { text: t.noteModalTitle });
+    const wrap = contentEl.createDiv("bt-modal-content");
+    const ta = wrap.createEl("textarea", { placeholder: t.noteModalPlaceholder });
+    ta.value = this.current;
+    const row = wrap.createDiv("bt-modal-actions");
+    const ok = row.createEl("button", { cls: "bt-btn bt-btn-primary", text: t.noteModalSave });
+    ok.onclick = () => {
+      this.onConfirm(ta.value);
+      this.close();
+    };
+    window.setTimeout(() => ta.focus(), 50);
+  }
+  onClose() {
+    this.contentEl.empty();
+  }
+};
+var ActionModal = class extends import_obsidian2.Modal {
+  constructor(app, attacker, targets, conditions, plugin, onConfirm) {
+    super(app);
+    this.attacker = attacker;
+    this.targets = targets;
+    this.conditions = conditions;
+    this.plugin = plugin;
+    this.onConfirm = onConfirm;
+  }
+  onOpen() {
+    const { contentEl } = this;
+    const lang = this.plugin.settings.language;
+    const t = LOCALIZATION[lang];
+    contentEl.createEl("h3", { text: `${t.actionModalTitle} \u2014 ${this.attacker.name}` });
+    const wrap = contentEl.createDiv("bt-modal-content");
+    const targetSelect = wrap.createEl("select");
+    this.targets.forEach((target) => {
+      targetSelect.createEl("option", {
+        value: target.id,
+        text: `${target.name} (${t.hp} ${target.hp}/${target.hpMax})`
+      });
+    });
+    const damageInput = wrap.createEl("input", {
+      type: "number",
+      placeholder: t.actionModalDamagePlaceholder
+    });
+    damageInput.min = "0";
+    const shieldRow = wrap.createDiv("bt-modal-checkbox-row");
+    const shieldToggle = shieldRow.createEl("input", { type: "checkbox" });
+    shieldToggle.checked = this.plugin.settings.shieldAbsorbsDamage;
+    shieldRow.createEl("label", { text: t.actionModalShieldLabel });
+    const conditionSelect = wrap.createEl("select");
+    conditionSelect.createEl("option", { value: "", text: t.actionModalNoCondition });
+    this.conditions.forEach((entry) => {
+      conditionSelect.createEl("option", { value: entry.name, text: entry.name });
+    });
+    const durationInput = wrap.createEl("input", {
+      type: "number",
+      placeholder: t.condModalDurationPlaceholder
+    });
+    durationInput.min = "1";
+    const noteInput = wrap.createEl("textarea", {
+      placeholder: t.actionModalNotePlaceholder
+    });
+    const row = wrap.createDiv("bt-modal-actions");
+    const ok = row.createEl("button", { cls: "bt-btn bt-btn-primary", text: t.actionModalApply });
+    ok.onclick = () => {
+      const parsedDuration = Number(durationInput.value);
+      this.onConfirm({
+        targetId: targetSelect.value,
+        damage: parseInt(damageInput.value) || 0,
+        useShield: shieldToggle.checked,
+        conditionName: conditionSelect.value,
+        conditionDuration: Number.isFinite(parsedDuration) && parsedDuration > 0 ? parsedDuration : null,
+        note: noteInput.value.trim()
+      });
+      this.close();
+    };
+    window.setTimeout(() => targetSelect.focus(), 50);
+  }
+  onClose() {
+    this.contentEl.empty();
+  }
+};
+var PickCombatantsModal = class extends import_obsidian2.Modal {
+  constructor(app, plugin, onConfirm) {
+    super(app);
+    this.selected = /* @__PURE__ */ new Set();
+    this.plugin = plugin;
+    this.onConfirm = onConfirm;
+  }
+  onOpen() {
+    const { contentEl } = this;
+    const lang = this.plugin.settings.language;
+    const t = LOCALIZATION[lang];
+    contentEl.createEl("h3", { text: t.pickModalTitle });
+    const searchInput = contentEl.createEl("input", {
+      type: "text",
+      placeholder: t.pickModalSearch,
+      cls: "bt-modal-content"
+    });
+    searchInput.addClass("bt-modal-search-input");
+    const list = contentEl.createDiv("bt-pick-list");
+    const files = this.app.vault.getMarkdownFiles().sort((a, b) => a.basename.localeCompare(b.basename));
+    const renderList = (filter) => {
+      list.empty();
+      files.filter((f) => !filter || f.basename.toLowerCase().includes(filter.toLowerCase())).forEach((file) => {
+        const item = list.createDiv("bt-pick-item");
+        const cb = item.createEl("input", { type: "checkbox" });
+        cb.checked = this.selected.has(file.path);
+        cb.onchange = () => {
+          if (cb.checked)
+            this.selected.add(file.path);
+          else
+            this.selected.delete(file.path);
+        };
+        const lbl = item.createEl("label", { text: file.basename });
+        lbl.onclick = () => {
+          cb.checked = !cb.checked;
+          cb.dispatchEvent(new Event("change"));
+        };
+      });
+    };
+    renderList("");
+    searchInput.oninput = () => renderList(searchInput.value);
+    const row = contentEl.createDiv("bt-modal-actions");
+    const cancel = row.createEl("button", { cls: "bt-btn", text: t.pickModalCancel });
+    cancel.onclick = () => this.close();
+    const ok = row.createEl("button", { cls: "bt-btn bt-btn-primary", text: t.pickModalLoad });
+    ok.onclick = () => {
+      const picked = files.filter((f) => this.selected.has(f.path));
+      if (!picked.length) {
+        new import_obsidian2.Notice(t.pickModalSelectMin);
+        return;
+      }
+      this.onConfirm(picked);
+      this.close();
+    };
+    window.setTimeout(() => searchInput.focus(), 50);
+  }
+  onClose() {
+    this.contentEl.empty();
+  }
+};
+var LogSetupModal = class extends import_obsidian2.Modal {
+  constructor(app, plugin, view, onChoose) {
+    super(app);
+    this.plugin = plugin;
+    this.view = view;
+    this.onChoose = onChoose;
+  }
+  onOpen() {
+    const { contentEl } = this;
+    const lang = this.plugin.settings.language;
+    const t = LOCALIZATION[lang];
+    contentEl.createEl("h3", { text: t.logConfigureTitle });
+    contentEl.createEl("p", { text: t.logHeadingDesc, cls: "setting-item-description" });
+    const container = contentEl.createDiv("bt-modal-content");
+    const newFileBtn = container.createEl("button", { cls: "bt-btn bt-btn-primary", text: `\u{1F4DD} ${t.logCreateNewFile}` });
+    newFileBtn.addClass("bt-log-new-file-btn");
+    newFileBtn.onclick = () => {
+      void (async () => {
+        try {
+          const file = await this.view.createNewLogFile();
+          new import_obsidian2.Notice(`${t.logActiveLogFile}: ${file.name}`);
+          this.onChoose(file);
+          this.close();
+        } catch (e) {
+          new import_obsidian2.Notice(lang === "es" ? "Error al crear la nota de registro." : "Error creating log note.");
+          console.error(e);
+        }
+      })();
+    };
+    const divider = container.createDiv("bt-log-divider");
+    divider.setText("\u2500\u2500\u2500 " + (lang === "es" ? "O SELECCIONAR EXISTENTE" : "OR SELECT EXISTING") + " \u2500\u2500\u2500");
+    const searchInput = container.createEl("input", {
+      type: "text",
+      placeholder: t.pickModalSearch
+    });
+    searchInput.addClass("bt-modal-search-input");
+    const list = container.createDiv("bt-pick-list");
+    list.addClass("bt-log-pick-list");
+    const files = this.app.vault.getMarkdownFiles().sort((a, b) => a.basename.localeCompare(b.basename));
+    const renderList = (filter) => {
+      list.empty();
+      files.filter((f) => !filter || f.basename.toLowerCase().includes(filter.toLowerCase())).slice(0, 50).forEach((file) => {
+        const item = list.createDiv("bt-pick-item");
+        item.addClass("bt-log-pick-item");
+        item.setText(file.path);
+        item.onclick = () => {
+          new import_obsidian2.Notice(`${t.logActiveLogFile}: ${file.name}`);
+          this.onChoose(file);
+          this.close();
+        };
+      });
+    };
+    renderList("");
+    searchInput.oninput = () => renderList(searchInput.value);
+    const row = contentEl.createDiv("bt-modal-actions");
+    row.addClass("bt-log-footer-actions");
+    const cancelBtn = row.createEl("button", { cls: "bt-btn", text: t.logButtonNoLog });
+    cancelBtn.onclick = () => {
+      this.onChoose(null);
+      this.close();
+    };
+  }
+  onClose() {
+    this.contentEl.empty();
+  }
+};
+var ConfirmModal = class extends import_obsidian2.Modal {
+  constructor(app, title, message, confirmText, onConfirm) {
+    super(app);
+    this.title = title;
+    this.message = message;
+    this.confirmText = confirmText;
+    this.onConfirm = onConfirm;
+  }
+  onOpen() {
+    const { contentEl } = this;
+    contentEl.createEl("h3", { text: this.title });
+    contentEl.createEl("p", { text: this.message });
+    const row = contentEl.createDiv("bt-modal-actions");
+    const cancelBtn = row.createEl("button", { cls: "bt-btn", text: "Cancel" });
+    cancelBtn.onclick = () => this.close();
+    const confirmBtn = row.createEl("button", { cls: "bt-btn bt-btn-danger-soft", text: this.confirmText });
+    confirmBtn.onclick = () => {
+      this.onConfirm();
+      this.close();
+    };
+  }
+  onClose() {
+    this.contentEl.empty();
+  }
+};
+var TextPromptModal = class extends import_obsidian2.Modal {
+  constructor(app, title, placeholder, initialValue, onConfirm) {
+    super(app);
+    this.title = title;
+    this.placeholder = placeholder;
+    this.initialValue = initialValue;
+    this.onConfirm = onConfirm;
+  }
+  onOpen() {
+    const { contentEl } = this;
+    contentEl.createEl("h3", { text: this.title });
+    const input = contentEl.createEl("input", {
+      type: "text",
+      placeholder: this.placeholder
+    });
+    input.value = this.initialValue;
+    const row = contentEl.createDiv("bt-modal-actions");
+    const cancelBtn = row.createEl("button", { cls: "bt-btn", text: "Cancel" });
+    cancelBtn.onclick = () => this.close();
+    const confirmBtn = row.createEl("button", { cls: "bt-btn bt-btn-primary", text: "OK" });
+    confirmBtn.onclick = () => {
+      this.onConfirm(input.value);
+      this.close();
+    };
+    window.setTimeout(() => input.focus(), 50);
+  }
+  onClose() {
+    this.contentEl.empty();
+  }
+};
+
+// src/view.ts
 var VIEW_TYPE = "combat-ledger-view";
 var PLAYER_VIEW_TYPE = "combat-ledger-player-view";
 var BattleTrackerView = class extends import_obsidian3.ItemView {
@@ -1258,23 +1311,26 @@ var BattleTrackerView = class extends import_obsidian3.ItemView {
     avatarEl.empty();
     if (avatarSrc) {
       avatarEl.addClass("bt-avatar-image");
-      avatarEl.style.backgroundImage = `url("${avatarSrc}")`;
-      avatarEl.style.backgroundSize = "cover";
-      avatarEl.style.backgroundPosition = "center";
+      avatarEl.setCssProps({
+        "background-image": `url("${avatarSrc}")`,
+        "background-size": "cover",
+        "background-position": "center"
+      });
       return;
     }
     avatarEl.removeClass("bt-avatar-image");
-    avatarEl.style.backgroundImage = "";
+    avatarEl.setCssProps({ "background-image": "" });
     avatarEl.setText((combatant.icon || combatant.name.slice(0, 2)).toUpperCase());
   }
   async toggleFullscreen() {
     var _a;
     const target = (_a = this.containerEl.closest(".workspace-leaf-content")) != null ? _a : this.containerEl;
-    if (document.fullscreenElement) {
-      await document.exitFullscreen();
+    const targetDocument = target.doc;
+    if (targetDocument.fullscreenElement) {
+      await targetDocument.exitFullscreen();
       return;
     }
-    if (target instanceof HTMLElement && target.requestFullscreen) {
+    if ((target == null ? void 0 : target.instanceOf(HTMLElement)) && target.requestFullscreen) {
       await target.requestFullscreen();
     }
   }
@@ -1313,39 +1369,51 @@ var BattleTrackerView = class extends import_obsidian3.ItemView {
     this.refresh();
   }
   saveBoardLayout() {
-    const name = window.prompt(LOCALIZATION[this.plugin.settings.language].boardSavePrompt);
-    if (!(name == null ? void 0 : name.trim()))
-      return;
-    const layoutName = name.trim();
-    const layouts = this.plugin.settings.savedBoardLayouts.filter((layout) => layout.name !== layoutName);
-    layouts.push({
-      name: layoutName,
-      background: this.boardBackground,
-      gridEnabled: this.boardGridEnabled,
-      snapToGrid: this.boardSnapToGrid,
-      gridSize: this.boardGridSize,
-      tokenStates: this.tokenStates
-    });
-    this.plugin.settings.savedBoardLayouts = layouts;
-    void this.plugin.saveSettings();
+    new TextPromptModal(
+      this.app,
+      LOCALIZATION[this.plugin.settings.language].boardSave,
+      LOCALIZATION[this.plugin.settings.language].boardSavePrompt,
+      "",
+      (value) => {
+        const layoutName = value.trim();
+        if (!layoutName)
+          return;
+        const layouts = this.plugin.settings.savedBoardLayouts.filter((layout) => layout.name !== layoutName);
+        layouts.push({
+          name: layoutName,
+          background: this.boardBackground,
+          gridEnabled: this.boardGridEnabled,
+          snapToGrid: this.boardSnapToGrid,
+          gridSize: this.boardGridSize,
+          tokenStates: this.tokenStates
+        });
+        this.plugin.settings.savedBoardLayouts = layouts;
+        void this.plugin.saveSettings();
+      }
+    ).open();
   }
   loadBoardLayout() {
     if (!this.plugin.settings.savedBoardLayouts.length) {
       new import_obsidian3.Notice(LOCALIZATION[this.plugin.settings.language].boardNoLayouts);
       return;
     }
-    const name = window.prompt(LOCALIZATION[this.plugin.settings.language].boardLoadPrompt);
-    if (!(name == null ? void 0 : name.trim()))
-      return;
-    const layout = this.plugin.settings.savedBoardLayouts.find((entry) => entry.name === name.trim());
-    if (!layout)
-      return;
-    this.boardBackground = layout.background;
-    this.boardGridEnabled = layout.gridEnabled;
-    this.boardSnapToGrid = layout.snapToGrid;
-    this.boardGridSize = layout.gridSize;
-    this.tokenStates = { ...layout.tokenStates };
-    this.refresh();
+    new TextPromptModal(
+      this.app,
+      LOCALIZATION[this.plugin.settings.language].boardLoad,
+      LOCALIZATION[this.plugin.settings.language].boardLoadPrompt,
+      "",
+      (value) => {
+        const layout = this.plugin.settings.savedBoardLayouts.find((entry) => entry.name === value.trim());
+        if (!layout)
+          return;
+        this.boardBackground = layout.background;
+        this.boardGridEnabled = layout.gridEnabled;
+        this.boardSnapToGrid = layout.snapToGrid;
+        this.boardGridSize = layout.gridSize;
+        this.tokenStates = { ...layout.tokenStates };
+        this.refresh();
+      }
+    ).open();
   }
   clearBoardLayout() {
     this.boardBackground = this.plugin.settings.boardDefaultBackground;
@@ -1423,8 +1491,7 @@ ${logLine}
     if (this.activeLogFile || this.logDismissed || this.logSetupInProgress)
       return;
     this.logSetupInProgress = true;
-    const { LogSetupModal: LogSetupModal2 } = (init_modals(), __toCommonJS(modals_exports));
-    new LogSetupModal2(this.app, this.plugin, this, async (file) => {
+    new LogSetupModal(this.app, this.plugin, this, async (file) => {
       this.logSetupInProgress = false;
       if (file) {
         this.activeLogFile = file;
@@ -1557,17 +1624,18 @@ ${header}
     const fields = this.plugin.settings.fields;
     try {
       await this.app.fileManager.processFrontMatter(combatant.file, (frontmatter) => {
-        frontmatter[fields.hp] = combatant.hp;
+        const data = frontmatter;
+        data[fields.hp] = combatant.hp;
         if (fields.initiative)
-          frontmatter[fields.initiative] = combatant.initiative;
+          data[fields.initiative] = combatant.initiative;
         if (fields.shield)
-          frontmatter[fields.shield] = combatant.shield;
+          data[fields.shield] = combatant.shield;
         if (fields.xp)
-          frontmatter[fields.xp] = combatant.xp;
+          data[fields.xp] = combatant.xp;
         if (fields.conditions)
-          frontmatter[fields.conditions] = this.serializeConditions(combatant.conditions);
+          data[fields.conditions] = this.serializeConditions(combatant.conditions);
         Object.entries(combatant.extraFields).forEach(([key, value]) => {
-          frontmatter[key] = value;
+          data[key] = value;
         });
       });
     } catch (error) {
@@ -1581,7 +1649,8 @@ ${header}
       return;
     try {
       await this.app.fileManager.processFrontMatter(combatant.file, (frontmatter) => {
-        frontmatter[xpField] = combatant.xp;
+        const data = frontmatter;
+        data[xpField] = combatant.xp;
       });
     } catch (error) {
       console.error("Failed to sync combatant XP:", error);
@@ -1994,7 +2063,10 @@ ${header}
   }
   render() {
     var _a, _b, _c, _d;
-    const container = this.containerEl.children[1];
+    const containerNode = this.containerEl.children[1];
+    if (!(containerNode == null ? void 0 : containerNode.instanceOf(HTMLElement)))
+      return;
+    const container = containerNode;
     container.empty();
     container.className = `bt-panel${this.mode === "player" ? " bt-panel-player" : ""}`;
     const lang = this.plugin.settings.language;
@@ -2024,7 +2096,7 @@ ${header}
       );
       const timerBar = timerWrap.createDiv("bt-turn-timer-bar");
       const timerFill = timerBar.createDiv(`bt-turn-timer-fill${timerState.expired ? " expired" : ""}`);
-      timerFill.style.width = `${Math.max(0, timerState.progress * 100)}%`;
+      timerFill.setCssProps({ "width": `${Math.max(0, timerState.progress * 100)}%` });
     }
     const topActions = topBar.createDiv("bt-top-actions");
     const fullBtn = topActions.createEl("button", { cls: "bt-btn" });
@@ -2032,10 +2104,10 @@ ${header}
     fullBtn.onclick = () => void this.toggleFullscreen();
     if (this.mode === "gm") {
       const nextBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-primary" });
-      nextBtn.innerHTML = t.nextTurn;
+      nextBtn.setText(t.nextTurn);
       nextBtn.onclick = () => void this.nextTurn();
       const loadBtn = topActions.createEl("button", { cls: "bt-btn" });
-      loadBtn.innerHTML = t.load;
+      loadBtn.setText(t.load);
       loadBtn.onclick = () => void this.loadFromVault();
       const playerBtn = topActions.createEl("button", { cls: "bt-btn" });
       playerBtn.setText(t.playerView);
@@ -2045,14 +2117,15 @@ ${header}
           cls: `bt-btn${this.activeLogFile ? " bt-btn-primary" : ""}`,
           title: t.logSelectLogFileButton
         });
-        logBtn.innerHTML = `\u{1F4DD} ${this.activeLogFile ? lang === "es" ? "Registrando" : "Logging" : lang === "es" ? "Registro" : "Log"}`;
+        logBtn.setText(`\u{1F4DD} ${this.activeLogFile ? lang === "es" ? "Registrando" : "Logging" : lang === "es" ? "Registro" : "Log"}`);
         logBtn.onclick = () => this.triggerLogSetup();
       }
       const resetBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-danger-soft" });
-      resetBtn.innerHTML = t.reset;
+      resetBtn.setText(t.reset);
       resetBtn.onclick = () => {
-        if (confirm(t.resetConfirm))
+        new ConfirmModal(this.app, t.reset, t.resetConfirm, t.reset, () => {
           this.resetBattle();
+        }).open();
       };
     }
     if (visibleAlerts.length) {
@@ -2091,17 +2164,19 @@ ${header}
     const board = boardSection.createDiv(`bt-board${this.boardGridEnabled ? " has-grid" : ""}`);
     const backgroundSrc = this.resolveBackgroundSrc(this.boardBackground);
     if (backgroundSrc) {
-      board.style.backgroundImage = `url("${backgroundSrc}")`;
+      board.setCssProps({ "background-image": `url("${backgroundSrc}")` });
     }
-    board.style.setProperty("--bt-grid-size", `${this.boardGridSize}px`);
+    board.setCssProps({ "--bt-grid-size": `${this.boardGridSize}px` });
     alive.forEach((combatant, index) => {
       const tokenState = this.ensureTokenState(combatant, index);
       if (this.mode === "player" && tokenState.hidden)
         return;
       const token = board.createDiv(`bt-token${combatant.id === this.activeCombatantId ? " active" : ""}${tokenState.hidden ? " is-hidden" : ""}${this.selectedTokenIds.includes(combatant.id) ? " is-selected" : ""}`);
-      token.style.left = `${tokenState.x}px`;
-      token.style.top = `${tokenState.y}px`;
-      token.style.transform = `scale(${tokenState.scale})`;
+      token.setCssProps({
+        "left": `${tokenState.x}px`,
+        "top": `${tokenState.y}px`,
+        "transform": `scale(${tokenState.scale})`
+      });
       token.title = combatant.name;
       const avatar = token.createDiv(`bt-token-avatar bt-avatar-${combatant.combatType === "PC" ? "pc" : combatant.combatType === "Enemy" ? "enemy" : "npc"}`);
       this.applyAvatar(avatar, combatant);
@@ -2203,7 +2278,7 @@ ${header}
       const nameWrap = header.createDiv("bt-name-wrap");
       const nameEl = nameWrap.createEl("span", { cls: "bt-name", text: combatant.name });
       if (this.mode === "gm") {
-        nameEl.style.cursor = "pointer";
+        nameEl.addClass("bt-clickable-name");
         nameEl.title = lang === "es" ? "Abrir nota" : "Open note";
         nameEl.onclick = () => void this.app.workspace.getLeaf(true).openFile(combatant.file);
       }
@@ -2224,7 +2299,7 @@ ${header}
             this.refresh();
           }
         };
-        setTimeout(() => {
+        window.setTimeout(() => {
           initInput.focus();
           initInput.select();
         }, 0);
@@ -2263,9 +2338,11 @@ ${header}
           tag.setText(this.formatConditionLabel(condition));
           const entry = conditionEntries.find((item) => item.name === condition.name);
           if (entry == null ? void 0 : entry.color) {
-            tag.style.color = entry.color;
-            tag.style.borderColor = entry.color;
-            tag.style.backgroundColor = entry.color + "22";
+            tag.setCssProps({
+              "color": entry.color,
+              "border-color": entry.color,
+              "background-color": entry.color + "22"
+            });
           }
         });
       }
@@ -2276,7 +2353,7 @@ ${header}
       hpLabelRow.createEl("span", { cls: "bt-hp-text", text: hpVisible ? `${combatant.hp} / ${combatant.hpMax}` : "\u2022\u2022\u2022" });
       const bar = hpWrap.createDiv("bt-bar");
       const fill = bar.createDiv("bt-bar-fill");
-      fill.style.width = `${Math.max(0, ratio * 100)}%`;
+      fill.setCssProps({ "width": `${Math.max(0, ratio * 100)}%` });
       fill.className = `bt-bar-fill ${ratio > 0.6 ? "bt-hp-ok" : ratio > 0.3 ? "bt-hp-mid" : "bt-hp-low"}`;
       const extraNames = Object.keys(combatant.extraFields);
       if (this.mode === "gm" && extraNames.length) {
@@ -2328,9 +2405,11 @@ ${header}
         }
         const defeatBtn = actions.createEl("button", { cls: "bt-btn bt-btn-ghost" });
         defeatBtn.setText(t.defeat);
-        defeatBtn.onclick = async () => {
-          await this.markCombatantDefeated(combatant);
-          this.refresh();
+        defeatBtn.onclick = () => {
+          void (async () => {
+            await this.markCombatantDefeated(combatant);
+            this.refresh();
+          })();
         };
       }
     });
@@ -2386,14 +2465,16 @@ ${header}
       });
       const reviveBtn = header.createEl("button", { cls: "bt-btn", title: t.revive });
       reviveBtn.setText(t.revive);
-      reviveBtn.onclick = async () => {
-        combatant.alive = true;
-        combatant.hp = Math.max(1, combatant.hpMax > 0 ? 1 : combatant.hp);
-        await this.syncCombatantToNote(combatant);
-        await this.writeToLog(lang === "es" ? `${combatant.name} ha resucitado` : `${combatant.name} has been revived`);
-        this.graveyardXpDraft = String(this.getPendingGraveyardXp());
-        this.ensureActiveCombatant();
-        this.refresh();
+      reviveBtn.onclick = () => {
+        void (async () => {
+          combatant.alive = true;
+          combatant.hp = Math.max(1, combatant.hpMax > 0 ? 1 : combatant.hp);
+          await this.syncCombatantToNote(combatant);
+          await this.writeToLog(lang === "es" ? `${combatant.name} ha resucitado` : `${combatant.name} has been revived`);
+          this.graveyardXpDraft = String(this.getPendingGraveyardXp());
+          this.ensureActiveCombatant();
+          this.refresh();
+        })();
       };
     });
   }
@@ -2435,32 +2516,29 @@ var BattleTrackerPlugin = class extends import_obsidian4.Plugin {
   }
   async onload() {
     await this.loadSettings();
-    const registry = this.app.viewRegistry;
-    if (registry && registry.viewByType && registry.viewByType[VIEW_TYPE]) {
-      delete registry.viewByType[VIEW_TYPE];
-    }
-    if (registry && registry.viewByType && registry.viewByType[PLAYER_VIEW_TYPE]) {
-      delete registry.viewByType[PLAYER_VIEW_TYPE];
-    }
     this.registerView(VIEW_TYPE, (leaf) => new BattleTrackerView(leaf, this, "gm"));
     this.registerView(PLAYER_VIEW_TYPE, (leaf) => new BattleTrackerView(leaf, this, "player"));
-    this.addRibbonIcon("sword", "Combat Ledger", () => this.activateView());
-    this.addCommand({
-      id: "open-combat-ledger",
-      name: this.settings.language === "es" ? "Abrir Combat Ledger" : "Open Combat Ledger",
-      callback: () => this.activateView()
+    this.addRibbonIcon("sword", "Combat Ledger", () => {
+      void this.activateView();
     });
     this.addCommand({
-      id: "open-combat-ledger-player-view",
+      id: "open-view",
+      name: this.settings.language === "es" ? "Abrir Combat Ledger" : "Open Combat Ledger",
+      callback: () => {
+        void this.activateView();
+      }
+    });
+    this.addCommand({
+      id: "open-player-view",
       name: this.settings.language === "es" ? "Abrir vista de jugadores" : "Open player view",
-      callback: () => this.activatePlayerView()
+      callback: () => {
+        void this.activatePlayerView();
+      }
     });
     this.addSettingTab(new BattleTrackerSettingTab(this.app, this));
   }
   onunload() {
     void this.persistData();
-    this.app.workspace.detachLeavesOfType(VIEW_TYPE);
-    this.app.workspace.detachLeavesOfType(PLAYER_VIEW_TYPE);
   }
   async activateView() {
     const { workspace } = this.app;
@@ -2529,18 +2607,20 @@ var BattleTrackerPlugin = class extends import_obsidian4.Plugin {
     });
   }
   async loadSettings() {
-    var _a, _b, _c, _d;
+    var _a, _b, _c;
     const rawData = await this.loadData();
-    const storedSettings = (_b = (_a = rawData == null ? void 0 : rawData.settings) != null ? _a : rawData) != null ? _b : {};
-    const storedSession = (_c = rawData == null ? void 0 : rawData.session) != null ? _c : null;
+    const hasWrappedData = Boolean(rawData && typeof rawData === "object" && "settings" in rawData);
+    const storedSettings = (_a = hasWrappedData ? rawData.settings : rawData) != null ? _a : {};
+    const storedSession = hasWrappedData ? (_b = rawData.session) != null ? _b : null : null;
     this.settings = Object.assign({}, DEFAULT_SETTINGS, storedSettings);
-    this.settings.fields = Object.assign({}, DEFAULT_SETTINGS.fields, (_d = this.settings.fields) != null ? _d : {});
+    this.settings.fields = Object.assign({}, DEFAULT_SETTINGS.fields, (_c = this.settings.fields) != null ? _c : {});
     const session = Object.assign(this.createDefaultSession(), storedSession != null ? storedSession : {});
     const activeLogPath = storedSession == null ? void 0 : storedSession.activeLogFile;
     const activeLogFile = typeof activeLogPath === "string" ? this.app.vault.getAbstractFileByPath(activeLogPath) : null;
     session.activeLogFile = activeLogFile instanceof import_obsidian4.TFile ? activeLogFile : null;
-    const restoredCombatants = Array.isArray(storedSession == null ? void 0 : storedSession.combatants) ? storedSession.combatants.map((entry) => {
-      const file = typeof (entry == null ? void 0 : entry.file) === "string" ? this.app.vault.getAbstractFileByPath(entry.file) : null;
+    const storedCombatants = storedSession == null ? void 0 : storedSession.combatants;
+    const restoredCombatants = Array.isArray(storedCombatants) ? storedCombatants.map((entry) => {
+      const file = typeof entry.file === "string" ? this.app.vault.getAbstractFileByPath(entry.file) : null;
       if (!(file instanceof import_obsidian4.TFile))
         return null;
       return {

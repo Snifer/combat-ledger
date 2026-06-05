@@ -73,13 +73,24 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 	}
 
 	display() {
+		this.renderSettings();
+	}
+
+	private addHeading(containerEl: HTMLElement, name: string, desc?: string) {
+		new Setting(containerEl).setName(name).setHeading();
+		if (desc) {
+			containerEl.createEl("p", { text: desc, cls: "setting-item-description" });
+		}
+	}
+
+	private renderSettings() {
 		const { containerEl } = this;
 		containerEl.empty();
 
 		const lang = this.plugin.settings.language;
 		const t = LOCALIZATION[lang];
 
-		containerEl.createEl("h2", { text: t.settingsTitle });
+		this.addHeading(containerEl, t.settingsTitle);
 
 		// Language Setting
 		new Setting(containerEl)
@@ -119,14 +130,13 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 
 						// Re-render setting tab
-						this.display();
+						this.renderSettings();
 
 						this.plugin.refreshViews();
 					})
 			);
 
-		containerEl.createEl("h3", { text: t.settingsFieldsTitle });
-		containerEl.createEl("p", { text: t.settingsFieldsDesc, cls: "setting-item-description" });
+		this.addHeading(containerEl, t.settingsFieldsTitle, t.settingsFieldsDesc);
 
 		const f = this.plugin.settings.fields;
 
@@ -185,7 +195,7 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 			.setDesc(t.settingsConditionsFieldDesc)
 			.addText((text) => text.setValue(f.conditions).onChange(async (v) => { f.conditions = v; await this.plugin.saveSettings(); }));
 
-		containerEl.createEl("h3", { text: t.settingsRealtimeTitle });
+		this.addHeading(containerEl, t.settingsRealtimeTitle);
 		new Setting(containerEl)
 			.setName(t.settingsRealtimeSyncName)
 			.setDesc(t.settingsRealtimeSyncDesc)
@@ -195,7 +205,7 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 					.onChange(async (v) => {
 						this.plugin.settings.realtimeSync = v;
 						await this.plugin.saveSettings();
-						this.display();
+						this.renderSettings();
 					})
 			);
 
@@ -227,7 +237,7 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 					})
 			);
 
-		containerEl.createEl("h3", { text: t.settingsTimerTitle });
+		this.addHeading(containerEl, t.settingsTimerTitle);
 		new Setting(containerEl)
 			.setName(t.settingsTimerEnabledName)
 			.setDesc(t.settingsTimerEnabledDesc)
@@ -237,7 +247,7 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 					.onChange(async (v) => {
 						this.plugin.settings.turnTimerEnabled = v;
 						await this.plugin.saveSettings();
-						this.display();
+						this.renderSettings();
 						this.refreshView();
 					})
 			);
@@ -272,7 +282,7 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 					})
 			);
 
-		containerEl.createEl("h3", { text: t.settingsBoardTitle });
+		this.addHeading(containerEl, t.settingsBoardTitle);
 		new Setting(containerEl)
 			.setName(t.settingsBoardGridName)
 			.setDesc(t.settingsBoardGridDesc)
@@ -328,13 +338,12 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 			);
 
 		// ── Conditions / States ───────────────────────────────────────────────
-		containerEl.createEl("h3", { text: t.settingsCondTitle });
-		containerEl.createEl("p", { text: t.settingsCondColorDesc, cls: "setting-item-description" });
+		this.addHeading(containerEl, t.settingsCondTitle, t.settingsCondColorDesc);
 
 		const condListEl = containerEl.createDiv("bt-settings-cond-list");
 		this.renderConditionRows(condListEl, t);
 
-		containerEl.createEl("h3", { text: t.settingsFolderTitle });
+		this.addHeading(containerEl, t.settingsFolderTitle);
 		new Setting(containerEl)
 			.setName(t.settingsFolderFieldName)
 			.setDesc(t.settingsFolderFieldDesc)
@@ -349,7 +358,7 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 			);
 
 		// Logging Section in Settings
-		containerEl.createEl("h3", { text: t.logTitle });
+		this.addHeading(containerEl, t.logTitle);
 		
 		new Setting(containerEl)
 			.setName(t.logEnabledName)
@@ -360,7 +369,7 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 					.onChange(async (v) => {
 						this.plugin.settings.logEnabled = v;
 						await this.plugin.saveSettings();
-						this.display();
+						this.renderSettings();
 					})
 			);
 			
@@ -424,14 +433,16 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 			const nameInput = row.createEl("input", {
 				cls: "bt-settings-cond-name",
 				type: "text",
-			}) as HTMLInputElement;
+			});
 			nameInput.value = entry.name;
 			nameInput.placeholder = t.settingsCondNamePlaceholder;
-			nameInput.addEventListener("change", async () => {
-				conditions[idx].name = nameInput.value.trim();
-				preview.setText(conditions[idx].name.slice(0, 2).toUpperCase() || "??");
-				await this.plugin.saveSettings();
-				this.refreshView();
+			nameInput.addEventListener("change", () => {
+				void (async () => {
+					conditions[idx].name = nameInput.value.trim();
+					preview.setText(conditions[idx].name.slice(0, 2).toUpperCase() || "??");
+					await this.plugin.saveSettings();
+					this.refreshView();
+				})();
 			});
 
 			// Color label
@@ -441,13 +452,15 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 			const colorInput = row.createEl("input", {
 				cls: "bt-settings-color-input",
 				type: "color",
-			}) as HTMLInputElement;
+			});
 			colorInput.value = entry.color || "#888888";
-			colorInput.addEventListener("input", async () => {
-				conditions[idx].color = colorInput.value;
-				this.applyCondPreviewStyle(preview, colorInput.value);
-				await this.plugin.saveSettings();
-				this.refreshView();
+			colorInput.addEventListener("input", () => {
+				void (async () => {
+					conditions[idx].color = colorInput.value;
+					this.applyCondPreviewStyle(preview, colorInput.value);
+					await this.plugin.saveSettings();
+					this.refreshView();
+				})();
 			});
 
 			// Delete button
@@ -455,11 +468,13 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 				cls: "bt-settings-cond-del",
 				text: t.settingsCondDeleteBtn,
 			});
-			delBtn.onclick = async () => {
-				conditions.splice(idx, 1);
-				await this.plugin.saveSettings();
-				this.renderConditionRows(condListEl, t);
-				this.refreshView();
+			delBtn.onclick = () => {
+				void (async () => {
+					conditions.splice(idx, 1);
+					await this.plugin.saveSettings();
+					this.renderConditionRows(condListEl, t);
+					this.refreshView();
+				})();
 			};
 		});
 
@@ -468,21 +483,25 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 			cls: "bt-settings-cond-add",
 			text: t.settingsCondAddBtn,
 		});
-		addBtn.onclick = async () => {
-			conditions.push({ name: "", color: "#888888" });
-			await this.plugin.saveSettings();
-			this.renderConditionRows(condListEl, t);
-			// Focus the last added name input
-			const rows = condListEl.querySelectorAll(".bt-settings-cond-name");
-			if (rows.length) (rows[rows.length - 1] as HTMLInputElement).focus();
+		addBtn.onclick = () => {
+			void (async () => {
+				conditions.push({ name: "", color: "#888888" });
+				await this.plugin.saveSettings();
+				this.renderConditionRows(condListEl, t);
+				const rows = condListEl.querySelectorAll(".bt-settings-cond-name");
+				const lastRow = rows[rows.length - 1];
+				if (lastRow?.instanceOf(HTMLInputElement)) lastRow.focus();
+			})();
 		};
 	}
 
 	applyCondPreviewStyle(el: HTMLElement, color: string) {
 		const c = color || "var(--text-accent)";
-		el.style.color = c;
-		el.style.borderColor = c;
-		el.style.backgroundColor = color ? color + "22" : "transparent";
+		el.setCssProps({
+			"color": c,
+			"border-color": c,
+			"background-color": color ? color + "22" : "transparent",
+		});
 	}
 
 	refreshView() {

@@ -1,7 +1,7 @@
 {
   "id": "combat-ledger",
   "name": "Combat Ledger",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "minAppVersion": "1.13.0",
   "description": "Track combat encounters and manage initiative for your tabletop RPG sessions using YAML properties from combatant notes.",
   "author": "Snifer (Bastion del Dinosaurio)",

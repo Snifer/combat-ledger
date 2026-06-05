@@ -2,7 +2,7 @@ import { ItemView, Notice, TFile, WorkspaceLeaf } from "obsidian";
 import BattleTrackerPlugin from "./main";
 import { ActiveCondition, CombatAlert, Combatant } from "./types";
 import { LOCALIZATION } from "./localization";
-import { ActionModal, ConditionModal, DmgModal, NoteModal, PickCombatantsModal } from "./modals";
+import { ActionModal, ConditionModal, ConfirmModal, DmgModal, LogSetupModal, NoteModal, PickCombatantsModal, TextPromptModal } from "./modals";
 
 export const VIEW_TYPE = "combat-ledger-view";
 export const PLAYER_VIEW_TYPE = "combat-ledger-player-view";
@@ -139,24 +139,27 @@ export class BattleTrackerView extends ItemView {
 		avatarEl.empty();
 		if (avatarSrc) {
 			avatarEl.addClass("bt-avatar-image");
-			avatarEl.style.backgroundImage = `url("${avatarSrc}")`;
-			avatarEl.style.backgroundSize = "cover";
-			avatarEl.style.backgroundPosition = "center";
+			avatarEl.setCssProps({
+				"background-image": `url("${avatarSrc}")`,
+				"background-size": "cover",
+				"background-position": "center",
+			});
 			return;
 		}
 
 		avatarEl.removeClass("bt-avatar-image");
-		avatarEl.style.backgroundImage = "";
+		avatarEl.setCssProps({ "background-image": "" });
 		avatarEl.setText((combatant.icon || combatant.name.slice(0, 2)).toUpperCase());
 	}
 
 	async toggleFullscreen() {
 		const target = this.containerEl.closest(".workspace-leaf-content") ?? this.containerEl;
-		if (document.fullscreenElement) {
-			await document.exitFullscreen();
+		const targetDocument = target.doc;
+		if (targetDocument.fullscreenElement) {
+			await targetDocument.exitFullscreen();
 			return;
 		}
-		if (target instanceof HTMLElement && target.requestFullscreen) {
+		if (target?.instanceOf(HTMLElement) && target.requestFullscreen) {
 			await target.requestFullscreen();
 		}
 	}
@@ -197,20 +200,27 @@ export class BattleTrackerView extends ItemView {
 	}
 
 	saveBoardLayout() {
-		const name = window.prompt(LOCALIZATION[this.plugin.settings.language].boardSavePrompt);
-		if (!name?.trim()) return;
-		const layoutName = name.trim();
-		const layouts = this.plugin.settings.savedBoardLayouts.filter((layout) => layout.name !== layoutName);
-		layouts.push({
-			name: layoutName,
-			background: this.boardBackground,
-			gridEnabled: this.boardGridEnabled,
-			snapToGrid: this.boardSnapToGrid,
-			gridSize: this.boardGridSize,
-			tokenStates: this.tokenStates,
-		});
-		this.plugin.settings.savedBoardLayouts = layouts;
-		void this.plugin.saveSettings();
+		new TextPromptModal(
+			this.app,
+			LOCALIZATION[this.plugin.settings.language].boardSave,
+			LOCALIZATION[this.plugin.settings.language].boardSavePrompt,
+			"",
+			(value) => {
+				const layoutName = value.trim();
+				if (!layoutName) return;
+				const layouts = this.plugin.settings.savedBoardLayouts.filter((layout) => layout.name !== layoutName);
+				layouts.push({
+					name: layoutName,
+					background: this.boardBackground,
+					gridEnabled: this.boardGridEnabled,
+					snapToGrid: this.boardSnapToGrid,
+					gridSize: this.boardGridSize,
+					tokenStates: this.tokenStates,
+				});
+				this.plugin.settings.savedBoardLayouts = layouts;
+				void this.plugin.saveSettings();
+			},
+		).open();
 	}
 
 	loadBoardLayout() {
@@ -218,16 +228,22 @@ export class BattleTrackerView extends ItemView {
 			new Notice(LOCALIZATION[this.plugin.settings.language].boardNoLayouts);
 			return;
 		}
-		const name = window.prompt(LOCALIZATION[this.plugin.settings.language].boardLoadPrompt);
-		if (!name?.trim()) return;
-		const layout = this.plugin.settings.savedBoardLayouts.find((entry) => entry.name === name.trim());
-		if (!layout) return;
-		this.boardBackground = layout.background;
-		this.boardGridEnabled = layout.gridEnabled;
-		this.boardSnapToGrid = layout.snapToGrid;
-		this.boardGridSize = layout.gridSize;
-		this.tokenStates = { ...layout.tokenStates };
-		this.refresh();
+		new TextPromptModal(
+			this.app,
+			LOCALIZATION[this.plugin.settings.language].boardLoad,
+			LOCALIZATION[this.plugin.settings.language].boardLoadPrompt,
+			"",
+			(value) => {
+				const layout = this.plugin.settings.savedBoardLayouts.find((entry) => entry.name === value.trim());
+				if (!layout) return;
+				this.boardBackground = layout.background;
+				this.boardGridEnabled = layout.gridEnabled;
+				this.boardSnapToGrid = layout.snapToGrid;
+				this.boardGridSize = layout.gridSize;
+				this.tokenStates = { ...layout.tokenStates };
+				this.refresh();
+			},
+		).open();
 	}
 
 	clearBoardLayout() {
@@ -310,7 +326,6 @@ export class BattleTrackerView extends ItemView {
 		if (this.activeLogFile || this.logDismissed || this.logSetupInProgress) return;
 
 		this.logSetupInProgress = true;
-		const { LogSetupModal } = require("./modals");
 		new LogSetupModal(this.app, this.plugin, this, async (file: TFile | null) => {
 			this.logSetupInProgress = false;
 			if (file) {
@@ -460,14 +475,15 @@ export class BattleTrackerView extends ItemView {
 		const fields = this.plugin.settings.fields;
 		try {
 			await this.app.fileManager.processFrontMatter(combatant.file, (frontmatter) => {
-				frontmatter[fields.hp] = combatant.hp;
-				if (fields.initiative) frontmatter[fields.initiative] = combatant.initiative;
-				if (fields.shield) frontmatter[fields.shield] = combatant.shield;
-				if (fields.xp) frontmatter[fields.xp] = combatant.xp;
-				if (fields.conditions) frontmatter[fields.conditions] = this.serializeConditions(combatant.conditions);
+				const data = frontmatter as Record<string, unknown>;
+				data[fields.hp] = combatant.hp;
+				if (fields.initiative) data[fields.initiative] = combatant.initiative;
+				if (fields.shield) data[fields.shield] = combatant.shield;
+				if (fields.xp) data[fields.xp] = combatant.xp;
+				if (fields.conditions) data[fields.conditions] = this.serializeConditions(combatant.conditions);
 
 				Object.entries(combatant.extraFields).forEach(([key, value]) => {
-					frontmatter[key] = value;
+					data[key] = value;
 				});
 			});
 		} catch (error) {
@@ -482,7 +498,8 @@ export class BattleTrackerView extends ItemView {
 
 		try {
 			await this.app.fileManager.processFrontMatter(combatant.file, (frontmatter) => {
-				frontmatter[xpField] = combatant.xp;
+				const data = frontmatter as Record<string, unknown>;
+				data[xpField] = combatant.xp;
 			});
 		} catch (error) {
 			console.error("Failed to sync combatant XP:", error);
@@ -982,7 +999,9 @@ export class BattleTrackerView extends ItemView {
 	}
 
 	render() {
-		const container = this.containerEl.children[1] as HTMLElement;
+		const containerNode = this.containerEl.children[1];
+		if (!containerNode?.instanceOf(HTMLElement)) return;
+		const container = containerNode;
 		container.empty();
 		container.className = `bt-panel${this.mode === "player" ? " bt-panel-player" : ""}`;
 
@@ -1017,7 +1036,7 @@ export class BattleTrackerView extends ItemView {
 			);
 			const timerBar = timerWrap.createDiv("bt-turn-timer-bar");
 			const timerFill = timerBar.createDiv(`bt-turn-timer-fill${timerState.expired ? " expired" : ""}`);
-			timerFill.style.width = `${Math.max(0, timerState.progress * 100)}%`;
+			timerFill.setCssProps({ "width": `${Math.max(0, timerState.progress * 100)}%` });
 		}
 
 		const topActions = topBar.createDiv("bt-top-actions");
@@ -1027,11 +1046,11 @@ export class BattleTrackerView extends ItemView {
 
 		if (this.mode === "gm") {
 			const nextBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-primary" });
-			nextBtn.innerHTML = t.nextTurn;
+			nextBtn.setText(t.nextTurn);
 			nextBtn.onclick = () => void this.nextTurn();
 
 			const loadBtn = topActions.createEl("button", { cls: "bt-btn" });
-			loadBtn.innerHTML = t.load;
+			loadBtn.setText(t.load);
 			loadBtn.onclick = () => void this.loadFromVault();
 
 			const playerBtn = topActions.createEl("button", { cls: "bt-btn" });
@@ -1043,14 +1062,16 @@ export class BattleTrackerView extends ItemView {
 					cls: `bt-btn${this.activeLogFile ? " bt-btn-primary" : ""}`,
 					title: t.logSelectLogFileButton,
 				});
-				logBtn.innerHTML = `📝 ${this.activeLogFile ? (lang === "es" ? "Registrando" : "Logging") : (lang === "es" ? "Registro" : "Log")}`;
+				logBtn.setText(`📝 ${this.activeLogFile ? (lang === "es" ? "Registrando" : "Logging") : (lang === "es" ? "Registro" : "Log")}`);
 				logBtn.onclick = () => this.triggerLogSetup();
 			}
 
 			const resetBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-danger-soft" });
-			resetBtn.innerHTML = t.reset;
+			resetBtn.setText(t.reset);
 			resetBtn.onclick = () => {
-				if (confirm(t.resetConfirm)) this.resetBattle();
+				new ConfirmModal(this.app, t.reset, t.resetConfirm, t.reset, () => {
+					this.resetBattle();
+				}).open();
 			};
 		}
 
@@ -1086,7 +1107,7 @@ export class BattleTrackerView extends ItemView {
 				cls: "bt-board-background-input",
 				type: "text",
 				placeholder: t.boardBackground,
-			}) as HTMLInputElement;
+			});
 			backgroundInput.value = this.boardBackground;
 			backgroundInput.onchange = () => {
 				this.boardBackground = backgroundInput.value.trim();
@@ -1097,18 +1118,20 @@ export class BattleTrackerView extends ItemView {
 		const board = boardSection.createDiv(`bt-board${this.boardGridEnabled ? " has-grid" : ""}`);
 		const backgroundSrc = this.resolveBackgroundSrc(this.boardBackground);
 		if (backgroundSrc) {
-			board.style.backgroundImage = `url("${backgroundSrc}")`;
+			board.setCssProps({ "background-image": `url("${backgroundSrc}")` });
 		}
-		board.style.setProperty("--bt-grid-size", `${this.boardGridSize}px`);
+		board.setCssProps({ "--bt-grid-size": `${this.boardGridSize}px` });
 
 		alive.forEach((combatant, index) => {
 			const tokenState = this.ensureTokenState(combatant, index);
 			if (this.mode === "player" && tokenState.hidden) return;
 
 			const token = board.createDiv(`bt-token${combatant.id === this.activeCombatantId ? " active" : ""}${tokenState.hidden ? " is-hidden" : ""}${this.selectedTokenIds.includes(combatant.id) ? " is-selected" : ""}`);
-			token.style.left = `${tokenState.x}px`;
-			token.style.top = `${tokenState.y}px`;
-			token.style.transform = `scale(${tokenState.scale})`;
+			token.setCssProps({
+				"left": `${tokenState.x}px`,
+				"top": `${tokenState.y}px`,
+				"transform": `scale(${tokenState.scale})`,
+			});
 			token.title = combatant.name;
 
 			const avatar = token.createDiv(`bt-token-avatar bt-avatar-${combatant.combatType === "PC" ? "pc" : combatant.combatType === "Enemy" ? "enemy" : "npc"}`);
@@ -1225,7 +1248,7 @@ export class BattleTrackerView extends ItemView {
 			const nameWrap = header.createDiv("bt-name-wrap");
 			const nameEl = nameWrap.createEl("span", { cls: "bt-name", text: combatant.name });
 			if (this.mode === "gm") {
-				nameEl.style.cursor = "pointer";
+				nameEl.addClass("bt-clickable-name");
 				nameEl.title = lang === "es" ? "Abrir nota" : "Open note";
 				nameEl.onclick = () => void this.app.workspace.getLeaf(true).openFile(combatant.file);
 			}
@@ -1235,7 +1258,7 @@ export class BattleTrackerView extends ItemView {
 				const initInput = metaRow.createEl("input", {
 					cls: "bt-init-edit-input",
 					type: "number",
-				}) as HTMLInputElement;
+				});
 				initInput.value = String(combatant.initiative);
 				const commit = () => void this.setInitiative(combatant.id, parseInt(initInput.value) || 0);
 				initInput.onblur = commit;
@@ -1246,7 +1269,7 @@ export class BattleTrackerView extends ItemView {
 						this.refresh();
 					}
 				};
-				setTimeout(() => {
+				window.setTimeout(() => {
 					initInput.focus();
 					initInput.select();
 				}, 0);
@@ -1289,9 +1312,11 @@ export class BattleTrackerView extends ItemView {
 					tag.setText(this.formatConditionLabel(condition));
 					const entry = conditionEntries.find((item) => item.name === condition.name);
 					if (entry?.color) {
-						tag.style.color = entry.color;
-						tag.style.borderColor = entry.color;
-						tag.style.backgroundColor = entry.color + "22";
+						tag.setCssProps({
+							"color": entry.color,
+							"border-color": entry.color,
+							"background-color": entry.color + "22",
+						});
 					}
 				});
 			}
@@ -1304,7 +1329,7 @@ export class BattleTrackerView extends ItemView {
 
 			const bar = hpWrap.createDiv("bt-bar");
 			const fill = bar.createDiv("bt-bar-fill");
-			fill.style.width = `${Math.max(0, ratio * 100)}%`;
+			fill.setCssProps({ "width": `${Math.max(0, ratio * 100)}%` });
 			fill.className = `bt-bar-fill ${ratio > 0.6 ? "bt-hp-ok" : ratio > 0.3 ? "bt-hp-mid" : "bt-hp-low"}`;
 
 			const extraNames = Object.keys(combatant.extraFields);
@@ -1366,9 +1391,11 @@ export class BattleTrackerView extends ItemView {
 
 				const defeatBtn = actions.createEl("button", { cls: "bt-btn bt-btn-ghost" });
 				defeatBtn.setText(t.defeat);
-				defeatBtn.onclick = async () => {
-					await this.markCombatantDefeated(combatant);
-					this.refresh();
+				defeatBtn.onclick = () => {
+					void (async () => {
+						await this.markCombatantDefeated(combatant);
+						this.refresh();
+					})();
 				};
 			}
 		});
@@ -1377,7 +1404,7 @@ export class BattleTrackerView extends ItemView {
 
 		const graveyard = container.createEl("details", {
 			cls: "bt-graveyard",
-		}) as HTMLDetailsElement;
+		});
 		graveyard.open = this.graveyardExpanded;
 		graveyard.ontoggle = () => {
 			this.graveyardExpanded = graveyard.open;
@@ -1397,11 +1424,11 @@ export class BattleTrackerView extends ItemView {
 		xpPanel.createDiv("bt-graveyard-xp-stat").setText(`${t.graveyardAssignedXp}: ${this.graveyardAssignedXp}`);
 
 		const xpControls = graveyard.createDiv("bt-graveyard-controls");
-		const xpInput = xpControls.createEl("input", {
-			cls: "bt-graveyard-input",
-			type: "number",
-			placeholder: t.graveyardXpPlaceholder,
-		}) as HTMLInputElement;
+			const xpInput = xpControls.createEl("input", {
+				cls: "bt-graveyard-input",
+				type: "number",
+				placeholder: t.graveyardXpPlaceholder,
+			});
 		xpInput.min = "0";
 		xpInput.value = this.graveyardXpDraft ?? String(this.getPendingGraveyardXp());
 		xpInput.onchange = () => {
@@ -1434,14 +1461,16 @@ export class BattleTrackerView extends ItemView {
 
 			const reviveBtn = header.createEl("button", { cls: "bt-btn", title: t.revive });
 			reviveBtn.setText(t.revive);
-			reviveBtn.onclick = async () => {
-				combatant.alive = true;
-				combatant.hp = Math.max(1, combatant.hpMax > 0 ? 1 : combatant.hp);
-				await this.syncCombatantToNote(combatant);
-				await this.writeToLog(lang === "es" ? `${combatant.name} ha resucitado` : `${combatant.name} has been revived`);
-				this.graveyardXpDraft = String(this.getPendingGraveyardXp());
-				this.ensureActiveCombatant();
-				this.refresh();
+			reviveBtn.onclick = () => {
+				void (async () => {
+					combatant.alive = true;
+					combatant.hp = Math.max(1, combatant.hpMax > 0 ? 1 : combatant.hp);
+					await this.syncCombatantToNote(combatant);
+					await this.writeToLog(lang === "es" ? `${combatant.name} ha resucitado` : `${combatant.name} has been revived`);
+					this.graveyardXpDraft = String(this.getPendingGraveyardXp());
+					this.ensureActiveCombatant();
+					this.refresh();
+				})();
 			};
 		});
 	}

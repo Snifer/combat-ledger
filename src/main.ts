@@ -3,6 +3,20 @@ import { BattleTrackerSettings, CombatSessionState, Combatant } from "./types";
 import { DEFAULT_SETTINGS, BattleTrackerSettingTab } from "./settings";
 import { PLAYER_VIEW_TYPE, VIEW_TYPE, BattleTrackerView } from "./view";
 
+interface SerializedCombatant extends Omit<Combatant, "file"> {
+	file: string;
+}
+
+interface SerializedSession extends Omit<CombatSessionState, "combatants" | "activeLogFile"> {
+	combatants: SerializedCombatant[];
+	activeLogFile: string | null;
+}
+
+interface PersistedPluginData {
+	settings?: Partial<BattleTrackerSettings>;
+	session?: Partial<SerializedSession>;
+}
+
 export default class BattleTrackerPlugin extends Plugin {
 	settings: BattleTrackerSettings;
 	session: CombatSessionState = this.createDefaultSession();
@@ -36,30 +50,27 @@ export default class BattleTrackerPlugin extends Plugin {
 	async onload() {
 		await this.loadSettings();
 
-		const registry = (this.app as any).viewRegistry;
-		if (registry && registry.viewByType && registry.viewByType[VIEW_TYPE]) {
-			delete registry.viewByType[VIEW_TYPE];
-		}
-
-		if (registry && registry.viewByType && registry.viewByType[PLAYER_VIEW_TYPE]) {
-			delete registry.viewByType[PLAYER_VIEW_TYPE];
-		}
-
 		this.registerView(VIEW_TYPE, (leaf) => new BattleTrackerView(leaf, this, "gm"));
 		this.registerView(PLAYER_VIEW_TYPE, (leaf) => new BattleTrackerView(leaf, this, "player"));
 
-		this.addRibbonIcon("sword", "Combat Ledger", () => this.activateView());
-
-		this.addCommand({
-			id: "open-combat-ledger",
-			name: this.settings.language === "es" ? "Abrir Combat Ledger" : "Open Combat Ledger",
-			callback: () => this.activateView(),
+		this.addRibbonIcon("sword", "Combat Ledger", () => {
+			void this.activateView();
 		});
 
 		this.addCommand({
-			id: "open-combat-ledger-player-view",
+			id: "open-view",
+			name: this.settings.language === "es" ? "Abrir Combat Ledger" : "Open Combat Ledger",
+			callback: () => {
+				void this.activateView();
+			},
+		});
+
+		this.addCommand({
+			id: "open-player-view",
 			name: this.settings.language === "es" ? "Abrir vista de jugadores" : "Open player view",
-			callback: () => this.activatePlayerView(),
+			callback: () => {
+				void this.activatePlayerView();
+			},
 		});
 
 		this.addSettingTab(new BattleTrackerSettingTab(this.app, this));
@@ -67,8 +78,6 @@ export default class BattleTrackerPlugin extends Plugin {
 
 	onunload() {
 		void this.persistData();
-		this.app.workspace.detachLeavesOfType(VIEW_TYPE);
-		this.app.workspace.detachLeavesOfType(PLAYER_VIEW_TYPE);
 	}
 
 	async activateView() {
@@ -122,11 +131,11 @@ export default class BattleTrackerPlugin extends Plugin {
 	}
 
 	async persistData() {
-		const serializedCombatants = this.session.combatants.map((combatant) => ({
+		const serializedCombatants: SerializedCombatant[] = this.session.combatants.map((combatant) => ({
 			...combatant,
 			file: combatant.file.path,
 		}));
-		const serializableSession = {
+		const serializableSession: SerializedSession = {
 			...this.session,
 			combatants: serializedCombatants,
 			activeLogFile: this.session.activeLogFile?.path ?? null,
@@ -138,26 +147,28 @@ export default class BattleTrackerPlugin extends Plugin {
 	}
 
 	async loadSettings() {
-		const rawData = await this.loadData();
-		const storedSettings = rawData?.settings ?? rawData ?? {};
-		const storedSession = rawData?.session ?? null;
+		const rawData = await this.loadData() as PersistedPluginData | Partial<BattleTrackerSettings> | null;
+		const hasWrappedData = Boolean(rawData && typeof rawData === "object" && "settings" in rawData);
+		const storedSettings = (hasWrappedData ? (rawData as PersistedPluginData).settings : rawData) ?? {};
+		const storedSession: Partial<SerializedSession> | null = hasWrappedData ? (rawData as PersistedPluginData).session ?? null : null;
 
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, storedSettings);
 		this.settings.fields = Object.assign({}, DEFAULT_SETTINGS.fields, this.settings.fields ?? {});
 
-		const session = Object.assign(this.createDefaultSession(), storedSession ?? {});
+		const session: CombatSessionState = Object.assign(this.createDefaultSession(), storedSession ?? {});
 		const activeLogPath = storedSession?.activeLogFile;
 		const activeLogFile = typeof activeLogPath === "string" ? this.app.vault.getAbstractFileByPath(activeLogPath) : null;
 		session.activeLogFile = activeLogFile instanceof TFile ? activeLogFile : null;
-		const restoredCombatants = Array.isArray(storedSession?.combatants)
-			? storedSession.combatants
+		const storedCombatants = storedSession?.combatants;
+		const restoredCombatants = Array.isArray(storedCombatants)
+			? storedCombatants
 				.map((entry) => {
-					const file = typeof entry?.file === "string" ? this.app.vault.getAbstractFileByPath(entry.file) : null;
+					const file = typeof entry.file === "string" ? this.app.vault.getAbstractFileByPath(entry.file) : null;
 					if (!(file instanceof TFile)) return null;
 					return {
 						...entry,
 						file,
-					} as Combatant;
+					};
 				})
 				.filter((entry): entry is Combatant => Boolean(entry))
 			: [];

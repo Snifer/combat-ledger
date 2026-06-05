@@ -29,7 +29,7 @@ export class DmgModal extends Modal {
 		input.min = "0";
 
 		const shieldRow = wrap.createDiv("bt-modal-checkbox-row");
-		const shieldToggle = shieldRow.createEl("input", { type: "checkbox" }) as HTMLInputElement;
+		const shieldToggle = shieldRow.createEl("input", { type: "checkbox" });
 		shieldToggle.checked = this.plugin.settings.shieldAbsorbsDamage;
 		shieldToggle.disabled = !this.hasShield;
 		shieldRow.createEl("label", {
@@ -49,7 +49,7 @@ export class DmgModal extends Modal {
 			this.close();
 		};
 
-		setTimeout(() => input.focus(), 50);
+		window.setTimeout(() => input.focus(), 50);
 	}
 
 	onClose() {
@@ -83,7 +83,7 @@ export class ConditionModal extends Modal {
 		this.allConditions.forEach((entry) => {
 			const row = grid.createDiv("bt-cond-edit-row");
 			const left = row.createDiv("bt-cond-edit-main");
-			const check = left.createEl("input", { type: "checkbox" }) as HTMLInputElement;
+			const check = left.createEl("input", { type: "checkbox" });
 			check.checked = selected.has(entry.name);
 
 			const btn = left.createEl("button", {
@@ -95,16 +95,18 @@ export class ConditionModal extends Modal {
 				cls: "bt-cond-duration-input",
 				type: "number",
 				placeholder: t.condModalDurationPlaceholder,
-			}) as HTMLInputElement;
+			});
 			durationInput.min = "1";
 			const currentDuration = selected.get(entry.name);
 			durationInput.value = currentDuration ? String(currentDuration) : "";
 			durationInput.disabled = !check.checked;
 
 			if (entry.color) {
-				btn.style.color = check.checked ? "#fff" : entry.color;
-				btn.style.borderColor = entry.color;
-				btn.style.backgroundColor = check.checked ? entry.color : entry.color + "22";
+				btn.setCssProps({
+					"color": check.checked ? "#fff" : entry.color,
+					"border-color": entry.color,
+					"background-color": check.checked ? entry.color : entry.color + "22",
+				});
 			}
 
 			const updateVisual = () => {
@@ -112,8 +114,10 @@ export class ConditionModal extends Modal {
 				durationInput.disabled = !check.checked;
 				if (!check.checked) durationInput.value = "";
 				if (entry.color) {
-					btn.style.color = check.checked ? "#fff" : entry.color;
-					btn.style.backgroundColor = check.checked ? entry.color : entry.color + "22";
+					btn.setCssProps({
+						"color": check.checked ? "#fff" : entry.color,
+						"background-color": check.checked ? entry.color : entry.color + "22",
+					});
 				}
 			};
 
@@ -130,12 +134,14 @@ export class ConditionModal extends Modal {
 		ok.onclick = () => {
 			const updated: ActiveCondition[] = [];
 			const rows = Array.from(grid.querySelectorAll(".bt-cond-edit-row"));
-			rows.forEach((rowEl, idx) => {
-				const check = rowEl.querySelector("input[type='checkbox']") as HTMLInputElement | null;
-				const durationInput = rowEl.querySelector(".bt-cond-duration-input") as HTMLInputElement | null;
-				const condition = this.allConditions[idx];
-				if (!check?.checked || !condition) return;
-				const parsedDuration = Number(durationInput?.value);
+				rows.forEach((rowEl, idx) => {
+					const checkNode = rowEl.querySelector("input[type='checkbox']");
+					const durationNode = rowEl.querySelector(".bt-cond-duration-input");
+					const check = checkNode?.instanceOf(HTMLInputElement) ? checkNode : null;
+					const durationInput = durationNode?.instanceOf(HTMLInputElement) ? durationNode : null;
+					const condition = this.allConditions[idx];
+					if (!check?.checked || !condition) return;
+					const parsedDuration = Number(durationInput?.value);
 				updated.push({
 					name: condition.name,
 					duration: Number.isFinite(parsedDuration) && parsedDuration > 0 ? parsedDuration : null,
@@ -178,7 +184,7 @@ export class NoteModal extends Modal {
 			this.onConfirm(ta.value);
 			this.close();
 		};
-		setTimeout(() => ta.focus(), 50);
+		window.setTimeout(() => ta.focus(), 50);
 	}
 
 	onClose() {
@@ -235,11 +241,11 @@ export class ActionModal extends Modal {
 		const damageInput = wrap.createEl("input", {
 			type: "number",
 			placeholder: t.actionModalDamagePlaceholder,
-		}) as HTMLInputElement;
+		});
 		damageInput.min = "0";
 
 		const shieldRow = wrap.createDiv("bt-modal-checkbox-row");
-		const shieldToggle = shieldRow.createEl("input", { type: "checkbox" }) as HTMLInputElement;
+		const shieldToggle = shieldRow.createEl("input", { type: "checkbox" });
 		shieldToggle.checked = this.plugin.settings.shieldAbsorbsDamage;
 		shieldRow.createEl("label", { text: t.actionModalShieldLabel });
 
@@ -252,12 +258,12 @@ export class ActionModal extends Modal {
 		const durationInput = wrap.createEl("input", {
 			type: "number",
 			placeholder: t.condModalDurationPlaceholder,
-		}) as HTMLInputElement;
+		});
 		durationInput.min = "1";
 
 		const noteInput = wrap.createEl("textarea", {
 			placeholder: t.actionModalNotePlaceholder,
-		}) as HTMLTextAreaElement;
+		});
 
 		const row = wrap.createDiv("bt-modal-actions");
 		const ok = row.createEl("button", { cls: "bt-btn bt-btn-primary", text: t.actionModalApply });
@@ -274,7 +280,7 @@ export class ActionModal extends Modal {
 			this.close();
 		};
 
-		setTimeout(() => targetSelect.focus(), 50);
+		window.setTimeout(() => targetSelect.focus(), 50);
 	}
 
 	onClose() {
@@ -305,7 +311,7 @@ export class PickCombatantsModal extends Modal {
 			placeholder: t.pickModalSearch,
 			cls: "bt-modal-content",
 		});
-		searchInput.style.marginBottom = "8px";
+		searchInput.addClass("bt-modal-search-input");
 
 		const list = contentEl.createDiv("bt-pick-list");
 
@@ -317,7 +323,7 @@ export class PickCombatantsModal extends Modal {
 				.filter((f) => !filter || f.basename.toLowerCase().includes(filter.toLowerCase()))
 				.forEach((file) => {
 					const item = list.createDiv("bt-pick-item");
-					const cb = item.createEl("input", { type: "checkbox" }) as HTMLInputElement;
+					const cb = item.createEl("input", { type: "checkbox" });
 					cb.checked = this.selected.has(file.path);
 					cb.onchange = () => {
 						if (cb.checked) this.selected.add(file.path);
@@ -348,7 +354,7 @@ export class PickCombatantsModal extends Modal {
 			this.close();
 		};
 
-		setTimeout(() => searchInput.focus(), 50);
+		window.setTimeout(() => searchInput.focus(), 50);
 	}
 
 	onClose() {
@@ -379,36 +385,32 @@ export class LogSetupModal extends Modal {
 		const container = contentEl.createDiv("bt-modal-content");
 
 		const newFileBtn = container.createEl("button", { cls: "bt-btn bt-btn-primary", text: `📝 ${t.logCreateNewFile}` });
-		newFileBtn.style.width = "100%";
-		newFileBtn.style.padding = "8px";
-		newFileBtn.style.marginBottom = "15px";
-		newFileBtn.onclick = async () => {
-			try {
-				const file = await this.view.createNewLogFile();
-				new Notice(`${t.logActiveLogFile}: ${file.name}`);
-				this.onChoose(file);
-				this.close();
-			} catch (e) {
-				new Notice(lang === "es" ? "Error al crear la nota de registro." : "Error creating log note.");
-				console.error(e);
-			}
+		newFileBtn.addClass("bt-log-new-file-btn");
+		newFileBtn.onclick = () => {
+			void (async () => {
+				try {
+					const file = await this.view.createNewLogFile();
+					new Notice(`${t.logActiveLogFile}: ${file.name}`);
+					this.onChoose(file);
+					this.close();
+				} catch (e) {
+					new Notice(lang === "es" ? "Error al crear la nota de registro." : "Error creating log note.");
+					console.error(e);
+				}
+			})();
 		};
 
-		const divider = container.createDiv();
-		divider.style.textAlign = "center";
-		divider.style.margin = "10px 0";
-		divider.style.color = "var(--text-muted)";
-		divider.style.fontSize = "11px";
+		const divider = container.createDiv("bt-log-divider");
 		divider.setText("─── " + (lang === "es" ? "O SELECCIONAR EXISTENTE" : "OR SELECT EXISTING") + " ───");
 
 		const searchInput = container.createEl("input", {
 			type: "text",
 			placeholder: t.pickModalSearch,
 		});
-		searchInput.style.marginBottom = "8px";
+		searchInput.addClass("bt-modal-search-input");
 
 		const list = container.createDiv("bt-pick-list");
-		list.style.maxHeight = "180px";
+		list.addClass("bt-log-pick-list");
 
 		const files = this.app.vault.getMarkdownFiles().sort((a, b) => a.basename.localeCompare(b.basename));
 
@@ -419,8 +421,8 @@ export class LogSetupModal extends Modal {
 				.slice(0, 50)
 				.forEach((file) => {
 					const item = list.createDiv("bt-pick-item");
-					item.style.padding = "6px 8px";
-					item.setText(file.path);
+						item.addClass("bt-log-pick-item");
+						item.setText(file.path);
 					item.onclick = () => {
 						new Notice(`${t.logActiveLogFile}: ${file.name}`);
 						this.onChoose(file);
@@ -433,13 +435,84 @@ export class LogSetupModal extends Modal {
 		searchInput.oninput = () => renderList(searchInput.value);
 
 		const row = contentEl.createDiv("bt-modal-actions");
-		row.style.marginTop = "15px";
+		row.addClass("bt-log-footer-actions");
 
 		const cancelBtn = row.createEl("button", { cls: "bt-btn", text: t.logButtonNoLog });
 		cancelBtn.onclick = () => {
 			this.onChoose(null);
 			this.close();
 		};
+	}
+
+	onClose() {
+		this.contentEl.empty();
+	}
+}
+
+export class ConfirmModal extends Modal {
+	title: string;
+	message: string;
+	confirmText: string;
+	onConfirm: () => void;
+
+	constructor(app: App, title: string, message: string, confirmText: string, onConfirm: () => void) {
+		super(app);
+		this.title = title;
+		this.message = message;
+		this.confirmText = confirmText;
+		this.onConfirm = onConfirm;
+	}
+
+	onOpen() {
+		const { contentEl } = this;
+		contentEl.createEl("h3", { text: this.title });
+		contentEl.createEl("p", { text: this.message });
+		const row = contentEl.createDiv("bt-modal-actions");
+		const cancelBtn = row.createEl("button", { cls: "bt-btn", text: "Cancel" });
+		cancelBtn.onclick = () => this.close();
+		const confirmBtn = row.createEl("button", { cls: "bt-btn bt-btn-danger-soft", text: this.confirmText });
+		confirmBtn.onclick = () => {
+			this.onConfirm();
+			this.close();
+		};
+	}
+
+	onClose() {
+		this.contentEl.empty();
+	}
+}
+
+export class TextPromptModal extends Modal {
+	title: string;
+	placeholder: string;
+	initialValue: string;
+	onConfirm: (value: string) => void;
+
+	constructor(app: App, title: string, placeholder: string, initialValue: string, onConfirm: (value: string) => void) {
+		super(app);
+		this.title = title;
+		this.placeholder = placeholder;
+		this.initialValue = initialValue;
+		this.onConfirm = onConfirm;
+	}
+
+	onOpen() {
+		const { contentEl } = this;
+		contentEl.createEl("h3", { text: this.title });
+		const input = contentEl.createEl("input", {
+			type: "text",
+			placeholder: this.placeholder,
+		});
+		input.value = this.initialValue;
+		const row = contentEl.createDiv("bt-modal-actions");
+		const cancelBtn = row.createEl("button", { cls: "bt-btn", text: "Cancel" });
+		cancelBtn.onclick = () => this.close();
+		const confirmBtn = row.createEl("button", { cls: "bt-btn bt-btn-primary", text: "OK" });
+		confirmBtn.onclick = () => {
+			this.onConfirm(input.value);
+			this.close();
+		};
+		window.setTimeout(() => input.focus(), 50);
 	}
 
 	onClose() {
