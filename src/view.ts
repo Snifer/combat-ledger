@@ -1,4 +1,4 @@
-import { ItemView, Notice, TFile, WorkspaceLeaf } from "obsidian";
+import { ItemView, MarkdownView, Notice, TFile, WorkspaceLeaf } from "obsidian";
 import BattleTrackerPlugin from "./main";
 import { ActiveCondition, CombatAlert, Combatant } from "./types";
 import { LOCALIZATION } from "./localization";
@@ -1010,6 +1010,23 @@ export class BattleTrackerView extends ItemView {
 		if (this.combatants.length > 0) this.triggerLogSetup();
 	}
 
+	async revealObsidianFile(file: TFile) {
+		let existingLeaf: WorkspaceLeaf | undefined;
+
+		this.app.workspace.iterateAllLeaves((leaf) => {
+			if (leaf.view instanceof MarkdownView &&
+					leaf.view.file?.path === file.path) {
+					existingLeaf = leaf;
+			}
+		});
+
+		if (existingLeaf) {
+				await this.app.workspace.revealLeaf(existingLeaf);
+		} else {
+				await this.app.workspace.getLeaf(true).openFile(file);
+		}
+	}
+
 	async handleToggleBoardClick(event: PointerEvent) {
 		this.boardEnabled = !this.boardEnabled;
 		const boardSection = this.containerEl.getElementsByClassName("bt-board-section")[0];
@@ -1292,7 +1309,7 @@ export class BattleTrackerView extends ItemView {
 			if (this.mode === "gm") {
 				nameEl.addClass("bt-clickable-name");
 				nameEl.title = lang === "es" ? "Abrir nota" : "Open note";
-				nameEl.onclick = () => void this.app.workspace.getLeaf(true).openFile(combatant.file);
+				nameEl.onclick = () => void this.revealObsidianFile(combatant.file);
 			}
 
 			const metaRow = nameWrap.createDiv("bt-sub bt-init-edit-row");
