@@ -1117,7 +1117,13 @@ export class BattleTrackerView extends ItemView {
 					title: t.logSelectLogFileButton,
 				});
 				logBtn.setText(`📝 ${this.activeLogFile ? (lang === "es" ? "Registrando" : "Logging") : (lang === "es" ? "Registro" : "Log")}`);
-				logBtn.onclick = () => this.triggerLogSetup();
+				logBtn.onclick = () => {
+					if (this.activeLogFile) {
+						this.revealObsidianFile(this.activeLogFile);
+					} else {
+						this.triggerLogSetup();
+					}
+				}
 			}
 
 			const resetBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-danger-soft" });
