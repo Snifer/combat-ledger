@@ -1,4 +1,4 @@
-import { Plugin, TFile, WorkspaceLeaf } from "obsidian";
+import { Plugin, WorkspaceLeaf } from "obsidian";
 import { BattleTrackerSettings, CombatSessionState, Combatant } from "./types";
 import { DEFAULT_SETTINGS, BattleTrackerSettingTab } from "./settings";
 import { PLAYER_VIEW_TYPE, VIEW_TYPE, BattleTrackerView } from "./view";
@@ -157,23 +157,30 @@ export default class BattleTrackerPlugin extends Plugin {
 		this.settings.fields = Object.assign({}, DEFAULT_SETTINGS.fields, this.settings.fields ?? {});
 
 		const session: CombatSessionState = Object.assign(this.createDefaultSession(), storedSession ?? {});
-		const activeLogPath = storedSession?.activeLogFile;
-		const activeLogFile = typeof activeLogPath === "string" ? this.app.vault.getAbstractFileByPath(activeLogPath) : null;
-		session.activeLogFile = activeLogFile instanceof TFile ? activeLogFile : null;
-		const storedCombatants = storedSession?.combatants;
-		const restoredCombatants = Array.isArray(storedCombatants)
-			? storedCombatants
-				.map((entry) => {
-					const file = typeof entry.file === "string" ? this.app.vault.getAbstractFileByPath(entry.file) : null;
-					if (!(file instanceof TFile)) return null;
-					return {
-						...entry,
-						file,
-					};
-				})
-				.filter((entry): entry is Combatant => Boolean(entry))
-			: [];
-		session.combatants = restoredCombatants;
+
+		// We can only call getFileByPath when Obsidian has finished loading.
+		// This might not be the case at startup, so we need to wait using onLayoutReady.
+		this.app.workspace.onLayoutReady(async () => {
+			const activeLogPath = storedSession?.activeLogFile;
+			session.activeLogFile = typeof activeLogPath === "string" ? this.app.vault.getFileByPath(activeLogPath) : null;
+
+			const storedCombatants = storedSession?.combatants;
+
+			const restoredCombatants = Array.isArray(storedCombatants)
+				? storedCombatants
+					.map((entry) => {
+						const file = typeof entry.file === "string" ? this.app.vault.getFileByPath(entry.file) : null;
+						return {
+							...entry,
+							file,
+						};
+					})
+					.filter((entry): entry is Combatant => Boolean(entry))
+				: [];
+			session.combatants = restoredCombatants;
+			this.refreshViews();
+		});
+
 		session.boardBackground = session.boardBackground || this.settings.boardDefaultBackground;
 		session.boardEnabled = typeof session.boardEnabled === "boolean" ? session.boardEnabled : this.settings.boardEnabled;
 		session.boardGridEnabled = typeof session.boardGridEnabled === "boolean" ? session.boardGridEnabled : this.settings.boardGridEnabled;
