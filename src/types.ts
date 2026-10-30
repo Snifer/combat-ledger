@@ -51,6 +51,7 @@ export interface BattleTrackerSettings {
 	turnTimerEnabled: boolean;
 	turnTimerSeconds: number;
 	playerViewShowHp: boolean;
+	boardEnabled: boolean;
 	boardGridEnabled: boolean;
 	boardSnapToGrid: boolean;
 	boardGridSize: number;
@@ -100,6 +101,7 @@ export interface CombatSessionState {
 	turnTimerStartedAt: number;
 	turnTimerCombatantId: string | null;
 	boardBackground: string;
+	boardEnabled: boolean;
 	boardGridEnabled: boolean;
 	boardSnapToGrid: boolean;
 	boardGridSize: number;

@@ -31,6 +31,12 @@ export class BattleTrackerView extends ItemView {
 		super(leaf);
 		this.plugin = plugin;
 		this.mode = mode;
+
+		this.boardBackground = this.plugin.settings.boardDefaultBackground;
+		this.boardEnabled = this.plugin.settings.boardEnabled;
+		this.boardGridEnabled = this.plugin.settings.boardGridEnabled;
+		this.boardSnapToGrid = this.plugin.settings.boardSnapToGrid;
+		this.boardGridSize = this.plugin.settings.boardGridSize;
 	}
 
 	getViewType() {
@@ -65,6 +71,8 @@ export class BattleTrackerView extends ItemView {
 	set turnTimerCombatantId(value: string | null) { this.plugin.session.turnTimerCombatantId = value; }
 	get boardBackground() { return this.plugin.session.boardBackground; }
 	set boardBackground(value: string) { this.plugin.session.boardBackground = value; }
+	get boardEnabled() { return this.plugin.session.boardEnabled; }
+	set boardEnabled(value: boolean) { this.plugin.session.boardEnabled = value; }
 	get boardGridEnabled() { return this.plugin.session.boardGridEnabled; }
 	set boardGridEnabled(value: boolean) { this.plugin.session.boardGridEnabled = value; }
 	get boardSnapToGrid() { return this.plugin.session.boardSnapToGrid; }
@@ -146,6 +154,20 @@ export class BattleTrackerView extends ItemView {
 		avatarEl.removeClass("bt-avatar-image");
 		avatarEl.setCssProps({ "--bt-avatar-image": "none" });
 		avatarEl.setText((combatant.icon || combatant.name.slice(0, 2)).toUpperCase());
+	}
+
+	async toggleBoard(event: PointerEvent) {
+		this.boardEnabled = !this.boardEnabled;
+		const boardSection = this.containerEl.getElementsByClassName("bt-board-section")[0];
+		if (boardSection) {
+			if (boardSection.hasClass("board-hidden")) {
+				boardSection.removeClass("board-hidden");
+				(event?.currentTarget as HTMLButtonElement)?.setText(LOCALIZATION[this.plugin.settings.language].hideBoard)
+			} else {
+				boardSection.addClass("board-hidden");
+				(event?.currentTarget as HTMLButtonElement)?.setText(LOCALIZATION[this.plugin.settings.language].showBoard)
+			}
+		}
 	}
 
 	async toggleFullscreen() {
@@ -1041,6 +1063,11 @@ export class BattleTrackerView extends ItemView {
 		}
 
 		const topActions = topBar.createDiv("bt-top-actions");
+
+		const boardBtn = topActions.createEl("button", { cls: "bt-btn" });
+		boardBtn.setText(this.boardEnabled ? t.hideBoard : t.showBoard);
+		boardBtn.onclick = (event) => void this.toggleBoard(event);
+
 		const fullBtn = topActions.createEl("button", { cls: "bt-btn" });
 		fullBtn.setText(t.fullscreen);
 		fullBtn.onclick = () => void this.toggleFullscreen();
@@ -1083,7 +1110,7 @@ export class BattleTrackerView extends ItemView {
 			});
 		}
 
-		const boardSection = container.createDiv("bt-board-section");
+		const boardSection = container.createDiv(`bt-board-section${this.boardEnabled ? "" : " board-hidden"}`);
 		if (this.mode === "gm") {
 			const boardControls = boardSection.createDiv("bt-board-controls");
 			boardControls.createEl("span", { cls: "bt-label", text: t.boardTitle });

@@ -198,6 +198,10 @@
 	margin-bottom: 12px;
 }
 
+.bt-board-section.board-hidden {
+	display: none;
+}
+
 .bt-board-controls {
 	display: flex;
 	flex-wrap: wrap;

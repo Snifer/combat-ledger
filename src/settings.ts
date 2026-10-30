@@ -52,6 +52,7 @@ export const DEFAULT_SETTINGS: BattleTrackerSettings = {
 	turnTimerEnabled: false,
 	turnTimerSeconds: 60,
 	playerViewShowHp: false,
+	boardEnabled: true,
 	boardGridEnabled: true,
 	boardSnapToGrid: false,
 	boardGridSize: 64,
@@ -283,6 +284,17 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 			);
 
 		this.addHeading(containerEl, t.settingsBoardTitle);
+		new Setting(containerEl)
+			.setName(t.settingsBoardVisibilityName)
+			.setDesc(t.settingsBoardVisibilityDesc)
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.boardEnabled)
+					.onChange(async (v) => {
+						this.plugin.settings.boardEnabled = v;
+						await this.plugin.saveSettings();
+					})
+			);
 		new Setting(containerEl)
 			.setName(t.settingsBoardGridName)
 			.setDesc(t.settingsBoardGridDesc)

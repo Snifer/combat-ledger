@@ -34,6 +34,7 @@ export default class BattleTrackerPlugin extends Plugin {
 			turnTimerStartedAt: 0,
 			turnTimerCombatantId: null,
 			boardBackground: "",
+			boardEnabled: true,
 			boardGridEnabled: true,
 			boardSnapToGrid: false,
 			boardGridSize: 64,
@@ -174,6 +175,7 @@ export default class BattleTrackerPlugin extends Plugin {
 			: [];
 		session.combatants = restoredCombatants;
 		session.boardBackground = session.boardBackground || this.settings.boardDefaultBackground;
+		session.boardEnabled = typeof session.boardEnabled === "boolean" ? session.boardEnabled : this.settings.boardEnabled;
 		session.boardGridEnabled = typeof session.boardGridEnabled === "boolean" ? session.boardGridEnabled : this.settings.boardGridEnabled;
 		session.boardSnapToGrid = typeof session.boardSnapToGrid === "boolean" ? session.boardSnapToGrid : this.settings.boardSnapToGrid;
 		session.boardGridSize = session.boardGridSize || this.settings.boardGridSize;
