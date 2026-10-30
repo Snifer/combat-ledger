@@ -319,6 +319,7 @@ export class BattleTrackerView extends ItemView {
 	}
 
 	triggerLogSetup() {
+		if (!this.plugin.settings.logEnabled) return;
 		if (this.activeLogFile || this.logDismissed || this.logSetupInProgress) return;
 
 		this.logSetupInProgress = true;
