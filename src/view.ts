@@ -104,16 +104,19 @@ export class BattleTrackerView extends ItemView {
 	}
 
 	pushAlert(type: CombatAlert["type"], message: string) {
+		if (this.plugin.settings.maxAlertCount === 0) return;
+
 		const now = Date.now();
 		this.alerts = [
-			...this.alerts.filter((alert) => now - alert.createdAt < 8000),
+			...this.alerts
+				.filter((alert) => now - alert.createdAt < this.plugin.settings.maxAlertDuration),
 			{ id: `${type}-${now}-${Math.random().toString(36).slice(2, 8)}`, type, message, createdAt: now },
-		];
+		].slice(-this.plugin.settings.maxAlertCount);
 	}
 
 	getVisibleAlerts(): CombatAlert[] {
 		const now = Date.now();
-		const visible = this.alerts.filter((alert) => now - alert.createdAt < 8000);
+		const visible = this.alerts.filter((alert) => now - alert.createdAt < this.plugin.settings.maxAlertDuration);
 		if (visible.length !== this.alerts.length) {
 			this.alerts = visible;
 		}
@@ -154,20 +157,6 @@ export class BattleTrackerView extends ItemView {
 		avatarEl.removeClass("bt-avatar-image");
 		avatarEl.setCssProps({ "--bt-avatar-image": "none" });
 		avatarEl.setText((combatant.icon || combatant.name.slice(0, 2)).toUpperCase());
-	}
-
-	async toggleBoard(event: PointerEvent) {
-		this.boardEnabled = !this.boardEnabled;
-		const boardSection = this.containerEl.getElementsByClassName("bt-board-section")[0];
-		if (boardSection) {
-			if (boardSection.hasClass("board-hidden")) {
-				boardSection.removeClass("board-hidden");
-				(event?.currentTarget as HTMLButtonElement)?.setText(LOCALIZATION[this.plugin.settings.language].hideBoard)
-			} else {
-				boardSection.addClass("board-hidden");
-				(event?.currentTarget as HTMLButtonElement)?.setText(LOCALIZATION[this.plugin.settings.language].showBoard)
-			}
-		}
 	}
 
 	async toggleFullscreen() {
@@ -1021,6 +1010,27 @@ export class BattleTrackerView extends ItemView {
 		if (this.combatants.length > 0) this.triggerLogSetup();
 	}
 
+	async handleToggleBoardClick(event: PointerEvent) {
+		this.boardEnabled = !this.boardEnabled;
+		const boardSection = this.containerEl.getElementsByClassName("bt-board-section")[0];
+		if (boardSection) {
+			if (boardSection.hasClass("board-hidden")) {
+				boardSection.removeClass("board-hidden");
+				(event?.currentTarget as HTMLButtonElement)?.setText(LOCALIZATION[this.plugin.settings.language].hideBoard)
+			} else {
+				boardSection.addClass("board-hidden");
+				(event?.currentTarget as HTMLButtonElement)?.setText(LOCALIZATION[this.plugin.settings.language].showBoard)
+			}
+		}
+	}
+
+	handleRemoveAlertClick(event: PointerEvent) {
+		const alertBtn = (event?.currentTarget as HTMLButtonElement);
+		const alertId = alertBtn.getAttr("data-alert-id");
+		this.alerts = this.alerts.filter(a => a.id !== alertId);
+		alertBtn.remove();
+	}
+
 	render() {
 		const containerNode = this.containerEl.children[1];
 		if (!containerNode?.instanceOf(HTMLElement)) return;
@@ -1066,7 +1076,7 @@ export class BattleTrackerView extends ItemView {
 
 		const boardBtn = topActions.createEl("button", { cls: "bt-btn" });
 		boardBtn.setText(this.boardEnabled ? t.hideBoard : t.showBoard);
-		boardBtn.onclick = (event) => void this.toggleBoard(event);
+		boardBtn.onclick = (event) => void this.handleToggleBoardClick(event);
 
 		const fullBtn = topActions.createEl("button", { cls: "bt-btn" });
 		fullBtn.setText(t.fullscreen);
@@ -1106,7 +1116,10 @@ export class BattleTrackerView extends ItemView {
 		if (visibleAlerts.length) {
 			const alertsWrap = container.createDiv("bt-alerts");
 			visibleAlerts.slice().reverse().forEach((alert) => {
-				alertsWrap.createDiv(`bt-alert bt-alert-${alert.type}`).setText(alert.message);
+				const alertBtn = alertsWrap.createDiv(`bt-alert bt-alert-${alert.type}`);
+				alertBtn.setText(alert.message);
+				alertBtn.setAttr("data-alert-id", alert.id);
+				alertBtn.onclick = (event) => this.handleRemoveAlertClick(event);
 			});
 		}
 

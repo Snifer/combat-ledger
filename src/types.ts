@@ -62,6 +62,8 @@ export interface BattleTrackerSettings {
 	logHeader: string;
 	logFileName: string;
 	logFolder: string;
+	maxAlertCount: number;
+	maxAlertDuration: number;
 }
 
 export interface Combatant {

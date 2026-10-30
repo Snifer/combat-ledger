@@ -140,6 +140,11 @@ export const LOCALIZATION = {
 		settingsFolderTitle: "Carpeta de combatientes (opcional)",
 		settingsFolderFieldName: "Ruta de carpeta",
 		settingsFolderFieldDesc: "Si indicas una carpeta (ej. Campaña/Criaturas), al pulsar «Cargar» cargará todas las notas de esa carpeta automáticamente. Déjalo vacío para seleccionar manualmente.",
+		settingsAlertsTitle: "Alertas",
+		settingsAlertsMaxDurationName: "Duración máxima de las alertas",
+		settingsAlertsMaxDurationDesc: "Duración máxima durante la que se muestra una alerta (en milisegundos).",
+		settingsAlertsMaxNumberName: "Número máximo de alertas",
+		settingsAlertsMaxNumberDesc: "Número máximo de alertas mostradas simultáneamente.",
 		
 		// Logging Settings & UI
 		logTitle: "Registro de Combate (Log)",
@@ -313,6 +318,11 @@ export const LOCALIZATION = {
 		settingsFolderTitle: "Combatant Folder (optional)",
 		settingsFolderFieldName: "Folder path",
 		settingsFolderFieldDesc: "If you specify a folder (e.g. Campaign/Creatures), clicking 'Load' will load all notes in that folder automatically. Leave empty to select manually.",
+		settingsAlertsTitle: "Alerts",
+		settingsAlertsMaxDurationName: "Maximum Alert Duration",
+		settingsAlertsMaxDurationDesc: "Maximum duration an alert is shown (in milliseconds).",
+		settingsAlertsMaxNumberName: "Maximum Alert Count",
+		settingsAlertsMaxNumberDesc: "Maximum number of alerts shown at a time.",
 		
 		// Logging Settings & UI
 		logTitle: "Combat Log (Log)",
