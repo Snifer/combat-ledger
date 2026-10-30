@@ -695,7 +695,6 @@
 .bt-modal-content input,
 .bt-modal-content textarea,
 .bt-modal-content select {
-	width: 100%;
 	padding: 6px 8px;
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 5px;
