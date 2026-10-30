@@ -26,6 +26,7 @@ export class BattleTrackerView extends ItemView {
 	turnTimerInterval: number | null = null;
 	mode: "gm" | "player";
 	lastTimerExpiredFor: string | null = null;
+	logSetupInProgress: boolean;
 
 	constructor(leaf: WorkspaceLeaf, plugin: BattleTrackerPlugin, mode: "gm" | "player") {
 		super(leaf);
@@ -89,8 +90,6 @@ export class BattleTrackerView extends ItemView {
 	set logDismissed(value: boolean) { this.plugin.session.logDismissed = value; }
 	get logQueue() { return this.plugin.session.logQueue; }
 	set logQueue(value: string[]) { this.plugin.session.logQueue = value; }
-	get logSetupInProgress() { return this.plugin.session.logSetupInProgress; }
-	set logSetupInProgress(value: boolean) { this.plugin.session.logSetupInProgress = value; }
 	get alerts() { return this.plugin.session.alerts; }
 	set alerts(value: CombatAlert[]) { this.plugin.session.alerts = value; }
 
@@ -1021,9 +1020,9 @@ export class BattleTrackerView extends ItemView {
 		});
 
 		if (existingLeaf) {
-				await this.app.workspace.revealLeaf(existingLeaf);
+			await this.app.workspace.revealLeaf(existingLeaf);
 		} else {
-				await this.app.workspace.getLeaf(true).openFile(file);
+			await this.app.workspace.getLeaf(true).openFile(file);
 		}
 	}
 

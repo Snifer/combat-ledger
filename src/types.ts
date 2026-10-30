@@ -112,6 +112,5 @@ export interface CombatSessionState {
 	activeLogFile: TFile | null;
 	logDismissed: boolean;
 	logQueue: string[];
-	logSetupInProgress: boolean;
 	alerts: CombatAlert[];
 }

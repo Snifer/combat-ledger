@@ -43,7 +43,6 @@ export default class BattleTrackerPlugin extends Plugin {
 			activeLogFile: null,
 			logDismissed: false,
 			logQueue: [],
-			logSetupInProgress: false,
 			alerts: [],
 		};
 	}
