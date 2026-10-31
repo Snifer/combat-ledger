@@ -1083,16 +1083,14 @@ export class BattleTrackerView extends ItemView {
 		}
 	}
 
-	async handleToggleBoardClick(event: PointerEvent) {
+	async toggleBoard() {
 		this.boardEnabled = !this.boardEnabled;
 		const boardSection = this.containerEl.getElementsByClassName("bt-board-section")[0];
 		if (boardSection) {
 			if (boardSection.hasClass("board-hidden")) {
 				boardSection.removeClass("board-hidden");
-				(event?.currentTarget as HTMLButtonElement)?.setText(LOCALIZATION[this.plugin.settings.language].hideBoard)
 			} else {
 				boardSection.addClass("board-hidden");
-				(event?.currentTarget as HTMLButtonElement)?.setText(LOCALIZATION[this.plugin.settings.language].showBoard)
 			}
 		}
 	}
@@ -1147,31 +1145,39 @@ export class BattleTrackerView extends ItemView {
 
 		const topActions = topBar.createDiv("bt-top-actions");
 
-		const boardBtn = topActions.createEl("button", { cls: "bt-btn" });
-		boardBtn.setText(this.boardEnabled ? t.hideBoard : t.showBoard);
-		boardBtn.onclick = (event) => void this.handleToggleBoardClick(event);
-
-		const fullBtn = topActions.createEl("button", { cls: "bt-btn" });
-		fullBtn.setText(t.fullscreen);
-		fullBtn.onclick = () => void this.toggleFullscreen();
-
 		if (this.mode === "gm") {
-			const nextBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-primary" });
-			nextBtn.setText(t.nextTurn);
+			const nextBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-primary bt-btn-large-width" });
+			const nextIcon = nextBtn.createSpan();
+			setIcon(nextIcon, "step-forward");
+			nextBtn.createSpan({ text: t.nextTurn });
 			nextBtn.onclick = () => void this.nextTurn();
 
 			if (this.plugin.settings.defaultCombatantFolder) {
-				const loadDefaultBtn = topActions.createEl("button", { cls: "bt-btn" });
-				loadDefaultBtn.setText(t.loadDefault);
+				const loadDefaultBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-medium-width" });
+				const loadDefaultIcon = loadDefaultBtn.createSpan();
+				setIcon(loadDefaultIcon, "user-plus");
+				loadDefaultBtn.createSpan({ text: t.loadDefault });
 				loadDefaultBtn.onclick = () => void this.loadDefaultCombatants();
 			}
 
-			const loadBtn = topActions.createEl("button", { cls: "bt-btn" });
-			loadBtn.setText(t.load);
+			const loadBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-medium-width" });
+			const loadIcon = loadBtn.createSpan();
+			setIcon(loadIcon, "user-plus");
+			loadBtn.createSpan({ text: t.load });
 			loadBtn.onclick = () => void this.loadSelectedCombatantsFromVault();
+		}
 
-			const playerBtn = topActions.createEl("button", { cls: "bt-btn" });
-			playerBtn.setText(t.playerView);
+		const boardBtn = topActions.createEl("button", { cls: "bt-btn", title: t.showHideBoard });
+		setIcon(boardBtn, "grid");
+		boardBtn.onclick = () => void this.toggleBoard();
+
+		const fullBtn = topActions.createEl("button", { cls: "bt-btn", title: t.fullscreen });
+		setIcon(fullBtn, "fullscreen");
+		fullBtn.onclick = () => void this.toggleFullscreen();
+
+		if (this.mode === "gm") {
+			const playerBtn = topActions.createEl("button", { cls: "bt-btn", title: t.playerView });
+			setIcon(playerBtn, "hat-glasses");
 			playerBtn.onclick = () => void this.plugin.activatePlayerView();
 
 			if (this.plugin.settings.logEnabled) {
@@ -1179,7 +1185,12 @@ export class BattleTrackerView extends ItemView {
 					cls: `bt-btn${this.activeLogFile ? " bt-btn-primary" : ""}`,
 					title: t.logSelectLogFileButton,
 				});
-				logBtn.setText(`📝 ${this.activeLogFile ? (lang === "es" ? "Registrando" : "Logging") : (lang === "es" ? "Registro" : "Log")}`);
+				const logIcon = logBtn.createSpan();
+				setIcon(logIcon, "scroll-text");
+				if (this.activeLogFile) {
+					logBtn.createSpan({ text: (lang === "es" ? "Registrando" : "Logging") });
+				}
+
 				logBtn.onclick = () => {
 					if (this.activeLogFile) {
 						this.revealObsidianFile(this.activeLogFile);
@@ -1190,7 +1201,9 @@ export class BattleTrackerView extends ItemView {
 			}
 
 			const resetBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-danger-soft" });
-			resetBtn.setText(t.reset);
+			const resetIcon = resetBtn.createSpan();
+			setIcon(resetIcon, "rotate-ccw");
+			resetBtn.createSpan({ text: t.reset });
 			resetBtn.onclick = () => {
 				new ConfirmModal(this.app, t.reset, t.resetConfirm, t.reset, () => {
 					this.resetBattle();
@@ -1214,19 +1227,27 @@ export class BattleTrackerView extends ItemView {
 			boardControls.createEl("span", { cls: "bt-label", text: t.boardTitle });
 
 			const centerBtn = boardControls.createEl("button", { cls: "bt-btn" });
-			centerBtn.setText(t.boardCenter);
+			const centerIcon = centerBtn.createSpan();
+			setIcon(centerIcon, "layout-grid");
+			centerBtn.createSpan({ text: t.boardCenter });
 			centerBtn.onclick = () => this.centerTokens();
 
 			const saveBtn = boardControls.createEl("button", { cls: "bt-btn" });
-			saveBtn.setText(t.boardSave);
+			const saveIcon = saveBtn.createSpan();
+			setIcon(saveIcon, "save");
+			saveBtn.createSpan({ text: t.boardSave });
 			saveBtn.onclick = () => this.saveBoardLayout();
 
 			const loadLayoutBtn = boardControls.createEl("button", { cls: "bt-btn" });
-			loadLayoutBtn.setText(t.boardLoad);
+			const loadLayoutIcon = loadLayoutBtn.createSpan();
+			setIcon(loadLayoutIcon, "folder");
+			loadLayoutBtn.createSpan({ text: t.boardLoad });
 			loadLayoutBtn.onclick = () => this.loadBoardLayout();
 
 			const clearLayoutBtn = boardControls.createEl("button", { cls: "bt-btn" });
-			clearLayoutBtn.setText(t.boardClear);
+			const clearLayoutIcon = clearLayoutBtn.createSpan();
+			setIcon(clearLayoutIcon, "x");
+			clearLayoutBtn.createSpan({ text: t.boardClear });
 			clearLayoutBtn.onclick = () => this.clearBoardLayout();
 
 			const backgroundInput = boardControls.createEl("input", {
@@ -1417,24 +1438,28 @@ export class BattleTrackerView extends ItemView {
 			}
 
 			const badge = header.createDiv(`bt-badge bt-badge-${combatant.combatType === "PC" ? "pc" : combatant.combatType === "Enemy" ? "enemy" : "npc"}`);
-			badge.setText(combatant.combatType);
+			badge.title = combatant.combatType;
+			// const badgeIcon = badge.createSpan();
+			setIcon(badge, combatant.combatType === "PC" ? "user" : combatant.combatType === "Enemy"? "skull" : "handshake");
+			// badge.createSpan({ text: combatant.combatType });
 
 			if (this.mode === "gm") {
-				const editInitBtn = header.createEl("button", { cls: "bt-btn-icon bt-btn-small-width", title: t.editInitiative });
+				const metaActions = header.createDiv(`bt-meta-actions`);
+				const editInitBtn = metaActions.createEl("button", { cls: "bt-btn-icon bt-btn-small-width", title: t.editInitiative });
 				setIcon(editInitBtn, "pen");
 				editInitBtn.onclick = () => {
 					this.editingInitiativeId = combatant.id;
 					this.refresh();
 				};
 
-				const rollInitBtn = header.createEl("button", { cls: "bt-btn-icon bt-btn-small-width", title: t.rollInitiative });
+				const rollInitBtn = metaActions.createEl("button", { cls: "bt-btn-icon bt-btn-small-width", title: t.rollInitiative });
 				setIcon(rollInitBtn, "dices");
 				rollInitBtn.onclick = () => {
 					combatant.initiative = this.rollInitiative(combatant.initiativeMod);
 					this.refresh();
 				};
 
-				const removeBtn = header.createEl("button", { cls: "bt-btn-icon bt-btn-small-width", title: t.removeTitle });
+				const removeBtn = metaActions.createEl("button", { cls: "bt-btn-icon bt-btn-error bt-btn-small-width", title: t.removeTitle });
 				setIcon(removeBtn, "x");
 				removeBtn.onclick = () => void this.removeCombatant(combatant.id);
 			}
@@ -1494,20 +1519,26 @@ export class BattleTrackerView extends ItemView {
 			if (this.mode === "gm") {
 				const actions = card.createDiv("bt-actions");
 
-				const dmgBtn = actions.createEl("button", { cls: "bt-btn bt-btn-danger-soft" });
-				dmgBtn.setText(t.damageHeal);
+				const dmgBtn = actions.createEl("button", { cls: "bt-btn bt-btn-danger-soft bt-btn-large-width" });
+				const dmgIcon = dmgBtn.createSpan();
+				setIcon(dmgIcon, "swords");
+				dmgBtn.createSpan({ text: t.damageHeal });
 				dmgBtn.onclick = () => new DmgModal(this.app, combatant.name, this.plugin, combatant.shield > 0, (value, heal, useShield) => {
 					void this.applyDmg(combatant.id, value, heal, useShield);
 				}).open();
 
-				const condBtn = actions.createEl("button", { cls: "bt-btn" });
-				condBtn.setText(t.status);
+				const condBtn = actions.createEl("button", { cls: "bt-btn bt-btn-medium-width" });
+				const condIcon = condBtn.createSpan();
+				setIcon(condIcon, "bubbles");
+				condBtn.createSpan({ text: t.status });
 				condBtn.onclick = () => new ConditionModal(this.app, conditionEntries, combatant.conditions, this.plugin, (updated) => {
 					void this.updateConditions(combatant.id, updated);
 				}).open();
 
-				const noteBtn = actions.createEl("button", { cls: "bt-btn" });
-				noteBtn.setText(t.note);
+				const noteBtn = actions.createEl("button", { cls: "bt-btn bt-btn-medium-width" });
+				const noteIcon = noteBtn.createSpan();
+				setIcon(noteIcon, "notebook-pen");
+				noteBtn.createSpan({ text: t.note });
 				noteBtn.onclick = () => new NoteModal(this.app, combatant.notes, this.plugin, (text) => {
 					combatant.notes = text;
 					void this.writeToLog(lang === "es"
@@ -1517,8 +1548,10 @@ export class BattleTrackerView extends ItemView {
 				}).open();
 
 				if (isActive && alive.length > 1) {
-					const actionBtn = actions.createEl("button", { cls: "bt-btn bt-btn-primary" });
-					actionBtn.setText(t.action);
+					const actionBtn = actions.createEl("button", { cls: "bt-btn bt-btn-primary bt-btn-medium-width" });
+					const actionIcon = actionBtn.createSpan();
+					setIcon(actionIcon, "zap");
+					actionBtn.createSpan({ text: t.action });
 					actionBtn.onclick = () => new ActionModal(
 						this.app,
 						combatant,
@@ -1529,8 +1562,10 @@ export class BattleTrackerView extends ItemView {
 					).open();
 				}
 
-				const defeatBtn = actions.createEl("button", { cls: "bt-btn bt-btn-ghost" });
-				defeatBtn.setText(t.defeat);
+				const defeatBtn = actions.createEl("button", { cls: "bt-btn bt-btn-ghost bt-btn-medium-width" });
+				const defeatIcon = defeatBtn.createSpan();
+				setIcon(defeatIcon, "skull");
+				defeatBtn.createSpan({ text: t.defeat });
 				defeatBtn.onclick = () => {
 					void (async () => {
 						await this.markCombatantDefeated(combatant);

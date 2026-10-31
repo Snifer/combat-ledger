@@ -2,6 +2,14 @@
    Combat Ledger
 ============================================================ */
 
+:root {
+	--color-red-background: #ef444422;
+	--color-green-background: #22c55e22;
+	--color-blue-background: #3b82f622;
+	--color-yellow-background: #f59e0b22;
+	--color-orange-background: #f9731622;
+}
+
 /* ── Panel ─────────────────────────────────────────────────── */
 .bt-panel {
 	padding: 10px;
@@ -26,10 +34,16 @@
 }
 
 .bt-round-badge {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 	font-size: 12px;
 	font-weight: 600;
-	padding: 3px 10px;
+	line-height: 1;
+	padding: 6px 10px;
 	border-radius: 6px;
+	min-height: var(--input-height);
+	min-width: 80px;
 	background: var(--background-modifier-border);
 	color: var(--text-normal);
 }
@@ -153,8 +167,8 @@
 	margin-left: auto;
 }
 
-.bt-btn-icon:hover {
-	color: var(--text-error);
+.bt-btn-error:hover {
+	color: var(--text-error) !important;
 }
 
 .bt-btn-mini {
@@ -173,11 +187,15 @@
 }
 
 .bt-btn-small-width {
-	min-width: 25px;
+	min-width: 30px;
 }
 
 .bt-btn-medium-width {
 	min-width: 80px;
+}
+
+.bt-btn-large-width {
+	min-width: 110px;
 }
 
 .bt-alerts {
@@ -300,7 +318,7 @@
 	width: 40px;
 	height: 40px;
 	border-radius: 999px;
-	margin-bottom: 4px;
+	margin: 0 auto 4px auto;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -314,6 +332,7 @@
 	font-size: 10px;
 	font-weight: 700;
 	line-height: 1.2;
+	text-align: center;
 }
 
 .bt-token-conditions {
@@ -329,6 +348,7 @@
 	border-radius: 999px;
 	background: var(--background-primary);
 	border: 1px solid var(--background-modifier-border);
+	text-align: center;
 }
 
 .bt-token-tools {
@@ -338,8 +358,10 @@
 }
 
 .bt-token-tool {
+	width: 100%;
+	height: auto;
 	font-size: 9px;
-	padding: 2px 4px;
+	padding: 4px 4px;
 	border-radius: 4px;
 	border: 1px solid var(--background-modifier-border);
 	background: var(--background-primary);
@@ -417,6 +439,7 @@
 	font-size: 11px;
 	font-weight: 600;
 	flex-shrink: 0;
+	line-height: 1;
 }
 
 .bt-avatar-image {
@@ -427,18 +450,21 @@
 }
 
 .bt-avatar-pc {
-	background: var(--color-blue-background);
-	color: var(--color-blue);
+	background: var(--color-green-background);
+	color: var(--color-green);
+	font-weight: bold;
 }
 
 .bt-avatar-enemy {
 	background: var(--color-red-background);
 	color: var(--color-red);
+	font-weight: bold;
 }
 
 .bt-avatar-npc {
 	background: var(--color-yellow-background);
 	color: var(--color-yellow);
+	font-weight: bold;
 }
 
 /* Name */
@@ -467,6 +493,10 @@
 	color: var(--text-muted);
 }
 
+.bt-sub > span {
+	line-height: 1;
+}
+
 .bt-init-edit-row {
 	display: flex;
 	align-items: center;
@@ -493,26 +523,37 @@
 
 /* Type badge */
 .bt-badge {
-	font-size: 10px;
-	padding: 2px 6px;
-	border-radius: 4px;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
 	margin-left: auto;
+	padding: 4px 6px;
+	border-radius: 4px;
 	white-space: nowrap;
+	font-size: 12px;
+	gap: 4px;
+	min-width: 40px;
+}
+
+.bt-badge > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .bt-badge-pc {
-	background: var(--color-blue-background);
-	color: var(--color-blue);
+	color: var(--color-green);
+	font-weight: bold;
 }
 
 .bt-badge-enemy {
-	background: var(--color-red-background);
 	color: var(--color-red);
+	font-weight: bold;
 }
 
 .bt-badge-npc {
-	background: var(--color-yellow-background);
 	color: var(--color-yellow);
+	font-weight: bold;
 }
 
 /* ── Condition tags ─────────────────────────────────────────── */
@@ -637,10 +678,29 @@
 }
 
 /* ── Action row ─────────────────────────────────────────────── */
+.bt-meta-actions {
+	display: flex;
+	gap: 0px;
+	flex-wrap: wrap;
+}
+
+.bt-meta-actions > button {
+	background: transparent;
+	box-shadow: none;
+}
+
+.bt-meta-actions > button:hover {
+	box-shadow: var(--input-shadow-hover);
+}
+
 .bt-actions {
 	display: flex;
 	gap: 5px;
 	flex-wrap: wrap;
+}
+
+.bt-actions > :last-child {
+    margin-left: auto;
 }
 
 .bt-graveyard {
@@ -983,6 +1043,7 @@
 	color: var(--text-muted);
 	cursor: pointer;
 	transition: all 0.15s;
+	gap: 4px;
 }
 
 .bt-settings-cond-add:hover {

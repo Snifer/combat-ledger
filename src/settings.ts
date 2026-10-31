@@ -1,4 +1,4 @@
-import { App, PluginSettingTab, Setting } from "obsidian";
+import { App, PluginSettingTab, Setting, setIcon } from "obsidian";
 import BattleTrackerPlugin from "./main";
 import { BattleTrackerSettings, ConditionEntry } from "./types";
 import { LOCALIZATION } from "./localization";
@@ -536,8 +536,9 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 			// Delete button
 			const delBtn = row.createEl("button", {
 				cls: "bt-settings-cond-del",
-				text: t.settingsCondDeleteBtn,
+				title: t.settingsCondDeleteBtn,
 			});
+			setIcon(delBtn, "trash");
 			delBtn.onclick = () => {
 				void (async () => {
 					conditions.splice(idx, 1);
@@ -549,10 +550,10 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 		});
 
 		// Add condition button
-		const addBtn = condListEl.createEl("button", {
-			cls: "bt-settings-cond-add",
-			text: t.settingsCondAddBtn,
-		});
+		const addBtn = condListEl.createEl("button", { cls: "bt-settings-cond-add" });
+		const addIcon = addBtn.createSpan();
+		setIcon(addIcon, "plus");
+		addBtn.createSpan({ text: t.settingsCondAddBtn });
 		addBtn.onclick = () => {
 			void (async () => {
 				conditions.push({ name: "", color: "#888888" });
