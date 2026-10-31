@@ -44,7 +44,8 @@ export interface BattleTrackerSettings {
 	language: "es" | "en";
 	fields: FieldMapping;
 	conditions: ConditionEntry[];
-	combatantFolder: string;
+	rootCombatantFolder: string;
+	defaultCombatantFolder: string;
 	realtimeSync: boolean;
 	realtimeSyncMode: "pc" | "all";
 	shieldAbsorbsDamage: boolean;

@@ -45,7 +45,8 @@ export const DEFAULT_SETTINGS: BattleTrackerSettings = {
 		conditions: "conditions",
 	},
 	conditions: DEFAULT_CONDITIONS_ES,
-	combatantFolder: "",
+	rootCombatantFolder: "",
+	defaultCombatantFolder: "",
 	realtimeSync: false,
 	realtimeSyncMode: "pc",
 	shieldAbsorbsDamage: true,
@@ -95,7 +96,7 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 
 		this.addHeading(containerEl, t.settingsTitle);
 
-		// Language Setting
+		// ── Language ──────────────────────────────────────────────────────────
 		new Setting(containerEl)
 			.setName(t.settingsLanguageName)
 			.setDesc(t.settingsLanguageDesc)
@@ -139,6 +140,7 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 					})
 			);
 
+		// ── Combatant Fields ──────────────────────────────────────────────────
 		this.addHeading(containerEl, t.settingsFieldsTitle, t.settingsFieldsDesc);
 
 		const f = this.plugin.settings.fields;
@@ -357,21 +359,34 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 		const condListEl = containerEl.createDiv("bt-settings-cond-list");
 		this.renderConditionRows(condListEl, t);
 
+		// ── Combatant Folders ─────────────────────────────────────────────────
 		this.addHeading(containerEl, t.settingsFolderTitle);
 		new Setting(containerEl)
-			.setName(t.settingsFolderFieldName)
-			.setDesc(t.settingsFolderFieldDesc)
+			.setName(t.settingsRootFolderFieldName)
+			.setDesc(t.settingsRootFolderFieldDesc)
 			.addText((text) =>
 				text
-					.setPlaceholder("Campaña/Criaturas")
-					.setValue(this.plugin.settings.combatantFolder)
+					.setPlaceholder("Campaign/Creatures")
+					.setValue(this.plugin.settings.rootCombatantFolder)
 					.onChange(async (v) => {
-						this.plugin.settings.combatantFolder = v.trim();
+						this.plugin.settings.rootCombatantFolder = v.trim().replace(/\/$/, "");
+						await this.plugin.saveSettings();
+					})
+			);
+		new Setting(containerEl)
+			.setName(t.settingsDefaultFolderFieldName)
+			.setDesc(t.settingsDefaultFolderFieldDesc)
+			.addText((text) =>
+				text
+					.setPlaceholder("Campaign/Creatures/Players")
+					.setValue(this.plugin.settings.defaultCombatantFolder)
+					.onChange(async (v) => {
+						this.plugin.settings.defaultCombatantFolder = v.trim().replace(/\/$/, "");
 						await this.plugin.saveSettings();
 					})
 			);
 
-		// Logging Section in Settings
+		// ── Logging ───────────────────────────────────────────────────────────
 		this.addHeading(containerEl, t.logTitle);
 		
 		new Setting(containerEl)
@@ -427,7 +442,7 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 				);
 		}
 
-		// Alerts Section in Settings
+		// ── Alerts ────────────────────────────────────────────────────────────
 		this.addHeading(containerEl, t.settingsAlertsTitle);
 		
 		new Setting(containerEl)

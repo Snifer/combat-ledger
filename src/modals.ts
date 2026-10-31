@@ -385,7 +385,12 @@ export class PickCombatantsModal extends Modal {
 
 		const list = contentEl.createDiv("bt-pick-list");
 
-		this.files = this.app.vault.getMarkdownFiles().sort((a, b) => a.basename.localeCompare(b.basename));
+		this.files = this.app.vault.getMarkdownFiles()
+			.filter((file) => {
+				console.log(file.path);
+				return this.plugin.settings.rootCombatantFolder == "" || file.path.startsWith(`${this.plugin.settings.rootCombatantFolder}/`);
+			})
+			.sort((a, b) => a.basename.localeCompare(b.basename));
 
 		const renderList = (filter: string) => {
 			list.empty();

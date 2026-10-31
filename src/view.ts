@@ -958,7 +958,7 @@ export class BattleTrackerView extends ItemView {
 	}
 
 	async loadDefaultCombatants() {
-		const folder = this.plugin.settings.combatantFolder.trim();
+		const folder = this.plugin.settings.defaultCombatantFolder.trim();
 		if (!folder) return;
 
 		const lang = this.plugin.settings.language;
@@ -1115,7 +1115,7 @@ export class BattleTrackerView extends ItemView {
 			nextBtn.setText(t.nextTurn);
 			nextBtn.onclick = () => void this.nextTurn();
 
-			if (this.plugin.settings.combatantFolder) {
+			if (this.plugin.settings.defaultCombatantFolder) {
 				const loadDefaultBtn = topActions.createEl("button", { cls: "bt-btn" });
 				loadDefaultBtn.setText(t.loadDefault);
 				loadDefaultBtn.onclick = () => void this.loadDefaultCombatants();
