@@ -1446,9 +1446,7 @@ export class BattleTrackerView extends ItemView {
 
 			const badge = header.createDiv(`bt-badge bt-badge-${combatant.combatType === "PC" ? "pc" : combatant.combatType === "Enemy" ? "enemy" : "npc"}`);
 			badge.title = combatant.combatType;
-			// const badgeIcon = badge.createSpan();
 			setIcon(badge, combatant.combatType === "PC" ? "user" : combatant.combatType === "Enemy"? "skull" : "handshake");
-			// badge.createSpan({ text: combatant.combatType });
 
 			if (this.mode === "gm") {
 				const metaActions = header.createDiv(`bt-meta-actions`);
@@ -1492,12 +1490,6 @@ export class BattleTrackerView extends ItemView {
 			hpLabelRow.createEl("span", { text: t.hp, cls: "bt-label" });
 			const hpVisible = this.mode === "gm" || this.plugin.settings.playerViewShowHp;
 			hpLabelRow.createEl("span", { cls: "bt-hp-text", text: hpVisible ? `${combatant.hp} / ${combatant.hpMax}` : "•••" });
-
-			// const shieldWrap = card.createDiv("bt-hp-wrap");
-			// const shieldLabelRow = shieldWrap.createDiv("bt-hp-label-row");
-			// hpLabelRow.createEl("span", { text: t.shield, cls: "bt-label" });
-			// const shieldVisible = this.mode === "gm" || this.plugin.settings.playerViewShowHp;
-			// hpLabelRow.createEl("span", { cls: "bt-hp-text", text: hpVisible ? `${combatant.shield}` : "•••" });
 
 			const bar = hpWrap.createDiv("bt-bar");
 			const fill = bar.createDiv("bt-bar-fill");
