@@ -1519,7 +1519,7 @@ export class BattleTrackerView extends ItemView {
 			if (this.mode === "gm") {
 				const actions = card.createDiv("bt-actions");
 
-				const dmgBtn = actions.createEl("button", { cls: "bt-btn bt-btn-danger-soft bt-btn-large-width" });
+				const dmgBtn = actions.createEl("button", { cls: "bt-btn bt-btn-large-width" });
 				const dmgIcon = dmgBtn.createSpan();
 				setIcon(dmgIcon, "swords");
 				dmgBtn.createSpan({ text: t.damageHeal });

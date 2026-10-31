@@ -150,9 +150,10 @@ export class ConditionModal extends Modal {
 			check.checked = selected.has(entry.name);
 
 			const btn = left.createEl("button", {
-				cls: `bt-cond-toggle${check.checked ? " selected" : ""}`,
-				text: entry.name,
+				cls: `bt-cond-toggle${check.checked ? " selected" : ""}`
 			});
+
+			left.createSpan({ text: entry.name });
 
 			const durationInput = row.createEl("input", {
 				cls: "bt-cond-duration-input",
@@ -162,39 +163,46 @@ export class ConditionModal extends Modal {
 			durationInput.min = "1";
 			const currentDuration = selected.get(entry.name);
 			durationInput.value = currentDuration ? String(currentDuration) : "";
-			durationInput.disabled = !check.checked;
 
 			if (entry.color) {
-				btn.setCssProps({
-					"--bt-cond-toggle-color": check.checked ? "#fff" : entry.color,
-					"--bt-cond-toggle-border": entry.color,
-					"--bt-cond-toggle-background": check.checked ? entry.color : `${entry.color}22`,
-				});
 				btn.addClass("bt-cond-toggle-custom");
 			}
 
 			const updateVisual = () => {
 				btn.classList.toggle("selected", check.checked);
-				durationInput.disabled = !check.checked;
+				durationInput.style.visibility = check.checked ? "visible" : "collapse";
 				if (!check.checked) durationInput.value = "";
 				if (entry.color) {
 					btn.setCssProps({
 						"--bt-cond-toggle-color": check.checked ? "#fff" : entry.color,
+						"--bt-cond-toggle-border": entry.color,
 						"--bt-cond-toggle-background": check.checked ? entry.color : `${entry.color}22`,
 					});
 				}
 			};
+			updateVisual();
 
-			btn.onclick = () => {
+			check.onclick = (evt) => {
+				evt.stopPropagation();
+			}
+			row.onclick = () => {
 				check.checked = !check.checked;
+				// To make sure that the contentEl keyhandler works, the focus must always be set to something
+				check.focus();
 				updateVisual();
 			};
+			durationInput.onclick = (evt) => {
+				evt.stopPropagation();
+			}
 
 			check.onchange = updateVisual;
 		});
 
 		const row = contentEl.createDiv("bt-modal-actions");
-		const ok = row.createEl("button", { cls: "bt-btn bt-btn-primary", text: t.condModalApply });
+		const ok = row.createEl("button", { cls: "bt-btn bt-btn-primary bt-btn-medium-width" });
+		const okIcon = ok.createSpan();
+		setIcon(okIcon, "corner-down-right");
+		ok.createSpan({ text: t.condModalApply });
 		ok.onclick = () => {
 			this.handleConfirm();
 		};
@@ -234,7 +242,10 @@ export class NoteModal extends Modal {
 		const ta = wrap.createEl("textarea", { placeholder: t.noteModalPlaceholder });
 		ta.value = this.current;
 		const row = wrap.createDiv("bt-modal-actions");
-		const ok = row.createEl("button", { cls: "bt-btn bt-btn-primary", text: t.noteModalSave });
+		const ok = row.createEl("button", { cls: "bt-btn bt-btn-primary bt-btn-medium-width" });
+		const okIcon = ok.createSpan();
+		setIcon(okIcon, "save");
+		ok.createSpan({ text: t.noteModalSave });
 		ok.onclick = () => {
 			this.onConfirm(ta.value);
 			this.close();
@@ -329,7 +340,10 @@ export class ActionModal extends Modal {
 		});
 
 		const row = wrap.createDiv("bt-modal-actions");
-		const ok = row.createEl("button", { cls: "bt-btn bt-btn-primary", text: t.actionModalApply });
+		const ok = row.createEl("button", { cls: "bt-btn bt-btn-primary bt-btn-medium-width" });
+		const okIcon = ok.createSpan();
+		setIcon(okIcon, "corner-down-right");
+		ok.createSpan({ text: t.condModalApply });
 		ok.onclick = () => {
 			const parsedDuration = Number(durationInput.value);
 			this.onConfirm({

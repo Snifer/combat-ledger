@@ -10,6 +10,10 @@
 	--color-orange-background: #f9731622;
 }
 
+h3 {
+	margin-top: 0;
+}
+
 /* ── Panel ─────────────────────────────────────────────────── */
 .bt-panel {
 	padding: 10px;
@@ -378,7 +382,8 @@
 
 .bt-init-chip {
 	font-size: 11px;
-	padding: 2px 8px;
+	line-height: 1;
+	padding: 4px 8px;
 	border-radius: 99px;
 	border: 1px solid var(--background-modifier-border);
 	color: var(--text-muted);
@@ -567,7 +572,7 @@
 .bt-cond-tag {
 	--bt-cond-color: var(--text-accent);
 	--bt-cond-background: var(--background-secondary);
-	font-size: 10px;
+	font-size: 11px;
 	padding: 2px 6px;
 	border-radius: 99px;
 	border: 1px solid var(--background-modifier-border);
@@ -831,6 +836,8 @@
 	display: flex;
 	align-items: center;
 	gap: 8px;
+	cursor: pointer;
+	height: var(--input-height);
 }
 
 .bt-cond-edit-main {
@@ -855,18 +862,14 @@
 	cursor: pointer;
 	background: transparent;
 	color: var(--text-muted);
+	width: 20px;
+	height: 20px;
 }
 
-.bt-cond-toggle-custom {
+.bt-cond-toggle.bt-cond-toggle-custom {
 	color: var(--bt-cond-toggle-color);
 	border-color: var(--bt-cond-toggle-border);
 	background: var(--bt-cond-toggle-background);
-}
-
-.bt-cond-toggle.selected {
-	background: var(--interactive-accent);
-	color: var(--text-on-accent);
-	border-color: transparent;
 }
 
 .bt-modal-actions {
