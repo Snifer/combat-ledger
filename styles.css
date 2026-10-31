@@ -375,19 +375,23 @@ h3 {
 /* ── Initiative strip ───────────────────────────────────────── */
 .bt-init-strip {
 	display: flex;
-	gap: 5px;
+	gap: 4px;
 	flex-wrap: wrap;
 	margin-bottom: 10px;
 }
 
 .bt-init-chip {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 	font-size: 11px;
 	line-height: 1;
-	padding: 4px 8px;
-	border-radius: 99px;
+	padding: 4px 4px 4px 8px;
+	border-radius: 8px;
 	border: 1px solid var(--background-modifier-border);
 	color: var(--text-muted);
 	background: var(--background-secondary);
+	gap: 4px;
 }
 
 .bt-init-chip.active {
@@ -395,6 +399,21 @@ h3 {
 	color: var(--text-on-accent);
 	border-color: transparent;
 	font-weight: 600;
+}
+
+.bt-init-chip-name {
+	white-space: nowrap;
+}
+
+.bt-init-chip-value {
+	padding: 4px;
+	border-radius: 4px;
+    background: var(--background-modifier-border);
+    color: var(--text-muted);
+}
+
+.bt-init-chip.active .bt-init-chip-value {
+    background: color-mix(in srgb, var(--interactive-accent) 65%, black);
 }
 
 /* ── Empty state ────────────────────────────────────────────── */

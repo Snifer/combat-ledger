@@ -1374,7 +1374,12 @@ export class BattleTrackerView extends ItemView {
 			const strip = container.createDiv("bt-init-strip");
 			alive.forEach((combatant, index) => {
 				const chip = strip.createDiv(`bt-init-chip${index === activeIndex ? " active" : ""}`);
-				chip.setText(`${combatant.name} (${combatant.initiative})`);
+				chip.createSpan({ cls: "bt-init-chip-name", text: combatant.name });
+
+				chip.createSpan({
+						cls: "bt-init-chip-value",
+						text: String(combatant.initiative)
+				});
 			});
 		}
 
