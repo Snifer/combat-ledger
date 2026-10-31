@@ -555,7 +555,9 @@ export class BattleTrackerView extends ItemView {
 	}
 
 	getDefeatedXpTotal(): number {
-		return this.deadSorted().reduce((sum, combatant) => sum + Math.max(0, combatant.xp || 0), 0);
+		return this.deadSorted()
+			.filter((combatant) => combatant.combatType !== "PC")
+			.reduce((sum, combatant) => sum + Math.max(0, combatant.xp || 0), 0);
 	}
 
 	getPendingGraveyardXp(): number {
