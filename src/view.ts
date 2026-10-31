@@ -1511,10 +1511,12 @@ export class BattleTrackerView extends ItemView {
 					const box = extraRow.createDiv("bt-extra-box");
 					box.createEl("span", { cls: "bt-label", text: key.toUpperCase() });
 					const valRow = box.createDiv("bt-extra-val-row");
-					const minusBtn = valRow.createEl("button", { cls: "bt-btn-mini", text: "−" });
+					const minusBtn = valRow.createEl("button", { cls: "bt-btn-mini" });
+					setIcon(minusBtn, "minus");
 					minusBtn.onclick = () => void this.modExtra(combatant.id, key, -1);
 					valRow.createEl("span", { cls: "bt-extra-val", text: String(combatant.extraFields[key]) });
-					const plusBtn = valRow.createEl("button", { cls: "bt-btn-mini", text: "+" });
+					const plusBtn = valRow.createEl("button", { cls: "bt-btn-mini" });
+					setIcon(plusBtn, "plus");
 					plusBtn.onclick = () => void this.modExtra(combatant.id, key, 1);
 				});
 			}

@@ -176,6 +176,8 @@ h3 {
 }
 
 .bt-btn-mini {
+	height: 25px;
+	width: 25px;
 	font-size: 13px;
 	padding: 0 5px;
 	border: 1px solid var(--background-modifier-border);
@@ -677,7 +679,7 @@ h3 {
 	align-items: center;
 	background: var(--background-secondary);
 	border-radius: 5px;
-	padding: 4px 8px;
+	padding: 4px 4px;
 	min-width: 60px;
 }
 
