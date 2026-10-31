@@ -348,27 +348,30 @@ h3 {
 
 .bt-token-condition {
 	font-size: 9px;
-	padding: 1px 4px;
-	border-radius: 999px;
+	padding: 2px 2px;
+	border-radius: 8px;
 	background: var(--background-primary);
 	border: 1px solid var(--background-modifier-border);
 	text-align: center;
 }
 
-.bt-token-tools {
-	display: flex;
-	gap: 4px;
-	margin-top: 4px;
+.bt-token:hover .bt-token-hide {
+	display: block;
 }
 
-.bt-token-tool {
-	width: 100%;
-	height: auto;
+.bt-token-hide {
+	display: none;
+	width: 25px;
+	height: 25px;
+	position: absolute;
+	top: 4px;
+	right: 4px;
 	font-size: 9px;
 	padding: 4px 4px;
 	border-radius: 4px;
 	border: 1px solid var(--background-modifier-border);
 	background: var(--background-primary);
+	opacity: 80%;
 	cursor: pointer;
 }
 

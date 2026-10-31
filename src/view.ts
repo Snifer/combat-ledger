@@ -1352,9 +1352,11 @@ export class BattleTrackerView extends ItemView {
 					this.refresh();
 				};
 
-				const tools = token.createDiv("bt-token-tools");
-				const hideBtn = tools.createEl("button", { cls: "bt-token-tool" });
-				hideBtn.setText(tokenState.hidden ? t.boardReveal : t.boardHide);
+				const hideBtn = token.createEl("button", {
+					cls: "bt-token-hide",
+					title: tokenState.hidden ? t.boardReveal : t.boardHide,
+				});
+				setIcon(hideBtn, tokenState.hidden ? "eye-off" : "eye")
 				hideBtn.onclick = (evt) => {
 					evt.stopPropagation();
 					this.updateTokenState(combatant.id, { hidden: !tokenState.hidden });
