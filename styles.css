@@ -147,6 +147,11 @@ h3 {
 	color: #fff;
 }
 
+.bt-btn.bt-btn-stop:hover {
+	background: var(--text-error);
+	color: #fff !important;
+}
+
 .bt-btn-ghost {
 	font-size: 11px;
 	padding: 4px 9px;
@@ -418,7 +423,8 @@ h3 {
 }
 
 .bt-init-chip.active .bt-init-chip-value {
-    background: color-mix(in srgb, var(--interactive-accent) 65%, black);
+    background: color-mix(in srgb, var(--interactive-accent) 80%, black);
+    color: var(--text-on-accent);
 }
 
 /* ── Empty state ────────────────────────────────────────────── */

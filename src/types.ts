@@ -97,6 +97,7 @@ export interface CombatAlert {
 
 export interface CombatSessionState {
 	combatants: Combatant[];
+	combatActive: boolean;
 	round: number;
 	activeCombatantId: string | null;
 	editingInitiativeId: string | null;

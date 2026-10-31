@@ -4,6 +4,7 @@ import { ActiveCondition, CombatAlert, Combatant } from "./types";
 import { LOCALIZATION } from "./localization";
 import { ActionModal, ConditionModal, ConfirmModal, DmgModal, LogSetupModal, NoteModal, PickCombatantsModal, TextPromptModal } from "./modals";
 import { randomInt } from 'crypto';
+import { write } from 'fs';
 
 export const VIEW_TYPE = "combat-ledger-view";
 export const PLAYER_VIEW_TYPE = "combat-ledger-player-view";
@@ -56,6 +57,8 @@ export class BattleTrackerView extends ItemView {
 
 	get combatants() { return this.plugin.session.combatants; }
 	set combatants(value: Combatant[]) { this.plugin.session.combatants = value; }
+	get combatActive() { return this.plugin.session.combatActive; }
+	set combatActive(value: boolean) { this.plugin.session.combatActive = value; }
 	get round() { return this.plugin.session.round; }
 	set round(value: number) { this.plugin.session.round = value; }
 	get activeCombatantId() { return this.plugin.session.activeCombatantId; }
@@ -270,9 +273,6 @@ export class BattleTrackerView extends ItemView {
 
 		if (!this.activeLogFile) {
 			this.logQueue.push(actionText);
-			if (!this.logSetupInProgress) {
-				this.triggerLogSetup();
-			}
 			return;
 		}
 
@@ -341,9 +341,7 @@ export class BattleTrackerView extends ItemView {
 				if (file) {
 					this.activeLogFile = file;
 					this.logDismissed = false;
-					const lang = this.plugin.settings.language;
-					const startMsg = LOCALIZATION[lang].logStarted;
-					const currentQueue = [startMsg, ...this.logQueue];
+					const currentQueue = [...this.logQueue];
 					this.logQueue = [];
 					for (const msg of currentQueue) {
 						await this.writeToLog(msg);
@@ -524,6 +522,8 @@ export class BattleTrackerView extends ItemView {
 	}
 
 	ensureActiveCombatant() {
+		if (!this.combatActive) return;
+
 		const alive = this.aliveSorted();
 		if (!alive.length) {
 			this.activeCombatantId = null;
@@ -533,9 +533,9 @@ export class BattleTrackerView extends ItemView {
 		if (!this.activeCombatantId || !alive.some((combatant) => combatant.id === this.activeCombatantId)) {
 			this.activeCombatantId = alive[0].id;
 			this.setupTurnTimer(true);
-			return;
+		} else {
+			this.setupTurnTimer();
 		}
-		this.setupTurnTimer();
 	}
 
 	sorted(): Combatant[] {
@@ -592,6 +592,7 @@ export class BattleTrackerView extends ItemView {
 	}
 
 	getCurrentTurnIndex(alive = this.aliveSorted()): number {
+		if (!this.combatActive) return -1;
 		if (!alive.length || !this.activeCombatantId) return 0;
 		const index = alive.findIndex((combatant) => combatant.id === this.activeCombatantId);
 		return index >= 0 ? index : 0;
@@ -664,7 +665,33 @@ export class BattleTrackerView extends ItemView {
 		}
 	}
 
+	async startCombat() {
+		if (this.combatants.length <= 0) {
+			new Notice(this.plugin.settings.language === "es"
+				? "Añade combatientes antes de iniciar un combate."
+				: "Please add combantants before starting a combat.");
+		}
+		this.combatActive = true;
+		this.ensureActiveCombatant();
+		this.triggerLogSetup();
+		await this.writeToLog(LOCALIZATION[this.plugin.settings.language].logCombatStarted);
+		this.refresh();
+	}
+
+	async endCombat() {
+		this.combatActive = false;
+		this.activeCombatantId = null;
+		this.round = 1;
+		this.refresh();
+		await this.writeToLog(LOCALIZATION[this.plugin.settings.language].logCombatEnded);
+		this.logQueue = [];
+		this.logDismissed = false;
+		this.activeLogFile = null;
+	}
+
 	async nextTurn() {
+		if (!this.combatActive) return;
+
 		const alive = this.aliveSorted();
 		if (!alive.length) return;
 
@@ -672,6 +699,7 @@ export class BattleTrackerView extends ItemView {
 		const currentIndex = this.getCurrentTurnIndex(alive);
 		const nextIndex = (currentIndex + 1) % alive.length;
 		if (nextIndex === 0) this.round++;
+
 		this.activeCombatantId = alive[nextIndex].id;
 		this.setupTurnTimer(true);
 
@@ -904,14 +932,10 @@ export class BattleTrackerView extends ItemView {
 		this.refresh();
 	}
 
-	resetBattle() {
-		void this.writeToLog(LOCALIZATION[this.plugin.settings.language].logEnded);
+	async resetBattle() {
+		await this.endCombat();
 		this.combatants = [];
-		this.round = 1;
 		this.activeCombatantId = null;
-		this.activeLogFile = null;
-		this.logDismissed = false;
-		this.logQueue = [];
 		this.editingInitiativeId = null;
 		this.graveyardAssignedXp = 0;
 		this.graveyardXpDraft = null;
@@ -1013,7 +1037,6 @@ export class BattleTrackerView extends ItemView {
 					] as const)
 				));
 				this.loadCombatants(loaded);
-				if (this.combatants.length > 0) this.triggerLogSetup();
 			})();
 		}).open();
 	}
@@ -1146,11 +1169,24 @@ export class BattleTrackerView extends ItemView {
 		const topActions = topBar.createDiv("bt-top-actions");
 
 		if (this.mode === "gm") {
-			const nextBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-primary bt-btn-large-width" });
-			const nextIcon = nextBtn.createSpan();
-			setIcon(nextIcon, "step-forward");
-			nextBtn.createSpan({ text: t.nextTurn });
-			nextBtn.onclick = () => void this.nextTurn();
+			if (this.combatActive) {
+				const endBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-danger-soft", title: t.endCombat });
+				setIcon(endBtn, "pause");
+				endBtn.onclick = () => void this.endCombat();
+
+				const nextBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-primary bt-btn-large-width" });
+				const nextIcon = nextBtn.createSpan();
+				setIcon(nextIcon, "step-forward");
+				nextBtn.createSpan({ text: t.nextTurn });
+				nextBtn.onclick = () => void this.nextTurn();
+			} else {
+				const startBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-primary bt-btn-large-width" });
+				const startIcon = startBtn.createSpan();
+				setIcon(startIcon, "play");
+				startBtn.createSpan({ text: t.startCombat });
+				startBtn.onclick = () => void this.startCombat();
+			}
+
 
 			if (this.plugin.settings.defaultCombatantFolder) {
 				const loadDefaultBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-medium-width" });
