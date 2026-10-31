@@ -33,6 +33,7 @@ export const DEFAULT_SETTINGS: BattleTrackerSettings = {
 	language: "es",
 	fields: {
 		initiative: "initiative",
+		initiative_mod: "initiative_mod",
 		hp: "hp",
 		hp_max: "hp_max",
 		shield: "shield",
@@ -149,6 +150,11 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 			.setName(t.settingsInitName)
 			.setDesc(t.settingsInitDesc)
 			.addText((text) => text.setValue(f.initiative).onChange(async (v) => { f.initiative = v; await this.plugin.saveSettings(); }));
+
+		new Setting(containerEl)
+			.setName(t.settingsInitModName)
+			.setDesc(t.settingsInitModDesc)
+			.addText((text) => text.setValue(f.initiative_mod).onChange(async (v) => { f.initiative_mod = v; await this.plugin.saveSettings(); }));
 			
 		new Setting(containerEl)
 			.setName(t.settingsHpName)

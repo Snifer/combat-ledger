@@ -2,6 +2,7 @@ import { TFile } from "obsidian";
 
 export interface FieldMapping {
 	initiative: string;
+	initiative_mod: string;
 	hp: string;
 	hp_max: string;
 	shield: string;
@@ -71,6 +72,7 @@ export interface Combatant {
 	id: string;           // file path
 	name: string;
 	initiative: number;
+	initiativeMod: number;
 	hp: number;
 	hpMax: number;
 	shield: number;

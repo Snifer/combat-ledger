@@ -47,6 +47,7 @@ Create a markdown note for each character or monster. The plugin reads metadata 
 ---
 type: PC            # PC, Enemy, or NPC
 initiative: 12
+initiative_mod: 2
 hp: 35
 hp_max: 35
 ac: 15

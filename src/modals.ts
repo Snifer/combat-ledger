@@ -411,7 +411,6 @@ export class PickCombatantsModal extends Modal {
 
 		this.files = this.app.vault.getMarkdownFiles()
 			.filter((file) => {
-				console.log(file.path);
 				return this.plugin.settings.rootCombatantFolder == "" || file.path.startsWith(`${this.plugin.settings.rootCombatantFolder}/`);
 			})
 			.sort((a, b) => a.basename.localeCompare(b.basename));

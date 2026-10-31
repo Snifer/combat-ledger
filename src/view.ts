@@ -1,8 +1,9 @@
-import { ItemView, MarkdownView, Notice, TFile, WorkspaceLeaf } from "obsidian";
+import { ItemView, MarkdownView, Notice, TFile, WorkspaceLeaf, setIcon } from "obsidian";
 import BattleTrackerPlugin from "./main";
 import { ActiveCondition, CombatAlert, Combatant } from "./types";
 import { LOCALIZATION } from "./localization";
 import { ActionModal, ConditionModal, ConfirmModal, DmgModal, LogSetupModal, NoteModal, PickCombatantsModal, TextPromptModal } from "./modals";
+import { randomInt } from 'crypto';
 
 export const VIEW_TYPE = "combat-ledger-view";
 export const PLAYER_VIEW_TYPE = "combat-ledger-player-view";
@@ -453,10 +454,15 @@ export class BattleTrackerView extends ItemView {
 		const icon = f.icon ? String(meta[f.icon] ?? "") : "";
 		const storedConditions = f.conditions ? this.parseStoredConditions(meta[f.conditions]) : [];
 
+		// Don't use -1 as default for the modifier as negative values are also valid
+		const initiativeMod = meta[f.initiative_mod] !== undefined ? Number(meta[f.initiative_mod]) : Number.NaN;
+		const initiative = Number(meta[f.initiative] ?? -1) || -1;
+
 		return {
 			id: file.path,
 			name: file.basename,
-			initiative: Number(meta[f.initiative] ?? 0) || 0,
+			initiative,
+			initiativeMod,
 			hp,
 			hpMax,
 			shield,
@@ -1021,9 +1027,18 @@ export class BattleTrackerView extends ItemView {
 				const newId = combatant.id + String(i);
 
 				if (!this.combatants.some((entry) => entry.id === newId)) {
+					// If a modifier is set, we determine the initiative randomly, otherwise use the fixed initiative
+					let initiative;
+					if (Number.isFinite(combatant.initiativeMod)) {
+						initiative = this.rollInitiative(combatant.initiativeMod);
+					} else {
+						initiative = combatant.initiative;
+					}
+
 					this.combatants.push({
 						...combatant,
 						id: newId,
+						initiative,
 						name: i == 0 ? combatant.name : `${combatant.name} (${i})`,
 					});
 					loadedCount++;
@@ -1041,6 +1056,14 @@ export class BattleTrackerView extends ItemView {
 		}
 
 		this.refresh();
+	}
+
+	rollInitiative(modifier: number) {
+		if (Number.isFinite(modifier)) {
+			return randomInt(21) + modifier;
+		} else {
+			return randomInt(21);
+		}
 	}
 
 	async revealObsidianFile(file: TFile) {
@@ -1397,15 +1420,22 @@ export class BattleTrackerView extends ItemView {
 			badge.setText(combatant.combatType);
 
 			if (this.mode === "gm") {
-				const initEditBtn = header.createEl("button", { cls: "bt-btn-icon", title: t.editInitiative });
-				initEditBtn.setText("✎");
-				initEditBtn.onclick = () => {
+				const editInitBtn = header.createEl("button", { cls: "bt-btn-icon bt-btn-small-width", title: t.editInitiative });
+				setIcon(editInitBtn, "pen");
+				editInitBtn.onclick = () => {
 					this.editingInitiativeId = combatant.id;
 					this.refresh();
 				};
 
-				const removeBtn = header.createEl("button", { cls: "bt-btn-icon", title: t.removeTitle });
-				removeBtn.setText("✕");
+				const rollInitBtn = header.createEl("button", { cls: "bt-btn-icon bt-btn-small-width", title: t.rollInitiative });
+				setIcon(rollInitBtn, "dices");
+				rollInitBtn.onclick = () => {
+					combatant.initiative = this.rollInitiative(combatant.initiativeMod);
+					this.refresh();
+				};
+
+				const removeBtn = header.createEl("button", { cls: "bt-btn-icon bt-btn-small-width", title: t.removeTitle });
+				setIcon(removeBtn, "x");
 				removeBtn.onclick = () => void this.removeCombatant(combatant.id);
 			}
 

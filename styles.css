@@ -96,6 +96,13 @@
 	background: transparent;
 	color: var(--text-normal);
 	cursor: pointer;
+	gap: 4px;
+}
+
+.bt-btn > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .bt-btn:hover {
@@ -163,6 +170,14 @@
 
 .bt-btn-mini:hover {
 	background: var(--background-modifier-hover);
+}
+
+.bt-btn-small-width {
+	min-width: 25px;
+}
+
+.bt-btn-medium-width {
+	min-width: 80px;
 }
 
 .bt-alerts {

@@ -47,6 +47,7 @@ Crea una nota Markdown para cada personaje o monstruo. El plugin leerá sus prop
 ---
 type: PC            # Tipo: PC (Jugador), Enemy (Enemigo), o NPC (No Jugador)
 initiative: 12
+initiative_mod: 2
 hp: 35
 hp_max: 35
 ac: 15
