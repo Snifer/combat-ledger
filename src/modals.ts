@@ -18,6 +18,11 @@ export class DmgModal extends Modal {
 		this.onConfirm = onConfirm;
 	}
 
+	handleShieldIncrease(value: number) {
+		this.onConfirm(value, true, true);
+		this.close();
+	}
+
 	handleHealing(value: number) {
 		this.onConfirm(value, true, false);
 		this.close();
@@ -47,23 +52,42 @@ export class DmgModal extends Modal {
 		});
 
 		const row = wrap.createDiv("bt-modal-actions");
-		const healBtn = row.createEl("button", { cls: "bt-btn", text: t.dmgModalHeal });
+
+		const shieldBtn = row.createEl("button", { cls: "bt-btn bt-btn-medium-width" });
+		const shieldIcon = shieldBtn.createSpan();
+		setIcon(shieldIcon, "shield-plus");
+		shieldBtn.createSpan({ text: t.dmgModalShield });
+		shieldBtn.onclick = () => {
+			this.handleShieldIncrease(parseInt(input.value) || 0);
+		};
+
+		const healBtn = row.createEl("button", { cls: "bt-btn bt-btn-medium-width" });
+		const healIcon = healBtn.createSpan();
+		setIcon(healIcon, "heart-plus");
+		healBtn.createSpan({ text: t.dmgModalHeal });
 		healBtn.onclick = () => {
 			this.handleHealing(parseInt(input.value) || 0);
 		};
 
-		const dmgBtn = row.createEl("button", { cls: "bt-btn bt-btn-danger-soft", text: t.dmgModalDmg });
+		const dmgBtn = row.createEl("button", { cls: "bt-btn bt-btn-danger-soft bt-btn-medium-width" });
+		const dmgIcon = dmgBtn.createSpan();
+		setIcon(dmgIcon, "swords");
+		dmgBtn.createSpan({ text: t.dmgModalDmg });
 		dmgBtn.onclick = () => {
 			this.handleDamage(parseInt(input.value) || 0, shieldToggle.checked)
 		};
 
     contentEl.addEventListener("keydown", (event: KeyboardEvent) => {
+			const value = parseInt(input.value) || 0;
 			if ((event.key === "Enter") || (event.key === "d")) {
 				event.preventDefault();
-				this.handleDamage(parseInt(input.value) || 0, shieldToggle.checked)
+				this.handleDamage(value, shieldToggle.checked)
 			} else if (event.key === "h") {
 				event.preventDefault();
-				this.handleHealing(parseInt(input.value) || 0);
+				this.handleHealing(value);
+			} else if (event.key === "s") {
+				event.preventDefault();
+				this.handleShieldIncrease(value);
 			}
     });
 

@@ -10,6 +10,7 @@ export const PLAYER_VIEW_TYPE = "combat-ledger-player-view";
 interface DamageResult {
 	finalDamage: number;
 	absorbedByShield: number;
+	shieldIncrease: number;
 	defeated: boolean;
 	healed: number;
 }
@@ -744,34 +745,49 @@ export class BattleTrackerView extends ItemView {
 
 	applyDamage(combatant: Combatant, amount: number, heal: boolean, useShield: boolean): DamageResult {
 		if (heal) {
-			const previous = combatant.hp;
-			combatant.hp = Math.min(combatant.hpMax, combatant.hp + amount);
-			if (combatant.hp > 0) combatant.alive = true;
+			if (useShield) {
+				combatant.shield = combatant.shield + amount;
+
+				return {
+					finalDamage: 0,
+					absorbedByShield: 0,
+					shieldIncrease: amount,
+					defeated: false,
+					healed: 0,
+				};
+			} else {
+				const previous = combatant.hp;
+				combatant.hp = Math.min(combatant.hpMax, combatant.hp + amount);
+				if (combatant.hp > 0) combatant.alive = true;
+
+				return {
+					finalDamage: 0,
+					absorbedByShield: 0,
+					shieldIncrease: 0,
+					defeated: false,
+					healed: combatant.hp - previous,
+				};
+			}
+		} else {
+			let remaining = Math.max(0, amount);
+			let absorbedByShield = 0;
+			if (useShield && combatant.shield > 0) {
+				absorbedByShield = Math.min(combatant.shield, remaining);
+				combatant.shield -= absorbedByShield;
+				remaining -= absorbedByShield;
+			}
+
+			combatant.hp = Math.max(0, combatant.hp - remaining);
+			if (combatant.hp === 0) combatant.alive = false;
+
 			return {
-				finalDamage: 0,
-				absorbedByShield: 0,
-				defeated: false,
-				healed: combatant.hp - previous,
+				finalDamage: remaining,
+				absorbedByShield,
+				shieldIncrease: 0,
+				defeated: combatant.hp === 0,
+				healed: 0,
 			};
 		}
-
-		let remaining = Math.max(0, amount);
-		let absorbedByShield = 0;
-		if (useShield && combatant.shield > 0) {
-			absorbedByShield = Math.min(combatant.shield, remaining);
-			combatant.shield -= absorbedByShield;
-			remaining -= absorbedByShield;
-		}
-
-		combatant.hp = Math.max(0, combatant.hp - remaining);
-		if (combatant.hp === 0) combatant.alive = false;
-
-		return {
-			finalDamage: remaining,
-			absorbedByShield,
-			defeated: combatant.hp === 0,
-			healed: 0,
-		};
 	}
 
 	async applyDmg(id: string, amount: number, heal: boolean, useShield: boolean) {
@@ -781,9 +797,15 @@ export class BattleTrackerView extends ItemView {
 		const lang = this.plugin.settings.language;
 		const result = this.applyDamage(combatant, amount, heal, useShield);
 		if (heal) {
-			await this.writeToLog(lang === "es"
-				? `${combatant.name} se cura ${result.healed} PV (PV: ${combatant.hp}/${combatant.hpMax})`
-				: `${combatant.name} heals ${result.healed} HP (HP: ${combatant.hp}/${combatant.hpMax})`);
+			if (useShield) {
+				await this.writeToLog(lang === "es"
+					? `${combatant.name} obtiene ${result.shieldIncrease} puntos de escudo (Escudo: ${combatant.shield})`
+					: `${combatant.name} gains ${result.shieldIncrease} Shield (Shield: ${combatant.shield})`);
+			} else {
+				await this.writeToLog(lang === "es"
+					? `${combatant.name} se cura ${result.healed} PV (PV: ${combatant.hp}/${combatant.hpMax})`
+					: `${combatant.name} heals ${result.healed} HP (HP: ${combatant.hp}/${combatant.hpMax})`);
+			}
 		} else {
 			const shieldText = result.absorbedByShield > 0
 				? lang === "es"
@@ -915,7 +937,7 @@ export class BattleTrackerView extends ItemView {
 		const lang = this.plugin.settings.language;
 		const result = payload.damage > 0
 			? this.applyDamage(target, payload.damage, false, payload.useShield)
-			: { finalDamage: 0, absorbedByShield: 0, defeated: false, healed: 0 };
+			: { finalDamage: 0, absorbedByShield: 0, shieldIncrease: 0, defeated: false, healed: 0 };
 
 		if (payload.conditionName) {
 			const existing = target.conditions.find((condition) => condition.name === payload.conditionName);
@@ -1408,6 +1430,12 @@ export class BattleTrackerView extends ItemView {
 			hpLabelRow.createEl("span", { text: t.hp, cls: "bt-label" });
 			const hpVisible = this.mode === "gm" || this.plugin.settings.playerViewShowHp;
 			hpLabelRow.createEl("span", { cls: "bt-hp-text", text: hpVisible ? `${combatant.hp} / ${combatant.hpMax}` : "•••" });
+
+			// const shieldWrap = card.createDiv("bt-hp-wrap");
+			// const shieldLabelRow = shieldWrap.createDiv("bt-hp-label-row");
+			// hpLabelRow.createEl("span", { text: t.shield, cls: "bt-label" });
+			// const shieldVisible = this.mode === "gm" || this.plugin.settings.playerViewShowHp;
+			// hpLabelRow.createEl("span", { cls: "bt-hp-text", text: hpVisible ? `${combatant.shield}` : "•••" });
 
 			const bar = hpWrap.createDiv("bt-bar");
 			const fill = bar.createDiv("bt-bar-fill");
