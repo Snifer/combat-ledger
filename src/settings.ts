@@ -2,7 +2,6 @@ import { App, PluginSettingTab, Setting } from "obsidian";
 import BattleTrackerPlugin from "./main";
 import { BattleTrackerSettings, ConditionEntry } from "./types";
 import { LOCALIZATION } from "./localization";
-import { isNumber } from 'util';
 
 export const DEFAULT_CONDITIONS_ES: ConditionEntry[] = [
 	{ name: "Aturdido",       color: "#f59e0b" },
@@ -367,7 +366,7 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 					.setPlaceholder("Campaña/Criaturas")
 					.setValue(this.plugin.settings.combatantFolder)
 					.onChange(async (v) => {
-						this.plugin.settings.combatantFolder = v;
+						this.plugin.settings.combatantFolder = v.trim();
 						await this.plugin.saveSettings();
 					})
 			);

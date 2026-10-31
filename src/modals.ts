@@ -1,4 +1,4 @@
-import { App, Modal, Notice, TFile } from "obsidian";
+import { App, Modal, Notice, TFile, setIcon } from "obsidian";
 import BattleTrackerPlugin from "./main";
 import { BattleTrackerView } from "./view";
 import { LOCALIZATION } from "./localization";
@@ -345,22 +345,26 @@ export class ActionModal extends Modal {
 
 export class PickCombatantsModal extends Modal {
 	plugin: BattleTrackerPlugin;
-	onConfirm: (files: TFile[]) => void;
+	onConfirm: (files: Map<TFile, number>) => void;
 	files: TFile[];
-	selected: Set<string> = new Set();
+	selectedCombatants: Map<string, number> = new Map();
 
-	constructor(app: App, plugin: BattleTrackerPlugin, onConfirm: (files: TFile[]) => void) {
+	constructor(app: App, plugin: BattleTrackerPlugin, onConfirm: (files: Map<TFile, number>) => void) {
 		super(app);
 		this.plugin = plugin;
 		this.onConfirm = onConfirm;
 	}
 
 	handleConfirm() {
-		const picked = this.files.filter((f) => this.selected.has(f.path));
-		if (!picked.length) {
+		if (!this.selectedCombatants.size) {
 			new Notice(LOCALIZATION[this.plugin.settings.language].pickModalSelectMin);
 			return;
 		}
+
+		const picked = new Map(this.files
+			.filter((f) => this.selectedCombatants.has(f.path))
+			.map((f) => [f, this.selectedCombatants.get(f.path) || 0]));
+
 		this.onConfirm(picked);
 		this.close();
 	}
@@ -388,17 +392,70 @@ export class PickCombatantsModal extends Modal {
 			this.files
 				.filter((f) => !filter || f.basename.toLowerCase().includes(filter.toLowerCase()))
 				.forEach((file) => {
-					const item = list.createDiv("bt-pick-item");
-					const cb = item.createEl("input", { type: "checkbox" });
-					cb.checked = this.selected.has(file.path);
-					cb.onchange = () => {
-						if (cb.checked) this.selected.add(file.path);
-						else this.selected.delete(file.path);
+					const item = list.createDiv("bt-combatant-pick-item");
+					item.createEl("label", { text: file.basename });
+					const counterDiv = item.createDiv("bt-combatant-counter-div");
+
+					const decrementBtn = counterDiv.createEl("button", { cls: "bt-btn" });
+					decrementBtn.disabled = true;
+					setIcon(decrementBtn, 'minus');
+					const countInput = counterDiv.createEl("input", {
+						type: "number",
+						value: "0",
+						attr: {
+								min: "0",
+								max: "99",
+								step: "1",
+						}
+					});
+					const incrementBtn = counterDiv.createEl("button", { cls: "bt-btn" });
+					setIcon(incrementBtn, 'plus');
+
+					decrementBtn.onclick = () => {
+						let count = this.selectedCombatants.get(file.path);
+						if ((count !== undefined) && (count > 0)) {
+							count--;
+							if (count <= 0) {
+								this.selectedCombatants.delete(file.path);
+								decrementBtn.disabled = true;
+							} else {
+								this.selectedCombatants.set(file.path, count);
+								decrementBtn.disabled = false;
+								incrementBtn.disabled = false;
+							}
+							countInput.value = String(count);
+						}
 					};
-					const lbl = item.createEl("label", { text: file.basename });
-					lbl.onclick = () => {
-						cb.checked = !cb.checked;
-						cb.dispatchEvent(new Event("change"));
+
+					countInput.onchange = () => {
+						const count = Math.min(Math.max(0, parseInt(countInput.value) || 0), 99);
+						countInput.value = String(count);
+						if (count <= 0) {
+							this.selectedCombatants.delete(file.path);
+							decrementBtn.disabled = true;
+						} else if (count >= 99) {
+							incrementBtn.disabled = true;
+						} else {
+							this.selectedCombatants.set(file.path, count);
+							decrementBtn.disabled = false;
+							incrementBtn.disabled = false;
+						}
+					};
+
+					incrementBtn.onclick = () => {
+						let count = this.selectedCombatants.get(file.path) ?? 0;
+						count++;
+						if (count > 99) {
+							return;
+						} else if (count == 99) {
+							incrementBtn.disabled = true;
+						} else {
+							decrementBtn.disabled = false;
+							incrementBtn.disabled = false;
+						}
+
+						this.selectedCombatants.set(file.path, count);
+						countInput.value = String(count);
 					};
 				});
 		};

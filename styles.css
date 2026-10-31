@@ -709,6 +709,7 @@
 }
 
 .bt-modal-search-input {
+	width: 100%;
 	margin-bottom: 8px;
 }
 
@@ -800,9 +801,9 @@
 	margin-top: 10px;
 }
 
-/* Pick combatants list */
+/* General Pick list */
 .bt-pick-list {
-	max-height: 300px;
+	height: 400px;
 	overflow-y: auto;
 	display: flex;
 	flex-direction: column;
@@ -830,6 +831,38 @@
 .bt-pick-item label {
 	cursor: pointer;
 	font-size: 12px;
+}
+
+/* Pick combatants list */
+.bt-combatant-pick-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;	
+	gap: 8px;
+	padding: 5px 8px;
+	border-radius: 5px;
+}
+
+.bt-combatant-pick-item:hover {
+	background: var(--background-modifier-hover);
+}
+
+.bt-combatant-pick-item label {
+	font-size: 12px;
+}
+
+.bt-combatant-counter-div {
+	display: flex;
+	align-items: center;
+}
+
+.bt-combatant-counter-div input {
+	max-width: 30px;
+	margin: 0 5px 0 5px;
+	align-items: center;
+	justify-items: center;
+	background: transparent;
+	border: none;
 }
 
 /* ── Settings — Condition color manager ─────────────────────── */

@@ -957,56 +957,68 @@ export class BattleTrackerView extends ItemView {
 		this.refresh();
 	}
 
-	async loadFromVault() {
+	async loadDefaultCombatants() {
 		const folder = this.plugin.settings.combatantFolder.trim();
-		const lang = this.plugin.settings.language;
-		let files: TFile[];
+		if (!folder) return;
 
-		if (folder) {
-			const folderObj = this.app.vault.getAbstractFileByPath(folder);
-			if (!folderObj) {
-				new Notice(lang === "es" ? `Carpeta "${folder}" no encontrada.` : `Folder "${folder}" not found.`);
-				return;
-			}
-			files = this.app.vault.getMarkdownFiles().filter((file) => file.path.startsWith(folder + "/"));
-		} else {
-			new PickCombatantsModal(this.app, this.plugin, (picked) => {
-				void (async () => {
-					const loaded = await Promise.all(picked.map((file) => this.fileToCombatant(file)));
-					for (const combatant of loaded) {
-						if (!this.combatants.find((entry) => entry.id === combatant.id)) {
-							this.combatants.push(combatant);
-						}
-					}
-					this.ensureActiveCombatant();
-					for (const combatant of loaded) {
-						await this.writeToLog(lang === "es"
-							? `Combatiente cargado: ${combatant.name} (Iniciativa: ${combatant.initiative}, PV: ${combatant.hp}/${combatant.hpMax})`
-							: `Combatant loaded: ${combatant.name} (Initiative: ${combatant.initiative}, HP: ${combatant.hp}/${combatant.hpMax})`);
-					}
-					this.refresh();
-					if (this.combatants.length > 0) this.triggerLogSetup();
-				})();
-			}).open();
+		const lang = this.plugin.settings.language;
+		const folderObj = this.app.vault.getFolderByPath(folder);
+		if (!folderObj) {
+			new Notice(lang === "es" ? `Carpeta "${folder}" no encontrada.` : `Folder "${folder}" not found.`);
 			return;
 		}
+		const files = this.app.vault.getMarkdownFiles().filter((file) => file.path.startsWith(folder + "/"));
 
-		const loaded = await Promise.all(files.map((file) => this.fileToCombatant(file)));
-		for (const combatant of loaded) {
-			if (!this.combatants.find((entry) => entry.id === combatant.id)) {
-				this.combatants.push(combatant);
+		const loaded = new Map(await Promise.all(
+			files.map(async (file) => [await this.fileToCombatant(file), 1] as const)
+		));
+		this.loadCombatants(loaded);
+	}
+
+	async loadSelectedCombatantsFromVault() {
+		new PickCombatantsModal(this.app, this.plugin, (picked) => {
+			void (async () => {
+				const loaded = new Map(await Promise.all(
+					[...picked].map(async ([file, count]) => [
+							await this.fileToCombatant(file),
+							count
+					] as const)
+				));
+				this.loadCombatants(loaded);
+				if (this.combatants.length > 0) this.triggerLogSetup();
+			})();
+		}).open();
+	}
+
+	async loadCombatants(combatants: Map<Combatant, number>) {
+		for (const [combatant, totalCount] of combatants) {
+			let i = 0;
+			let loadedCount = 0;
+
+			while (loadedCount < totalCount) {
+				const newId = combatant.id + String(i);
+
+				if (!this.combatants.some((entry) => entry.id === newId)) {
+					this.combatants.push({
+						...combatant,
+						id: newId,
+						name: i == 0 ? combatant.name : `${combatant.name} (${i})`,
+					});
+					loadedCount++;
+				}
+
+				i++;
 			}
 		}
 		this.ensureActiveCombatant();
 
-		for (const combatant of loaded) {
-			await this.writeToLog(lang === "es"
-				? `Combatiente cargado: ${combatant.name} (Iniciativa: ${combatant.initiative}, PV: ${combatant.hp}/${combatant.hpMax})`
-				: `Combatant loaded: ${combatant.name} (Initiative: ${combatant.initiative}, HP: ${combatant.hp}/${combatant.hpMax})`);
+		for (const [combatant, count] of combatants) {
+			await this.writeToLog(this.plugin.settings.language === "es"
+				? `Combatientes cargados: ${combatant.name} (${count}) (Iniciativa: ${combatant.initiative}, PV: ${combatant.hp}/${combatant.hpMax})`
+				: `Combatants loaded: ${combatant.name} (${count}) (Initiative: ${combatant.initiative}, HP: ${combatant.hp}/${combatant.hpMax})`);
 		}
 
 		this.refresh();
-		if (this.combatants.length > 0) this.triggerLogSetup();
 	}
 
 	async revealObsidianFile(file: TFile) {
@@ -1103,9 +1115,15 @@ export class BattleTrackerView extends ItemView {
 			nextBtn.setText(t.nextTurn);
 			nextBtn.onclick = () => void this.nextTurn();
 
+			if (this.plugin.settings.combatantFolder) {
+				const loadDefaultBtn = topActions.createEl("button", { cls: "bt-btn" });
+				loadDefaultBtn.setText(t.loadDefault);
+				loadDefaultBtn.onclick = () => void this.loadDefaultCombatants();
+			}
+
 			const loadBtn = topActions.createEl("button", { cls: "bt-btn" });
 			loadBtn.setText(t.load);
-			loadBtn.onclick = () => void this.loadFromVault();
+			loadBtn.onclick = () => void this.loadSelectedCombatantsFromVault();
 
 			const playerBtn = topActions.createEl("button", { cls: "bt-btn" });
 			playerBtn.setText(t.playerView);
