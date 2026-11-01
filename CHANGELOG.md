@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.0] - 2026-11-01
+
+### Added
+- Functionality for starting/stopping a combat.
+
+### Changed
+- Improved design of graveyard.
+
+### Fixed
+- Scroll position jumping to top when redrawing window.
+- *Pending XP* increasing when PC gets defeated.
+
 ## [1.2.6] - 2026-11-01
 
 ### Changed
