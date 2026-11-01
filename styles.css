@@ -595,7 +595,8 @@ h3 {
 	display: flex;
 	gap: 4px;
 	flex-wrap: wrap;
-	margin-bottom: 7px;
+	margin-top: 8px;
+	margin-bottom: 8px;
 }
 
 .bt-cond-tag {
