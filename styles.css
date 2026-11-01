@@ -460,7 +460,6 @@ h3 {
 	display: flex;
 	align-items: center;
 	gap: 7px;
-	margin-bottom: 8px;
 }
 
 /* Avatar */
@@ -623,6 +622,7 @@ h3 {
 
 /* ── HP bar ─────────────────────────────────────────────────── */
 .bt-hp-wrap {
+	margin-top: 8px;
 	margin-bottom: 8px;
 }
 
@@ -762,16 +762,21 @@ h3 {
 .bt-graveyard-xp-panel {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 8px;
+	justify-content: stretch;
+	gap: 4px;
 	margin: 10px 0;
 }
 
 .bt-graveyard-xp-stat {
+	flex: 1;
+	text-align: center;
 	font-size: 11px;
-	padding: 4px 8px;
-	border-radius: 999px;
+	line-height: 1;
+	padding: 8px 8px;
+	border-radius: 8px;
 	background: var(--background-primary);
 	border: 1px solid var(--background-modifier-border);
+	min-width: 100px;
 }
 
 .bt-graveyard-controls {

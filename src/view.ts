@@ -4,7 +4,6 @@ import { ActiveCondition, CombatAlert, Combatant } from "./types";
 import { LOCALIZATION } from "./localization";
 import { ActionModal, ConditionModal, ConfirmModal, DmgModal, LogSetupModal, NoteModal, PickCombatantsModal, TextPromptModal } from "./modals";
 import { randomInt } from 'crypto';
-import { write } from 'fs';
 
 export const VIEW_TYPE = "combat-ledger-view";
 export const PLAYER_VIEW_TYPE = "combat-ledger-player-view";
@@ -1633,7 +1632,7 @@ export class BattleTrackerView extends ItemView {
 		}
 
 		const xpPanel = graveyard.createDiv("bt-graveyard-xp-panel");
-		xpPanel.createDiv("bt-graveyard-xp-stat").setText(`${t.xp}: ${this.getDefeatedXpTotal()}`);
+		xpPanel.createDiv("bt-graveyard-xp-stat").setText(`${t.graveyardTotalXp}: ${this.getDefeatedXpTotal()}`);
 		xpPanel.createDiv("bt-graveyard-xp-stat").setText(`${t.graveyardPendingXp}: ${this.getPendingGraveyardXp()}`);
 		xpPanel.createDiv("bt-graveyard-xp-stat").setText(`${t.graveyardAssignedXp}: ${this.graveyardAssignedXp}`);
 
@@ -1673,8 +1672,10 @@ export class BattleTrackerView extends ItemView {
 				text: `${t.xp} ${combatant.xp} · ${t.init} ${combatant.initiative} · ${t.ac} ${combatant.ac}`,
 			});
 
-			const reviveBtn = header.createEl("button", { cls: "bt-btn", title: t.revive });
-			reviveBtn.setText(t.revive);
+			const reviveBtn = header.createEl("button", { cls: "bt-btn bt-btn-medium-width", title: t.revive });
+			const reviveIcon = reviveBtn.createSpan();
+			setIcon(reviveIcon, "heart-pulse");
+			reviveBtn.createSpan({ text: t.revive });
 			reviveBtn.onclick = () => {
 				void (async () => {
 					combatant.alive = true;
