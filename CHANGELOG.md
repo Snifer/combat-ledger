@@ -7,6 +7,66 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.0] - 2026-11-01
+
+### Added
+- Functionality for starting/stopping a combat.
+
+### Changed
+- Improved design of graveyard.
+
+### Fixed
+- Scroll position jumping to top when redrawing window.
+- *Pending XP* increasing when PC gets defeated.
+
+## [1.2.6] - 2026-11-01
+
+### Changed
+- Improved design of conditions modal.
+- Improved design of visual board modal.
+- Improved design of timeline.
+- Improved design of *Extra Property* widget.
+- Replaced unicode icons with modern Luicide icons.
+- Small margin/padding/centering improvements.
+
+## [1.2.5] - 2026-11-01
+
+### Added
+- Autmatic rolling of initiative.
+- Field *initiative_mod* for defining an initiative modifier which is used for automatic initiative rolls.
+
+### Changed
+- Static setting of initiative using the *initiative* field now only works if *initiative_mod* is not defined. 
+
+## [1.2.4] - 2026-11-01
+
+### Added
+- Functionality of adding shield to combatant while in combat.
+
+## [1.2.3] - 2026-11-01
+
+### Added
+- Setting *Root combatant folder*.
+- New action *Load Default* to distinguish loading manually and using the *Default combatant folder* setting.
+- Functionality for loading multiple identical combatants.
+
+## [1.2.2] - 2026-11-01
+
+### Added
+- Functionality for toggling visual board visibility.
+- Settings for alerts duration and count.
+- Functionality for opening configured log file.
+- Shortcuts for closing modal windows.
+
+### Changed
+- *Open note* now reveals the note if already opened instead of opening a new one.
+
+### Fixed
+- Log setup appearing when it was disabled in the settings.
+- *Let shield absorb damage* label overflowing outside of screen.
+- Saved combatants not being loaded after reopening Obsidian.
+- Log setup screen not being able to open after closing Obsidian while it was open.
+
 ## [1.2.1] - 2026-06-05
 
 ### Changed

@@ -11,6 +11,9 @@ type: PC
 # Base initiative (edit after rolling)
 initiative: 12
 
+# Initiative modifier (for automatic rolling; 1d20+initiative_mod)
+initiative_mod: 2
+
 # Hit points
 hp: 35
 hp_max: 35
