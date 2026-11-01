@@ -96,6 +96,13 @@
 	background: transparent;
 	color: var(--text-normal);
 	cursor: pointer;
+	gap: 4px;
+}
+
+.bt-btn > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .bt-btn:hover {
@@ -165,6 +172,14 @@
 	background: var(--background-modifier-hover);
 }
 
+.bt-btn-small-width {
+	min-width: 25px;
+}
+
+.bt-btn-medium-width {
+	min-width: 80px;
+}
+
 .bt-alerts {
 	display: flex;
 	flex-direction: column;
@@ -196,6 +211,10 @@
 
 .bt-board-section {
 	margin-bottom: 12px;
+}
+
+.bt-board-section.board-hidden {
+	display: none;
 }
 
 .bt-board-controls {
@@ -691,7 +710,6 @@
 .bt-modal-content input,
 .bt-modal-content textarea,
 .bt-modal-content select {
-	width: 100%;
 	padding: 6px 8px;
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 5px;
@@ -706,6 +724,7 @@
 }
 
 .bt-modal-search-input {
+	width: 100%;
 	margin-bottom: 8px;
 }
 
@@ -797,9 +816,9 @@
 	margin-top: 10px;
 }
 
-/* Pick combatants list */
+/* General Pick list */
 .bt-pick-list {
-	max-height: 300px;
+	height: 400px;
 	overflow-y: auto;
 	display: flex;
 	flex-direction: column;
@@ -827,6 +846,38 @@
 .bt-pick-item label {
 	cursor: pointer;
 	font-size: 12px;
+}
+
+/* Pick combatants list */
+.bt-combatant-pick-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;	
+	gap: 8px;
+	padding: 5px 8px;
+	border-radius: 5px;
+}
+
+.bt-combatant-pick-item:hover {
+	background: var(--background-modifier-hover);
+}
+
+.bt-combatant-pick-item label {
+	font-size: 12px;
+}
+
+.bt-combatant-counter-div {
+	display: flex;
+	align-items: center;
+}
+
+.bt-combatant-counter-div input {
+	max-width: 30px;
+	margin: 0 5px 0 5px;
+	align-items: center;
+	justify-items: center;
+	background: transparent;
+	border: none;
 }
 
 /* ── Settings — Condition color manager ─────────────────────── */

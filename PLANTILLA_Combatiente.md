@@ -11,6 +11,9 @@ type: PC
 # Iniciativa base (se puede tirar antes del combate y editar aquí)
 initiative: 12
 
+# Modificador de iniciativa (para la tirada automática; 1d20+initiative_mod)
+initiative_mod: 2
+
 # Puntos de vida
 hp: 35
 hp_max: 35

@@ -1,8 +1,9 @@
-import { ItemView, Notice, TFile, WorkspaceLeaf } from "obsidian";
+import { ItemView, MarkdownView, Notice, TFile, WorkspaceLeaf, setIcon } from "obsidian";
 import BattleTrackerPlugin from "./main";
 import { ActiveCondition, CombatAlert, Combatant } from "./types";
 import { LOCALIZATION } from "./localization";
 import { ActionModal, ConditionModal, ConfirmModal, DmgModal, LogSetupModal, NoteModal, PickCombatantsModal, TextPromptModal } from "./modals";
+import { randomInt } from 'crypto';
 
 export const VIEW_TYPE = "combat-ledger-view";
 export const PLAYER_VIEW_TYPE = "combat-ledger-player-view";
@@ -10,6 +11,7 @@ export const PLAYER_VIEW_TYPE = "combat-ledger-player-view";
 interface DamageResult {
 	finalDamage: number;
 	absorbedByShield: number;
+	shieldIncrease: number;
 	defeated: boolean;
 	healed: number;
 }
@@ -26,11 +28,18 @@ export class BattleTrackerView extends ItemView {
 	turnTimerInterval: number | null = null;
 	mode: "gm" | "player";
 	lastTimerExpiredFor: string | null = null;
+	logSetupInProgress: boolean;
 
 	constructor(leaf: WorkspaceLeaf, plugin: BattleTrackerPlugin, mode: "gm" | "player") {
 		super(leaf);
 		this.plugin = plugin;
 		this.mode = mode;
+
+		this.boardBackground = this.plugin.settings.boardDefaultBackground;
+		this.boardEnabled = this.plugin.settings.boardEnabled;
+		this.boardGridEnabled = this.plugin.settings.boardGridEnabled;
+		this.boardSnapToGrid = this.plugin.settings.boardSnapToGrid;
+		this.boardGridSize = this.plugin.settings.boardGridSize;
 	}
 
 	getViewType() {
@@ -65,6 +74,8 @@ export class BattleTrackerView extends ItemView {
 	set turnTimerCombatantId(value: string | null) { this.plugin.session.turnTimerCombatantId = value; }
 	get boardBackground() { return this.plugin.session.boardBackground; }
 	set boardBackground(value: string) { this.plugin.session.boardBackground = value; }
+	get boardEnabled() { return this.plugin.session.boardEnabled; }
+	set boardEnabled(value: boolean) { this.plugin.session.boardEnabled = value; }
 	get boardGridEnabled() { return this.plugin.session.boardGridEnabled; }
 	set boardGridEnabled(value: boolean) { this.plugin.session.boardGridEnabled = value; }
 	get boardSnapToGrid() { return this.plugin.session.boardSnapToGrid; }
@@ -81,8 +92,6 @@ export class BattleTrackerView extends ItemView {
 	set logDismissed(value: boolean) { this.plugin.session.logDismissed = value; }
 	get logQueue() { return this.plugin.session.logQueue; }
 	set logQueue(value: string[]) { this.plugin.session.logQueue = value; }
-	get logSetupInProgress() { return this.plugin.session.logSetupInProgress; }
-	set logSetupInProgress(value: boolean) { this.plugin.session.logSetupInProgress = value; }
 	get alerts() { return this.plugin.session.alerts; }
 	set alerts(value: CombatAlert[]) { this.plugin.session.alerts = value; }
 
@@ -96,16 +105,19 @@ export class BattleTrackerView extends ItemView {
 	}
 
 	pushAlert(type: CombatAlert["type"], message: string) {
+		if (this.plugin.settings.maxAlertCount === 0) return;
+
 		const now = Date.now();
 		this.alerts = [
-			...this.alerts.filter((alert) => now - alert.createdAt < 8000),
+			...this.alerts
+				.filter((alert) => now - alert.createdAt < this.plugin.settings.maxAlertDuration),
 			{ id: `${type}-${now}-${Math.random().toString(36).slice(2, 8)}`, type, message, createdAt: now },
-		];
+		].slice(-this.plugin.settings.maxAlertCount);
 	}
 
 	getVisibleAlerts(): CombatAlert[] {
 		const now = Date.now();
-		const visible = this.alerts.filter((alert) => now - alert.createdAt < 8000);
+		const visible = this.alerts.filter((alert) => now - alert.createdAt < this.plugin.settings.maxAlertDuration);
 		if (visible.length !== this.alerts.length) {
 			this.alerts = visible;
 		}
@@ -319,6 +331,7 @@ export class BattleTrackerView extends ItemView {
 	}
 
 	triggerLogSetup() {
+		if (!this.plugin.settings.logEnabled) return;
 		if (this.activeLogFile || this.logDismissed || this.logSetupInProgress) return;
 
 		this.logSetupInProgress = true;
@@ -441,10 +454,15 @@ export class BattleTrackerView extends ItemView {
 		const icon = f.icon ? String(meta[f.icon] ?? "") : "";
 		const storedConditions = f.conditions ? this.parseStoredConditions(meta[f.conditions]) : [];
 
+		// Don't use -1 as default for the modifier as negative values are also valid
+		const initiativeMod = meta[f.initiative_mod] !== undefined ? Number(meta[f.initiative_mod]) : Number.NaN;
+		const initiative = Number(meta[f.initiative] ?? -1) || -1;
+
 		return {
 			id: file.path,
 			name: file.basename,
-			initiative: Number(meta[f.initiative] ?? 0) || 0,
+			initiative,
+			initiativeMod,
 			hp,
 			hpMax,
 			shield,
@@ -733,34 +751,49 @@ export class BattleTrackerView extends ItemView {
 
 	applyDamage(combatant: Combatant, amount: number, heal: boolean, useShield: boolean): DamageResult {
 		if (heal) {
-			const previous = combatant.hp;
-			combatant.hp = Math.min(combatant.hpMax, combatant.hp + amount);
-			if (combatant.hp > 0) combatant.alive = true;
+			if (useShield) {
+				combatant.shield = combatant.shield + amount;
+
+				return {
+					finalDamage: 0,
+					absorbedByShield: 0,
+					shieldIncrease: amount,
+					defeated: false,
+					healed: 0,
+				};
+			} else {
+				const previous = combatant.hp;
+				combatant.hp = Math.min(combatant.hpMax, combatant.hp + amount);
+				if (combatant.hp > 0) combatant.alive = true;
+
+				return {
+					finalDamage: 0,
+					absorbedByShield: 0,
+					shieldIncrease: 0,
+					defeated: false,
+					healed: combatant.hp - previous,
+				};
+			}
+		} else {
+			let remaining = Math.max(0, amount);
+			let absorbedByShield = 0;
+			if (useShield && combatant.shield > 0) {
+				absorbedByShield = Math.min(combatant.shield, remaining);
+				combatant.shield -= absorbedByShield;
+				remaining -= absorbedByShield;
+			}
+
+			combatant.hp = Math.max(0, combatant.hp - remaining);
+			if (combatant.hp === 0) combatant.alive = false;
+
 			return {
-				finalDamage: 0,
-				absorbedByShield: 0,
-				defeated: false,
-				healed: combatant.hp - previous,
+				finalDamage: remaining,
+				absorbedByShield,
+				shieldIncrease: 0,
+				defeated: combatant.hp === 0,
+				healed: 0,
 			};
 		}
-
-		let remaining = Math.max(0, amount);
-		let absorbedByShield = 0;
-		if (useShield && combatant.shield > 0) {
-			absorbedByShield = Math.min(combatant.shield, remaining);
-			combatant.shield -= absorbedByShield;
-			remaining -= absorbedByShield;
-		}
-
-		combatant.hp = Math.max(0, combatant.hp - remaining);
-		if (combatant.hp === 0) combatant.alive = false;
-
-		return {
-			finalDamage: remaining,
-			absorbedByShield,
-			defeated: combatant.hp === 0,
-			healed: 0,
-		};
 	}
 
 	async applyDmg(id: string, amount: number, heal: boolean, useShield: boolean) {
@@ -770,9 +803,15 @@ export class BattleTrackerView extends ItemView {
 		const lang = this.plugin.settings.language;
 		const result = this.applyDamage(combatant, amount, heal, useShield);
 		if (heal) {
-			await this.writeToLog(lang === "es"
-				? `${combatant.name} se cura ${result.healed} PV (PV: ${combatant.hp}/${combatant.hpMax})`
-				: `${combatant.name} heals ${result.healed} HP (HP: ${combatant.hp}/${combatant.hpMax})`);
+			if (useShield) {
+				await this.writeToLog(lang === "es"
+					? `${combatant.name} obtiene ${result.shieldIncrease} puntos de escudo (Escudo: ${combatant.shield})`
+					: `${combatant.name} gains ${result.shieldIncrease} Shield (Shield: ${combatant.shield})`);
+			} else {
+				await this.writeToLog(lang === "es"
+					? `${combatant.name} se cura ${result.healed} PV (PV: ${combatant.hp}/${combatant.hpMax})`
+					: `${combatant.name} heals ${result.healed} HP (HP: ${combatant.hp}/${combatant.hpMax})`);
+			}
 		} else {
 			const shieldText = result.absorbedByShield > 0
 				? lang === "es"
@@ -904,7 +943,7 @@ export class BattleTrackerView extends ItemView {
 		const lang = this.plugin.settings.language;
 		const result = payload.damage > 0
 			? this.applyDamage(target, payload.damage, false, payload.useShield)
-			: { finalDamage: 0, absorbedByShield: 0, defeated: false, healed: 0 };
+			: { finalDamage: 0, absorbedByShield: 0, shieldIncrease: 0, defeated: false, healed: 0 };
 
 		if (payload.conditionName) {
 			const existing = target.conditions.find((condition) => condition.name === payload.conditionName);
@@ -946,56 +985,123 @@ export class BattleTrackerView extends ItemView {
 		this.refresh();
 	}
 
-	async loadFromVault() {
-		const folder = this.plugin.settings.combatantFolder.trim();
-		const lang = this.plugin.settings.language;
-		let files: TFile[];
+	async loadDefaultCombatants() {
+		const folder = this.plugin.settings.defaultCombatantFolder.trim();
+		if (!folder) return;
 
-		if (folder) {
-			const folderObj = this.app.vault.getAbstractFileByPath(folder);
-			if (!folderObj) {
-				new Notice(lang === "es" ? `Carpeta "${folder}" no encontrada.` : `Folder "${folder}" not found.`);
-				return;
-			}
-			files = this.app.vault.getMarkdownFiles().filter((file) => file.path.startsWith(folder + "/"));
-		} else {
-			new PickCombatantsModal(this.app, this.plugin, (picked) => {
-				void (async () => {
-					const loaded = await Promise.all(picked.map((file) => this.fileToCombatant(file)));
-					for (const combatant of loaded) {
-						if (!this.combatants.find((entry) => entry.id === combatant.id)) {
-							this.combatants.push(combatant);
-						}
-					}
-					this.ensureActiveCombatant();
-					for (const combatant of loaded) {
-						await this.writeToLog(lang === "es"
-							? `Combatiente cargado: ${combatant.name} (Iniciativa: ${combatant.initiative}, PV: ${combatant.hp}/${combatant.hpMax})`
-							: `Combatant loaded: ${combatant.name} (Initiative: ${combatant.initiative}, HP: ${combatant.hp}/${combatant.hpMax})`);
-					}
-					this.refresh();
-					if (this.combatants.length > 0) this.triggerLogSetup();
-				})();
-			}).open();
+		const lang = this.plugin.settings.language;
+		const folderObj = this.app.vault.getFolderByPath(folder);
+		if (!folderObj) {
+			new Notice(lang === "es" ? `Carpeta "${folder}" no encontrada.` : `Folder "${folder}" not found.`);
 			return;
 		}
+		const files = this.app.vault.getMarkdownFiles().filter((file) => file.path.startsWith(folder + "/"));
 
-		const loaded = await Promise.all(files.map((file) => this.fileToCombatant(file)));
-		for (const combatant of loaded) {
-			if (!this.combatants.find((entry) => entry.id === combatant.id)) {
-				this.combatants.push(combatant);
+		const loaded = new Map(await Promise.all(
+			files.map(async (file) => [await this.fileToCombatant(file), 1] as const)
+		));
+		this.loadCombatants(loaded);
+	}
+
+	async loadSelectedCombatantsFromVault() {
+		new PickCombatantsModal(this.app, this.plugin, (picked) => {
+			void (async () => {
+				const loaded = new Map(await Promise.all(
+					[...picked].map(async ([file, count]) => [
+							await this.fileToCombatant(file),
+							count
+					] as const)
+				));
+				this.loadCombatants(loaded);
+				if (this.combatants.length > 0) this.triggerLogSetup();
+			})();
+		}).open();
+	}
+
+	async loadCombatants(combatants: Map<Combatant, number>) {
+		for (const [combatant, totalCount] of combatants) {
+			let i = 0;
+			let loadedCount = 0;
+
+			while (loadedCount < totalCount) {
+				const newId = combatant.id + String(i);
+
+				if (!this.combatants.some((entry) => entry.id === newId)) {
+					// If a modifier is set, we determine the initiative randomly, otherwise use the fixed initiative
+					let initiative;
+					if (Number.isFinite(combatant.initiativeMod)) {
+						initiative = this.rollInitiative(combatant.initiativeMod);
+					} else {
+						initiative = combatant.initiative;
+					}
+
+					this.combatants.push({
+						...combatant,
+						id: newId,
+						initiative,
+						name: i == 0 ? combatant.name : `${combatant.name} (${i})`,
+					});
+					loadedCount++;
+				}
+
+				i++;
 			}
 		}
 		this.ensureActiveCombatant();
 
-		for (const combatant of loaded) {
-			await this.writeToLog(lang === "es"
-				? `Combatiente cargado: ${combatant.name} (Iniciativa: ${combatant.initiative}, PV: ${combatant.hp}/${combatant.hpMax})`
-				: `Combatant loaded: ${combatant.name} (Initiative: ${combatant.initiative}, HP: ${combatant.hp}/${combatant.hpMax})`);
+		for (const [combatant, count] of combatants) {
+			await this.writeToLog(this.plugin.settings.language === "es"
+				? `Combatientes cargados: ${combatant.name} (${count}) (Iniciativa: ${combatant.initiative}, PV: ${combatant.hp}/${combatant.hpMax})`
+				: `Combatants loaded: ${combatant.name} (${count}) (Initiative: ${combatant.initiative}, HP: ${combatant.hp}/${combatant.hpMax})`);
 		}
 
 		this.refresh();
-		if (this.combatants.length > 0) this.triggerLogSetup();
+	}
+
+	rollInitiative(modifier: number) {
+		if (Number.isFinite(modifier)) {
+			return randomInt(21) + modifier;
+		} else {
+			return randomInt(21);
+		}
+	}
+
+	async revealObsidianFile(file: TFile) {
+		let existingLeaf: WorkspaceLeaf | undefined;
+
+		this.app.workspace.iterateAllLeaves((leaf) => {
+			if (leaf.view instanceof MarkdownView &&
+					leaf.view.file?.path === file.path) {
+					existingLeaf = leaf;
+			}
+		});
+
+		if (existingLeaf) {
+			await this.app.workspace.revealLeaf(existingLeaf);
+		} else {
+			await this.app.workspace.getLeaf(true).openFile(file);
+		}
+	}
+
+	async handleToggleBoardClick(event: PointerEvent) {
+		this.boardEnabled = !this.boardEnabled;
+		const boardSection = this.containerEl.getElementsByClassName("bt-board-section")[0];
+		if (boardSection) {
+			if (boardSection.hasClass("board-hidden")) {
+				boardSection.removeClass("board-hidden");
+				(event?.currentTarget as HTMLButtonElement)?.setText(LOCALIZATION[this.plugin.settings.language].hideBoard)
+			} else {
+				boardSection.addClass("board-hidden");
+				(event?.currentTarget as HTMLButtonElement)?.setText(LOCALIZATION[this.plugin.settings.language].showBoard)
+			}
+		}
+	}
+
+	handleRemoveAlertClick(event: PointerEvent) {
+		const alertBtn = (event?.currentTarget as HTMLButtonElement);
+		const alertId = alertBtn.getAttr("data-alert-id");
+		this.alerts = this.alerts.filter(a => a.id !== alertId);
+		alertBtn.remove();
 	}
 
 	render() {
@@ -1040,6 +1146,11 @@ export class BattleTrackerView extends ItemView {
 		}
 
 		const topActions = topBar.createDiv("bt-top-actions");
+
+		const boardBtn = topActions.createEl("button", { cls: "bt-btn" });
+		boardBtn.setText(this.boardEnabled ? t.hideBoard : t.showBoard);
+		boardBtn.onclick = (event) => void this.handleToggleBoardClick(event);
+
 		const fullBtn = topActions.createEl("button", { cls: "bt-btn" });
 		fullBtn.setText(t.fullscreen);
 		fullBtn.onclick = () => void this.toggleFullscreen();
@@ -1049,9 +1160,15 @@ export class BattleTrackerView extends ItemView {
 			nextBtn.setText(t.nextTurn);
 			nextBtn.onclick = () => void this.nextTurn();
 
+			if (this.plugin.settings.defaultCombatantFolder) {
+				const loadDefaultBtn = topActions.createEl("button", { cls: "bt-btn" });
+				loadDefaultBtn.setText(t.loadDefault);
+				loadDefaultBtn.onclick = () => void this.loadDefaultCombatants();
+			}
+
 			const loadBtn = topActions.createEl("button", { cls: "bt-btn" });
 			loadBtn.setText(t.load);
-			loadBtn.onclick = () => void this.loadFromVault();
+			loadBtn.onclick = () => void this.loadSelectedCombatantsFromVault();
 
 			const playerBtn = topActions.createEl("button", { cls: "bt-btn" });
 			playerBtn.setText(t.playerView);
@@ -1063,7 +1180,13 @@ export class BattleTrackerView extends ItemView {
 					title: t.logSelectLogFileButton,
 				});
 				logBtn.setText(`📝 ${this.activeLogFile ? (lang === "es" ? "Registrando" : "Logging") : (lang === "es" ? "Registro" : "Log")}`);
-				logBtn.onclick = () => this.triggerLogSetup();
+				logBtn.onclick = () => {
+					if (this.activeLogFile) {
+						this.revealObsidianFile(this.activeLogFile);
+					} else {
+						this.triggerLogSetup();
+					}
+				}
 			}
 
 			const resetBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-danger-soft" });
@@ -1078,11 +1201,14 @@ export class BattleTrackerView extends ItemView {
 		if (visibleAlerts.length) {
 			const alertsWrap = container.createDiv("bt-alerts");
 			visibleAlerts.slice().reverse().forEach((alert) => {
-				alertsWrap.createDiv(`bt-alert bt-alert-${alert.type}`).setText(alert.message);
+				const alertBtn = alertsWrap.createDiv(`bt-alert bt-alert-${alert.type}`);
+				alertBtn.setText(alert.message);
+				alertBtn.setAttr("data-alert-id", alert.id);
+				alertBtn.onclick = (event) => this.handleRemoveAlertClick(event);
 			});
 		}
 
-		const boardSection = container.createDiv("bt-board-section");
+		const boardSection = container.createDiv(`bt-board-section${this.boardEnabled ? "" : " board-hidden"}`);
 		if (this.mode === "gm") {
 			const boardControls = boardSection.createDiv("bt-board-controls");
 			boardControls.createEl("span", { cls: "bt-label", text: t.boardTitle });
@@ -1251,7 +1377,7 @@ export class BattleTrackerView extends ItemView {
 			if (this.mode === "gm") {
 				nameEl.addClass("bt-clickable-name");
 				nameEl.title = lang === "es" ? "Abrir nota" : "Open note";
-				nameEl.onclick = () => void this.app.workspace.getLeaf(true).openFile(combatant.file);
+				nameEl.onclick = () => void this.revealObsidianFile(combatant.file);
 			}
 
 			const metaRow = nameWrap.createDiv("bt-sub bt-init-edit-row");
@@ -1294,15 +1420,22 @@ export class BattleTrackerView extends ItemView {
 			badge.setText(combatant.combatType);
 
 			if (this.mode === "gm") {
-				const initEditBtn = header.createEl("button", { cls: "bt-btn-icon", title: t.editInitiative });
-				initEditBtn.setText("✎");
-				initEditBtn.onclick = () => {
+				const editInitBtn = header.createEl("button", { cls: "bt-btn-icon bt-btn-small-width", title: t.editInitiative });
+				setIcon(editInitBtn, "pen");
+				editInitBtn.onclick = () => {
 					this.editingInitiativeId = combatant.id;
 					this.refresh();
 				};
 
-				const removeBtn = header.createEl("button", { cls: "bt-btn-icon", title: t.removeTitle });
-				removeBtn.setText("✕");
+				const rollInitBtn = header.createEl("button", { cls: "bt-btn-icon bt-btn-small-width", title: t.rollInitiative });
+				setIcon(rollInitBtn, "dices");
+				rollInitBtn.onclick = () => {
+					combatant.initiative = this.rollInitiative(combatant.initiativeMod);
+					this.refresh();
+				};
+
+				const removeBtn = header.createEl("button", { cls: "bt-btn-icon bt-btn-small-width", title: t.removeTitle });
+				setIcon(removeBtn, "x");
 				removeBtn.onclick = () => void this.removeCombatant(combatant.id);
 			}
 
@@ -1327,6 +1460,12 @@ export class BattleTrackerView extends ItemView {
 			hpLabelRow.createEl("span", { text: t.hp, cls: "bt-label" });
 			const hpVisible = this.mode === "gm" || this.plugin.settings.playerViewShowHp;
 			hpLabelRow.createEl("span", { cls: "bt-hp-text", text: hpVisible ? `${combatant.hp} / ${combatant.hpMax}` : "•••" });
+
+			// const shieldWrap = card.createDiv("bt-hp-wrap");
+			// const shieldLabelRow = shieldWrap.createDiv("bt-hp-label-row");
+			// hpLabelRow.createEl("span", { text: t.shield, cls: "bt-label" });
+			// const shieldVisible = this.mode === "gm" || this.plugin.settings.playerViewShowHp;
+			// hpLabelRow.createEl("span", { cls: "bt-hp-text", text: hpVisible ? `${combatant.shield}` : "•••" });
 
 			const bar = hpWrap.createDiv("bt-bar");
 			const fill = bar.createDiv("bt-bar-fill");
