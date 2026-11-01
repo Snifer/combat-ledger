@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.2.5] - 2026-11-01
+
+### Added
+- Autmatic rolling of initiative.
+- Field *initiative_mod* for defining an initiative modifier which is used for automatic initiative rolls.
+
+### Changed
+- Static setting of initiative using the *initiative* field now only works if *initiative_mod* is not defined. 
+
 ## [1.2.4] - 2026-11-01
 
 ### Added
