@@ -115,7 +115,15 @@ export default class BattleTrackerPlugin extends Plugin {
 		];
 		leaves.forEach((leaf) => {
 			if (leaf.view instanceof BattleTrackerView) {
+				const scrollContainer = leaf.view.contentEl;
+				const scrollTop = scrollContainer?.scrollTop || 0;
+
 				leaf.view.render();
+
+				// Restore scroll position
+				if (scrollContainer != null) {
+					scrollContainer.scrollTop = scrollTop;
+				}
 			}
 		});
 	}

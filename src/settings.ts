@@ -90,6 +90,7 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 
 	private renderSettings() {
 		const { containerEl } = this;
+		const scrollTop = containerEl.scrollTop;
 		containerEl.empty();
 
 		const lang = this.plugin.settings.language;
@@ -482,6 +483,9 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 						}
 					})
 			);
+
+		// Restore scroll position
+		containerEl.scrollTop = scrollTop;
 	}
 
 	// ── Render condition rows ──────────────────────────────────────────────────
