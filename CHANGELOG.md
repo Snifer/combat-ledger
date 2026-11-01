@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.2.6] - 2026-11-01
+
+### Changed
+- Improved design of conditions modal.
+- Improved design of visual board modal.
+- Improved design of timeline.
+- Improved design of *Extra Property* widget.
+- Replaced unicode icons with modern Luicide icons.
+- Small margin/padding/centering improvements.
+
 ## [1.2.5] - 2026-11-01
 
 ### Added
