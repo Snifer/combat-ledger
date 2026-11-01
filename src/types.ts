@@ -2,6 +2,7 @@ import { TFile } from "obsidian";
 
 export interface FieldMapping {
 	initiative: string;
+	initiative_mod: string;
 	hp: string;
 	hp_max: string;
 	shield: string;
@@ -44,13 +45,15 @@ export interface BattleTrackerSettings {
 	language: "es" | "en";
 	fields: FieldMapping;
 	conditions: ConditionEntry[];
-	combatantFolder: string;
+	rootCombatantFolder: string;
+	defaultCombatantFolder: string;
 	realtimeSync: boolean;
 	realtimeSyncMode: "pc" | "all";
 	shieldAbsorbsDamage: boolean;
 	turnTimerEnabled: boolean;
 	turnTimerSeconds: number;
 	playerViewShowHp: boolean;
+	boardEnabled: boolean;
 	boardGridEnabled: boolean;
 	boardSnapToGrid: boolean;
 	boardGridSize: number;
@@ -61,12 +64,15 @@ export interface BattleTrackerSettings {
 	logHeader: string;
 	logFileName: string;
 	logFolder: string;
+	maxAlertCount: number;
+	maxAlertDuration: number;
 }
 
 export interface Combatant {
 	id: string;           // file path
 	name: string;
 	initiative: number;
+	initiativeMod: number;
 	hp: number;
 	hpMax: number;
 	shield: number;
@@ -100,6 +106,7 @@ export interface CombatSessionState {
 	turnTimerStartedAt: number;
 	turnTimerCombatantId: string | null;
 	boardBackground: string;
+	boardEnabled: boolean;
 	boardGridEnabled: boolean;
 	boardSnapToGrid: boolean;
 	boardGridSize: number;
@@ -108,6 +115,5 @@ export interface CombatSessionState {
 	activeLogFile: TFile | null;
 	logDismissed: boolean;
 	logQueue: string[];
-	logSetupInProgress: boolean;
 	alerts: CombatAlert[];
 }

@@ -1,4 +1,4 @@
-import { App, Modal, Notice, TFile } from "obsidian";
+import { App, Modal, Notice, TFile, setIcon } from "obsidian";
 import BattleTrackerPlugin from "./main";
 import { BattleTrackerView } from "./view";
 import { LOCALIZATION } from "./localization";
@@ -18,6 +18,21 @@ export class DmgModal extends Modal {
 		this.onConfirm = onConfirm;
 	}
 
+	handleShieldIncrease(value: number) {
+		this.onConfirm(value, true, true);
+		this.close();
+	}
+
+	handleHealing(value: number) {
+		this.onConfirm(value, true, false);
+		this.close();
+	}
+
+	handleDamage(value: number, useShield: boolean) {
+		this.onConfirm(value, false, this.hasShield && useShield);
+		this.close();
+	}
+
 	onOpen() {
 		const { contentEl } = this;
 		const lang = this.plugin.settings.language;
@@ -30,24 +45,51 @@ export class DmgModal extends Modal {
 
 		const shieldRow = wrap.createDiv("bt-modal-checkbox-row");
 		const shieldToggle = shieldRow.createEl("input", { type: "checkbox" });
-		shieldToggle.checked = this.plugin.settings.shieldAbsorbsDamage;
+		shieldToggle.checked = this.hasShield && this.plugin.settings.shieldAbsorbsDamage;
 		shieldToggle.disabled = !this.hasShield;
 		shieldRow.createEl("label", {
 			text: this.hasShield ? t.dmgModalUseShield : t.dmgModalNoShield,
 		});
 
 		const row = wrap.createDiv("bt-modal-actions");
-		const healBtn = row.createEl("button", { cls: "bt-btn", text: t.dmgModalHeal });
-		healBtn.onclick = () => {
-			this.onConfirm(parseInt(input.value) || 0, true, false);
-			this.close();
+
+		const shieldBtn = row.createEl("button", { cls: "bt-btn bt-btn-medium-width" });
+		const shieldIcon = shieldBtn.createSpan();
+		setIcon(shieldIcon, "shield-plus");
+		shieldBtn.createSpan({ text: t.dmgModalShield });
+		shieldBtn.onclick = () => {
+			this.handleShieldIncrease(parseInt(input.value) || 0);
 		};
 
-		const dmgBtn = row.createEl("button", { cls: "bt-btn bt-btn-danger-soft", text: t.dmgModalDmg });
-		dmgBtn.onclick = () => {
-			this.onConfirm(parseInt(input.value) || 0, false, this.hasShield && shieldToggle.checked);
-			this.close();
+		const healBtn = row.createEl("button", { cls: "bt-btn bt-btn-medium-width" });
+		const healIcon = healBtn.createSpan();
+		setIcon(healIcon, "heart-plus");
+		healBtn.createSpan({ text: t.dmgModalHeal });
+		healBtn.onclick = () => {
+			this.handleHealing(parseInt(input.value) || 0);
 		};
+
+		const dmgBtn = row.createEl("button", { cls: "bt-btn bt-btn-danger-soft bt-btn-medium-width" });
+		const dmgIcon = dmgBtn.createSpan();
+		setIcon(dmgIcon, "swords");
+		dmgBtn.createSpan({ text: t.dmgModalDmg });
+		dmgBtn.onclick = () => {
+			this.handleDamage(parseInt(input.value) || 0, shieldToggle.checked)
+		};
+
+    contentEl.addEventListener("keydown", (event: KeyboardEvent) => {
+			const value = parseInt(input.value) || 0;
+			if ((event.key === "Enter") || (event.key === "d")) {
+				event.preventDefault();
+				this.handleDamage(value, shieldToggle.checked)
+			} else if (event.key === "h") {
+				event.preventDefault();
+				this.handleHealing(value);
+			} else if (event.key === "s") {
+				event.preventDefault();
+				this.handleShieldIncrease(value);
+			}
+    });
 
 		window.setTimeout(() => input.focus(), 50);
 	}
@@ -58,6 +100,7 @@ export class DmgModal extends Modal {
 }
 
 export class ConditionModal extends Modal {
+	grid: HTMLDivElement;
 	allConditions: ConditionEntry[];
 	current: ActiveCondition[];
 	plugin: BattleTrackerPlugin;
@@ -71,25 +114,46 @@ export class ConditionModal extends Modal {
 		this.onConfirm = onConfirm;
 	}
 
+	handleConfirm() {
+		const updated: ActiveCondition[] = [];
+		const rows = Array.from(this.grid.querySelectorAll(".bt-cond-edit-row"));
+			rows.forEach((rowEl, idx) => {
+				const checkNode = rowEl.querySelector("input[type='checkbox']");
+				const durationNode = rowEl.querySelector(".bt-cond-duration-input");
+				const check = checkNode?.instanceOf(HTMLInputElement) ? checkNode : null;
+				const durationInput = durationNode?.instanceOf(HTMLInputElement) ? durationNode : null;
+				const condition = this.allConditions[idx];
+				if (!check?.checked || !condition) return;
+				const parsedDuration = Number(durationInput?.value);
+			updated.push({
+				name: condition.name,
+				duration: Number.isFinite(parsedDuration) && parsedDuration > 0 ? parsedDuration : null,
+			});
+		});
+		this.onConfirm(updated);
+		this.close();
+	}
+
 	onOpen() {
 		const { contentEl } = this;
 		const lang = this.plugin.settings.language;
 		const t = LOCALIZATION[lang];
 
 		contentEl.createEl("h3", { text: t.condModalTitle });
-		const grid = contentEl.createDiv("bt-cond-edit-grid");
+		this.grid = contentEl.createDiv("bt-cond-edit-grid");
 		const selected = new Map(this.current.map((entry) => [entry.name, entry.duration]));
 
 		this.allConditions.forEach((entry) => {
-			const row = grid.createDiv("bt-cond-edit-row");
+			const row = this.grid.createDiv("bt-cond-edit-row");
 			const left = row.createDiv("bt-cond-edit-main");
 			const check = left.createEl("input", { type: "checkbox" });
 			check.checked = selected.has(entry.name);
 
 			const btn = left.createEl("button", {
-				cls: `bt-cond-toggle${check.checked ? " selected" : ""}`,
-				text: entry.name,
+				cls: `bt-cond-toggle${check.checked ? " selected" : ""}`
 			});
+
+			left.createSpan({ text: entry.name });
 
 			const durationInput = row.createEl("input", {
 				cls: "bt-cond-duration-input",
@@ -99,58 +163,56 @@ export class ConditionModal extends Modal {
 			durationInput.min = "1";
 			const currentDuration = selected.get(entry.name);
 			durationInput.value = currentDuration ? String(currentDuration) : "";
-			durationInput.disabled = !check.checked;
 
 			if (entry.color) {
-				btn.setCssProps({
-					"--bt-cond-toggle-color": check.checked ? "#fff" : entry.color,
-					"--bt-cond-toggle-border": entry.color,
-					"--bt-cond-toggle-background": check.checked ? entry.color : `${entry.color}22`,
-				});
 				btn.addClass("bt-cond-toggle-custom");
 			}
 
 			const updateVisual = () => {
 				btn.classList.toggle("selected", check.checked);
-				durationInput.disabled = !check.checked;
+				durationInput.style.visibility = check.checked ? "visible" : "collapse";
 				if (!check.checked) durationInput.value = "";
 				if (entry.color) {
 					btn.setCssProps({
 						"--bt-cond-toggle-color": check.checked ? "#fff" : entry.color,
+						"--bt-cond-toggle-border": entry.color,
 						"--bt-cond-toggle-background": check.checked ? entry.color : `${entry.color}22`,
 					});
 				}
 			};
+			updateVisual();
 
-			btn.onclick = () => {
+			check.onclick = (evt) => {
+				evt.stopPropagation();
+			}
+			row.onclick = () => {
 				check.checked = !check.checked;
+				// To make sure that the contentEl keyhandler works, the focus must always be set to something
+				check.focus();
 				updateVisual();
 			};
+			durationInput.onclick = (evt) => {
+				evt.stopPropagation();
+			}
 
 			check.onchange = updateVisual;
 		});
 
 		const row = contentEl.createDiv("bt-modal-actions");
-		const ok = row.createEl("button", { cls: "bt-btn bt-btn-primary", text: t.condModalApply });
+		const ok = row.createEl("button", { cls: "bt-btn bt-btn-primary bt-btn-medium-width" });
+		const okIcon = ok.createSpan();
+		setIcon(okIcon, "corner-down-right");
+		ok.createSpan({ text: t.condModalApply });
 		ok.onclick = () => {
-			const updated: ActiveCondition[] = [];
-			const rows = Array.from(grid.querySelectorAll(".bt-cond-edit-row"));
-				rows.forEach((rowEl, idx) => {
-					const checkNode = rowEl.querySelector("input[type='checkbox']");
-					const durationNode = rowEl.querySelector(".bt-cond-duration-input");
-					const check = checkNode?.instanceOf(HTMLInputElement) ? checkNode : null;
-					const durationInput = durationNode?.instanceOf(HTMLInputElement) ? durationNode : null;
-					const condition = this.allConditions[idx];
-					if (!check?.checked || !condition) return;
-					const parsedDuration = Number(durationInput?.value);
-				updated.push({
-					name: condition.name,
-					duration: Number.isFinite(parsedDuration) && parsedDuration > 0 ? parsedDuration : null,
-				});
-			});
-			this.onConfirm(updated);
-			this.close();
+			this.handleConfirm();
 		};
+
+    contentEl.addEventListener("keydown", (event: KeyboardEvent) => {
+			if (event.key === "Enter") {
+				event.preventDefault();
+				this.handleConfirm();
+			}
+    });
 	}
 
 	onClose() {
@@ -180,12 +242,23 @@ export class NoteModal extends Modal {
 		const ta = wrap.createEl("textarea", { placeholder: t.noteModalPlaceholder });
 		ta.value = this.current;
 		const row = wrap.createDiv("bt-modal-actions");
-		const ok = row.createEl("button", { cls: "bt-btn bt-btn-primary", text: t.noteModalSave });
+		const ok = row.createEl("button", { cls: "bt-btn bt-btn-primary bt-btn-medium-width" });
+		const okIcon = ok.createSpan();
+		setIcon(okIcon, "save");
+		ok.createSpan({ text: t.noteModalSave });
 		ok.onclick = () => {
 			this.onConfirm(ta.value);
 			this.close();
 		};
 		window.setTimeout(() => ta.focus(), 50);
+
+    contentEl.addEventListener("keydown", (event: KeyboardEvent) => {
+			if ((event.key === "Enter") && event.ctrlKey) {
+				event.preventDefault();
+				this.onConfirm(ta.value);
+				this.close();
+			}
+    });
 	}
 
 	onClose() {
@@ -267,7 +340,10 @@ export class ActionModal extends Modal {
 		});
 
 		const row = wrap.createDiv("bt-modal-actions");
-		const ok = row.createEl("button", { cls: "bt-btn bt-btn-primary", text: t.actionModalApply });
+		const ok = row.createEl("button", { cls: "bt-btn bt-btn-primary bt-btn-medium-width" });
+		const okIcon = ok.createSpan();
+		setIcon(okIcon, "corner-down-right");
+		ok.createSpan({ text: t.condModalApply });
 		ok.onclick = () => {
 			const parsedDuration = Number(durationInput.value);
 			this.onConfirm({
@@ -281,6 +357,22 @@ export class ActionModal extends Modal {
 			this.close();
 		};
 
+    contentEl.addEventListener("keydown", (event: KeyboardEvent) => {
+			if ((event.key === "Enter") && event.ctrlKey) {
+				event.preventDefault();
+				const parsedDuration = Number(durationInput.value);
+				this.onConfirm({
+					targetId: targetSelect.value,
+					damage: parseInt(damageInput.value) || 0,
+					useShield: shieldToggle.checked,
+					conditionName: conditionSelect.value,
+					conditionDuration: Number.isFinite(parsedDuration) && parsedDuration > 0 ? parsedDuration : null,
+					note: noteInput.value.trim(),
+				});
+				this.close();
+			}
+    });
+
 		window.setTimeout(() => targetSelect.focus(), 50);
 	}
 
@@ -291,13 +383,28 @@ export class ActionModal extends Modal {
 
 export class PickCombatantsModal extends Modal {
 	plugin: BattleTrackerPlugin;
-	onConfirm: (files: TFile[]) => void;
-	selected: Set<string> = new Set();
+	onConfirm: (files: Map<TFile, number>) => void;
+	files: TFile[];
+	selectedCombatants: Map<string, number> = new Map();
 
-	constructor(app: App, plugin: BattleTrackerPlugin, onConfirm: (files: TFile[]) => void) {
+	constructor(app: App, plugin: BattleTrackerPlugin, onConfirm: (files: Map<TFile, number>) => void) {
 		super(app);
 		this.plugin = plugin;
 		this.onConfirm = onConfirm;
+	}
+
+	handleConfirm() {
+		if (!this.selectedCombatants.size) {
+			new Notice(LOCALIZATION[this.plugin.settings.language].pickModalSelectMin);
+			return;
+		}
+
+		const picked = new Map(this.files
+			.filter((f) => this.selectedCombatants.has(f.path))
+			.map((f) => [f, this.selectedCombatants.get(f.path) || 0]));
+
+		this.onConfirm(picked);
+		this.close();
 	}
 
 	onOpen() {
@@ -316,24 +423,81 @@ export class PickCombatantsModal extends Modal {
 
 		const list = contentEl.createDiv("bt-pick-list");
 
-		const files = this.app.vault.getMarkdownFiles().sort((a, b) => a.basename.localeCompare(b.basename));
+		this.files = this.app.vault.getMarkdownFiles()
+			.filter((file) => {
+				return this.plugin.settings.rootCombatantFolder == "" || file.path.startsWith(`${this.plugin.settings.rootCombatantFolder}/`);
+			})
+			.sort((a, b) => a.basename.localeCompare(b.basename));
 
 		const renderList = (filter: string) => {
 			list.empty();
-			files
+			this.files
 				.filter((f) => !filter || f.basename.toLowerCase().includes(filter.toLowerCase()))
 				.forEach((file) => {
-					const item = list.createDiv("bt-pick-item");
-					const cb = item.createEl("input", { type: "checkbox" });
-					cb.checked = this.selected.has(file.path);
-					cb.onchange = () => {
-						if (cb.checked) this.selected.add(file.path);
-						else this.selected.delete(file.path);
+					const item = list.createDiv("bt-combatant-pick-item");
+					item.createEl("label", { text: file.basename });
+					const counterDiv = item.createDiv("bt-combatant-counter-div");
+
+					const decrementBtn = counterDiv.createEl("button", { cls: "bt-btn" });
+					decrementBtn.disabled = true;
+					setIcon(decrementBtn, 'minus');
+					const countInput = counterDiv.createEl("input", {
+						type: "number",
+						value: "0",
+						attr: {
+								min: "0",
+								max: "99",
+								step: "1",
+						}
+					});
+					const incrementBtn = counterDiv.createEl("button", { cls: "bt-btn" });
+					setIcon(incrementBtn, 'plus');
+
+					decrementBtn.onclick = () => {
+						let count = this.selectedCombatants.get(file.path);
+						if ((count !== undefined) && (count > 0)) {
+							count--;
+							if (count <= 0) {
+								this.selectedCombatants.delete(file.path);
+								decrementBtn.disabled = true;
+							} else {
+								this.selectedCombatants.set(file.path, count);
+								decrementBtn.disabled = false;
+								incrementBtn.disabled = false;
+							}
+							countInput.value = String(count);
+						}
 					};
-					const lbl = item.createEl("label", { text: file.basename });
-					lbl.onclick = () => {
-						cb.checked = !cb.checked;
-						cb.dispatchEvent(new Event("change"));
+
+					countInput.onchange = () => {
+						const count = Math.min(Math.max(0, parseInt(countInput.value) || 0), 99);
+						countInput.value = String(count);
+						if (count <= 0) {
+							this.selectedCombatants.delete(file.path);
+							decrementBtn.disabled = true;
+						} else if (count >= 99) {
+							incrementBtn.disabled = true;
+						} else {
+							this.selectedCombatants.set(file.path, count);
+							decrementBtn.disabled = false;
+							incrementBtn.disabled = false;
+						}
+					};
+
+					incrementBtn.onclick = () => {
+						let count = this.selectedCombatants.get(file.path) ?? 0;
+						count++;
+						if (count > 99) {
+							return;
+						} else if (count == 99) {
+							incrementBtn.disabled = true;
+						} else {
+							decrementBtn.disabled = false;
+							incrementBtn.disabled = false;
+						}
+
+						this.selectedCombatants.set(file.path, count);
+						countInput.value = String(count);
 					};
 				});
 		};
@@ -346,14 +510,15 @@ export class PickCombatantsModal extends Modal {
 		cancel.onclick = () => this.close();
 		const ok = row.createEl("button", { cls: "bt-btn bt-btn-primary", text: t.pickModalLoad });
 		ok.onclick = () => {
-			const picked = files.filter((f) => this.selected.has(f.path));
-			if (!picked.length) {
-				new Notice(t.pickModalSelectMin);
-				return;
-			}
-			this.onConfirm(picked);
-			this.close();
+			this.handleConfirm();
 		};
+
+    contentEl.addEventListener("keydown", (event: KeyboardEvent) => {
+			if (event.key === "Enter") {
+				event.preventDefault();
+				this.handleConfirm();
+			}
+    });
 
 		window.setTimeout(() => searchInput.focus(), 50);
 	}
@@ -513,6 +678,15 @@ export class TextPromptModal extends Modal {
 			this.onConfirm(input.value);
 			this.close();
 		};
+
+    contentEl.addEventListener("keydown", (event: KeyboardEvent) => {
+			if (event.key === "Enter") {
+				event.preventDefault();
+				this.onConfirm(input.value);
+				this.close();
+			}
+    });
+
 		window.setTimeout(() => input.focus(), 50);
 	}
 

@@ -1,8 +1,9 @@
-import { ItemView, Notice, TFile, WorkspaceLeaf } from "obsidian";
+import { ItemView, MarkdownView, Notice, TFile, WorkspaceLeaf, setIcon } from "obsidian";
 import BattleTrackerPlugin from "./main";
 import { ActiveCondition, CombatAlert, Combatant } from "./types";
 import { LOCALIZATION } from "./localization";
 import { ActionModal, ConditionModal, ConfirmModal, DmgModal, LogSetupModal, NoteModal, PickCombatantsModal, TextPromptModal } from "./modals";
+import { randomInt } from 'crypto';
 
 export const VIEW_TYPE = "combat-ledger-view";
 export const PLAYER_VIEW_TYPE = "combat-ledger-player-view";
@@ -10,6 +11,7 @@ export const PLAYER_VIEW_TYPE = "combat-ledger-player-view";
 interface DamageResult {
 	finalDamage: number;
 	absorbedByShield: number;
+	shieldIncrease: number;
 	defeated: boolean;
 	healed: number;
 }
@@ -26,11 +28,18 @@ export class BattleTrackerView extends ItemView {
 	turnTimerInterval: number | null = null;
 	mode: "gm" | "player";
 	lastTimerExpiredFor: string | null = null;
+	logSetupInProgress: boolean;
 
 	constructor(leaf: WorkspaceLeaf, plugin: BattleTrackerPlugin, mode: "gm" | "player") {
 		super(leaf);
 		this.plugin = plugin;
 		this.mode = mode;
+
+		this.boardBackground = this.plugin.settings.boardDefaultBackground;
+		this.boardEnabled = this.plugin.settings.boardEnabled;
+		this.boardGridEnabled = this.plugin.settings.boardGridEnabled;
+		this.boardSnapToGrid = this.plugin.settings.boardSnapToGrid;
+		this.boardGridSize = this.plugin.settings.boardGridSize;
 	}
 
 	getViewType() {
@@ -65,6 +74,8 @@ export class BattleTrackerView extends ItemView {
 	set turnTimerCombatantId(value: string | null) { this.plugin.session.turnTimerCombatantId = value; }
 	get boardBackground() { return this.plugin.session.boardBackground; }
 	set boardBackground(value: string) { this.plugin.session.boardBackground = value; }
+	get boardEnabled() { return this.plugin.session.boardEnabled; }
+	set boardEnabled(value: boolean) { this.plugin.session.boardEnabled = value; }
 	get boardGridEnabled() { return this.plugin.session.boardGridEnabled; }
 	set boardGridEnabled(value: boolean) { this.plugin.session.boardGridEnabled = value; }
 	get boardSnapToGrid() { return this.plugin.session.boardSnapToGrid; }
@@ -81,8 +92,6 @@ export class BattleTrackerView extends ItemView {
 	set logDismissed(value: boolean) { this.plugin.session.logDismissed = value; }
 	get logQueue() { return this.plugin.session.logQueue; }
 	set logQueue(value: string[]) { this.plugin.session.logQueue = value; }
-	get logSetupInProgress() { return this.plugin.session.logSetupInProgress; }
-	set logSetupInProgress(value: boolean) { this.plugin.session.logSetupInProgress = value; }
 	get alerts() { return this.plugin.session.alerts; }
 	set alerts(value: CombatAlert[]) { this.plugin.session.alerts = value; }
 
@@ -96,16 +105,19 @@ export class BattleTrackerView extends ItemView {
 	}
 
 	pushAlert(type: CombatAlert["type"], message: string) {
+		if (this.plugin.settings.maxAlertCount === 0) return;
+
 		const now = Date.now();
 		this.alerts = [
-			...this.alerts.filter((alert) => now - alert.createdAt < 8000),
+			...this.alerts
+				.filter((alert) => now - alert.createdAt < this.plugin.settings.maxAlertDuration),
 			{ id: `${type}-${now}-${Math.random().toString(36).slice(2, 8)}`, type, message, createdAt: now },
-		];
+		].slice(-this.plugin.settings.maxAlertCount);
 	}
 
 	getVisibleAlerts(): CombatAlert[] {
 		const now = Date.now();
-		const visible = this.alerts.filter((alert) => now - alert.createdAt < 8000);
+		const visible = this.alerts.filter((alert) => now - alert.createdAt < this.plugin.settings.maxAlertDuration);
 		if (visible.length !== this.alerts.length) {
 			this.alerts = visible;
 		}
@@ -319,6 +331,7 @@ export class BattleTrackerView extends ItemView {
 	}
 
 	triggerLogSetup() {
+		if (!this.plugin.settings.logEnabled) return;
 		if (this.activeLogFile || this.logDismissed || this.logSetupInProgress) return;
 
 		this.logSetupInProgress = true;
@@ -441,10 +454,15 @@ export class BattleTrackerView extends ItemView {
 		const icon = f.icon ? String(meta[f.icon] ?? "") : "";
 		const storedConditions = f.conditions ? this.parseStoredConditions(meta[f.conditions]) : [];
 
+		// Don't use -1 as default for the modifier as negative values are also valid
+		const initiativeMod = meta[f.initiative_mod] !== undefined ? Number(meta[f.initiative_mod]) : Number.NaN;
+		const initiative = Number(meta[f.initiative] ?? -1) || -1;
+
 		return {
 			id: file.path,
 			name: file.basename,
-			initiative: Number(meta[f.initiative] ?? 0) || 0,
+			initiative,
+			initiativeMod,
 			hp,
 			hpMax,
 			shield,
@@ -733,34 +751,49 @@ export class BattleTrackerView extends ItemView {
 
 	applyDamage(combatant: Combatant, amount: number, heal: boolean, useShield: boolean): DamageResult {
 		if (heal) {
-			const previous = combatant.hp;
-			combatant.hp = Math.min(combatant.hpMax, combatant.hp + amount);
-			if (combatant.hp > 0) combatant.alive = true;
+			if (useShield) {
+				combatant.shield = combatant.shield + amount;
+
+				return {
+					finalDamage: 0,
+					absorbedByShield: 0,
+					shieldIncrease: amount,
+					defeated: false,
+					healed: 0,
+				};
+			} else {
+				const previous = combatant.hp;
+				combatant.hp = Math.min(combatant.hpMax, combatant.hp + amount);
+				if (combatant.hp > 0) combatant.alive = true;
+
+				return {
+					finalDamage: 0,
+					absorbedByShield: 0,
+					shieldIncrease: 0,
+					defeated: false,
+					healed: combatant.hp - previous,
+				};
+			}
+		} else {
+			let remaining = Math.max(0, amount);
+			let absorbedByShield = 0;
+			if (useShield && combatant.shield > 0) {
+				absorbedByShield = Math.min(combatant.shield, remaining);
+				combatant.shield -= absorbedByShield;
+				remaining -= absorbedByShield;
+			}
+
+			combatant.hp = Math.max(0, combatant.hp - remaining);
+			if (combatant.hp === 0) combatant.alive = false;
+
 			return {
-				finalDamage: 0,
-				absorbedByShield: 0,
-				defeated: false,
-				healed: combatant.hp - previous,
+				finalDamage: remaining,
+				absorbedByShield,
+				shieldIncrease: 0,
+				defeated: combatant.hp === 0,
+				healed: 0,
 			};
 		}
-
-		let remaining = Math.max(0, amount);
-		let absorbedByShield = 0;
-		if (useShield && combatant.shield > 0) {
-			absorbedByShield = Math.min(combatant.shield, remaining);
-			combatant.shield -= absorbedByShield;
-			remaining -= absorbedByShield;
-		}
-
-		combatant.hp = Math.max(0, combatant.hp - remaining);
-		if (combatant.hp === 0) combatant.alive = false;
-
-		return {
-			finalDamage: remaining,
-			absorbedByShield,
-			defeated: combatant.hp === 0,
-			healed: 0,
-		};
 	}
 
 	async applyDmg(id: string, amount: number, heal: boolean, useShield: boolean) {
@@ -770,9 +803,15 @@ export class BattleTrackerView extends ItemView {
 		const lang = this.plugin.settings.language;
 		const result = this.applyDamage(combatant, amount, heal, useShield);
 		if (heal) {
-			await this.writeToLog(lang === "es"
-				? `${combatant.name} se cura ${result.healed} PV (PV: ${combatant.hp}/${combatant.hpMax})`
-				: `${combatant.name} heals ${result.healed} HP (HP: ${combatant.hp}/${combatant.hpMax})`);
+			if (useShield) {
+				await this.writeToLog(lang === "es"
+					? `${combatant.name} obtiene ${result.shieldIncrease} puntos de escudo (Escudo: ${combatant.shield})`
+					: `${combatant.name} gains ${result.shieldIncrease} Shield (Shield: ${combatant.shield})`);
+			} else {
+				await this.writeToLog(lang === "es"
+					? `${combatant.name} se cura ${result.healed} PV (PV: ${combatant.hp}/${combatant.hpMax})`
+					: `${combatant.name} heals ${result.healed} HP (HP: ${combatant.hp}/${combatant.hpMax})`);
+			}
 		} else {
 			const shieldText = result.absorbedByShield > 0
 				? lang === "es"
@@ -904,7 +943,7 @@ export class BattleTrackerView extends ItemView {
 		const lang = this.plugin.settings.language;
 		const result = payload.damage > 0
 			? this.applyDamage(target, payload.damage, false, payload.useShield)
-			: { finalDamage: 0, absorbedByShield: 0, defeated: false, healed: 0 };
+			: { finalDamage: 0, absorbedByShield: 0, shieldIncrease: 0, defeated: false, healed: 0 };
 
 		if (payload.conditionName) {
 			const existing = target.conditions.find((condition) => condition.name === payload.conditionName);
@@ -946,56 +985,121 @@ export class BattleTrackerView extends ItemView {
 		this.refresh();
 	}
 
-	async loadFromVault() {
-		const folder = this.plugin.settings.combatantFolder.trim();
-		const lang = this.plugin.settings.language;
-		let files: TFile[];
+	async loadDefaultCombatants() {
+		const folder = this.plugin.settings.defaultCombatantFolder.trim();
+		if (!folder) return;
 
-		if (folder) {
-			const folderObj = this.app.vault.getAbstractFileByPath(folder);
-			if (!folderObj) {
-				new Notice(lang === "es" ? `Carpeta "${folder}" no encontrada.` : `Folder "${folder}" not found.`);
-				return;
-			}
-			files = this.app.vault.getMarkdownFiles().filter((file) => file.path.startsWith(folder + "/"));
-		} else {
-			new PickCombatantsModal(this.app, this.plugin, (picked) => {
-				void (async () => {
-					const loaded = await Promise.all(picked.map((file) => this.fileToCombatant(file)));
-					for (const combatant of loaded) {
-						if (!this.combatants.find((entry) => entry.id === combatant.id)) {
-							this.combatants.push(combatant);
-						}
-					}
-					this.ensureActiveCombatant();
-					for (const combatant of loaded) {
-						await this.writeToLog(lang === "es"
-							? `Combatiente cargado: ${combatant.name} (Iniciativa: ${combatant.initiative}, PV: ${combatant.hp}/${combatant.hpMax})`
-							: `Combatant loaded: ${combatant.name} (Initiative: ${combatant.initiative}, HP: ${combatant.hp}/${combatant.hpMax})`);
-					}
-					this.refresh();
-					if (this.combatants.length > 0) this.triggerLogSetup();
-				})();
-			}).open();
+		const lang = this.plugin.settings.language;
+		const folderObj = this.app.vault.getFolderByPath(folder);
+		if (!folderObj) {
+			new Notice(lang === "es" ? `Carpeta "${folder}" no encontrada.` : `Folder "${folder}" not found.`);
 			return;
 		}
+		const files = this.app.vault.getMarkdownFiles().filter((file) => file.path.startsWith(folder + "/"));
 
-		const loaded = await Promise.all(files.map((file) => this.fileToCombatant(file)));
-		for (const combatant of loaded) {
-			if (!this.combatants.find((entry) => entry.id === combatant.id)) {
-				this.combatants.push(combatant);
+		const loaded = new Map(await Promise.all(
+			files.map(async (file) => [await this.fileToCombatant(file), 1] as const)
+		));
+		this.loadCombatants(loaded);
+	}
+
+	async loadSelectedCombatantsFromVault() {
+		new PickCombatantsModal(this.app, this.plugin, (picked) => {
+			void (async () => {
+				const loaded = new Map(await Promise.all(
+					[...picked].map(async ([file, count]) => [
+							await this.fileToCombatant(file),
+							count
+					] as const)
+				));
+				this.loadCombatants(loaded);
+				if (this.combatants.length > 0) this.triggerLogSetup();
+			})();
+		}).open();
+	}
+
+	async loadCombatants(combatants: Map<Combatant, number>) {
+		for (const [combatant, totalCount] of combatants) {
+			let i = 0;
+			let loadedCount = 0;
+
+			while (loadedCount < totalCount) {
+				const newId = combatant.id + String(i);
+
+				if (!this.combatants.some((entry) => entry.id === newId)) {
+					// If a modifier is set, we determine the initiative randomly, otherwise use the fixed initiative
+					let initiative;
+					if (Number.isFinite(combatant.initiativeMod)) {
+						initiative = this.rollInitiative(combatant.initiativeMod);
+					} else {
+						initiative = combatant.initiative;
+					}
+
+					this.combatants.push({
+						...combatant,
+						id: newId,
+						initiative,
+						name: i == 0 ? combatant.name : `${combatant.name} (${i})`,
+					});
+					loadedCount++;
+				}
+
+				i++;
 			}
 		}
 		this.ensureActiveCombatant();
 
-		for (const combatant of loaded) {
-			await this.writeToLog(lang === "es"
-				? `Combatiente cargado: ${combatant.name} (Iniciativa: ${combatant.initiative}, PV: ${combatant.hp}/${combatant.hpMax})`
-				: `Combatant loaded: ${combatant.name} (Initiative: ${combatant.initiative}, HP: ${combatant.hp}/${combatant.hpMax})`);
+		for (const [combatant, count] of combatants) {
+			await this.writeToLog(this.plugin.settings.language === "es"
+				? `Combatientes cargados: ${combatant.name} (${count}) (Iniciativa: ${combatant.initiative}, PV: ${combatant.hp}/${combatant.hpMax})`
+				: `Combatants loaded: ${combatant.name} (${count}) (Initiative: ${combatant.initiative}, HP: ${combatant.hp}/${combatant.hpMax})`);
 		}
 
 		this.refresh();
-		if (this.combatants.length > 0) this.triggerLogSetup();
+	}
+
+	rollInitiative(modifier: number) {
+		if (Number.isFinite(modifier)) {
+			return randomInt(21) + modifier;
+		} else {
+			return randomInt(21);
+		}
+	}
+
+	async revealObsidianFile(file: TFile) {
+		let existingLeaf: WorkspaceLeaf | undefined;
+
+		this.app.workspace.iterateAllLeaves((leaf) => {
+			if (leaf.view instanceof MarkdownView &&
+					leaf.view.file?.path === file.path) {
+					existingLeaf = leaf;
+			}
+		});
+
+		if (existingLeaf) {
+			await this.app.workspace.revealLeaf(existingLeaf);
+		} else {
+			await this.app.workspace.getLeaf(true).openFile(file);
+		}
+	}
+
+	async toggleBoard() {
+		this.boardEnabled = !this.boardEnabled;
+		const boardSection = this.containerEl.getElementsByClassName("bt-board-section")[0];
+		if (boardSection) {
+			if (boardSection.hasClass("board-hidden")) {
+				boardSection.removeClass("board-hidden");
+			} else {
+				boardSection.addClass("board-hidden");
+			}
+		}
+	}
+
+	handleRemoveAlertClick(event: PointerEvent) {
+		const alertBtn = (event?.currentTarget as HTMLButtonElement);
+		const alertId = alertBtn.getAttr("data-alert-id");
+		this.alerts = this.alerts.filter(a => a.id !== alertId);
+		alertBtn.remove();
 	}
 
 	render() {
@@ -1040,21 +1144,40 @@ export class BattleTrackerView extends ItemView {
 		}
 
 		const topActions = topBar.createDiv("bt-top-actions");
-		const fullBtn = topActions.createEl("button", { cls: "bt-btn" });
-		fullBtn.setText(t.fullscreen);
+
+		if (this.mode === "gm") {
+			const nextBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-primary bt-btn-large-width" });
+			const nextIcon = nextBtn.createSpan();
+			setIcon(nextIcon, "step-forward");
+			nextBtn.createSpan({ text: t.nextTurn });
+			nextBtn.onclick = () => void this.nextTurn();
+
+			if (this.plugin.settings.defaultCombatantFolder) {
+				const loadDefaultBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-medium-width" });
+				const loadDefaultIcon = loadDefaultBtn.createSpan();
+				setIcon(loadDefaultIcon, "user-plus");
+				loadDefaultBtn.createSpan({ text: t.loadDefault });
+				loadDefaultBtn.onclick = () => void this.loadDefaultCombatants();
+			}
+
+			const loadBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-medium-width" });
+			const loadIcon = loadBtn.createSpan();
+			setIcon(loadIcon, "user-plus");
+			loadBtn.createSpan({ text: t.load });
+			loadBtn.onclick = () => void this.loadSelectedCombatantsFromVault();
+		}
+
+		const boardBtn = topActions.createEl("button", { cls: "bt-btn", title: t.showHideBoard });
+		setIcon(boardBtn, "grid");
+		boardBtn.onclick = () => void this.toggleBoard();
+
+		const fullBtn = topActions.createEl("button", { cls: "bt-btn", title: t.fullscreen });
+		setIcon(fullBtn, "fullscreen");
 		fullBtn.onclick = () => void this.toggleFullscreen();
 
 		if (this.mode === "gm") {
-			const nextBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-primary" });
-			nextBtn.setText(t.nextTurn);
-			nextBtn.onclick = () => void this.nextTurn();
-
-			const loadBtn = topActions.createEl("button", { cls: "bt-btn" });
-			loadBtn.setText(t.load);
-			loadBtn.onclick = () => void this.loadFromVault();
-
-			const playerBtn = topActions.createEl("button", { cls: "bt-btn" });
-			playerBtn.setText(t.playerView);
+			const playerBtn = topActions.createEl("button", { cls: "bt-btn", title: t.playerView });
+			setIcon(playerBtn, "hat-glasses");
 			playerBtn.onclick = () => void this.plugin.activatePlayerView();
 
 			if (this.plugin.settings.logEnabled) {
@@ -1062,12 +1185,25 @@ export class BattleTrackerView extends ItemView {
 					cls: `bt-btn${this.activeLogFile ? " bt-btn-primary" : ""}`,
 					title: t.logSelectLogFileButton,
 				});
-				logBtn.setText(`📝 ${this.activeLogFile ? (lang === "es" ? "Registrando" : "Logging") : (lang === "es" ? "Registro" : "Log")}`);
-				logBtn.onclick = () => this.triggerLogSetup();
+				const logIcon = logBtn.createSpan();
+				setIcon(logIcon, "scroll-text");
+				if (this.activeLogFile) {
+					logBtn.createSpan({ text: (lang === "es" ? "Registrando" : "Logging") });
+				}
+
+				logBtn.onclick = () => {
+					if (this.activeLogFile) {
+						this.revealObsidianFile(this.activeLogFile);
+					} else {
+						this.triggerLogSetup();
+					}
+				}
 			}
 
 			const resetBtn = topActions.createEl("button", { cls: "bt-btn bt-btn-danger-soft" });
-			resetBtn.setText(t.reset);
+			const resetIcon = resetBtn.createSpan();
+			setIcon(resetIcon, "rotate-ccw");
+			resetBtn.createSpan({ text: t.reset });
 			resetBtn.onclick = () => {
 				new ConfirmModal(this.app, t.reset, t.resetConfirm, t.reset, () => {
 					this.resetBattle();
@@ -1078,29 +1214,40 @@ export class BattleTrackerView extends ItemView {
 		if (visibleAlerts.length) {
 			const alertsWrap = container.createDiv("bt-alerts");
 			visibleAlerts.slice().reverse().forEach((alert) => {
-				alertsWrap.createDiv(`bt-alert bt-alert-${alert.type}`).setText(alert.message);
+				const alertBtn = alertsWrap.createDiv(`bt-alert bt-alert-${alert.type}`);
+				alertBtn.setText(alert.message);
+				alertBtn.setAttr("data-alert-id", alert.id);
+				alertBtn.onclick = (event) => this.handleRemoveAlertClick(event);
 			});
 		}
 
-		const boardSection = container.createDiv("bt-board-section");
+		const boardSection = container.createDiv(`bt-board-section${this.boardEnabled ? "" : " board-hidden"}`);
 		if (this.mode === "gm") {
 			const boardControls = boardSection.createDiv("bt-board-controls");
 			boardControls.createEl("span", { cls: "bt-label", text: t.boardTitle });
 
 			const centerBtn = boardControls.createEl("button", { cls: "bt-btn" });
-			centerBtn.setText(t.boardCenter);
+			const centerIcon = centerBtn.createSpan();
+			setIcon(centerIcon, "layout-grid");
+			centerBtn.createSpan({ text: t.boardCenter });
 			centerBtn.onclick = () => this.centerTokens();
 
 			const saveBtn = boardControls.createEl("button", { cls: "bt-btn" });
-			saveBtn.setText(t.boardSave);
+			const saveIcon = saveBtn.createSpan();
+			setIcon(saveIcon, "save");
+			saveBtn.createSpan({ text: t.boardSave });
 			saveBtn.onclick = () => this.saveBoardLayout();
 
 			const loadLayoutBtn = boardControls.createEl("button", { cls: "bt-btn" });
-			loadLayoutBtn.setText(t.boardLoad);
+			const loadLayoutIcon = loadLayoutBtn.createSpan();
+			setIcon(loadLayoutIcon, "folder");
+			loadLayoutBtn.createSpan({ text: t.boardLoad });
 			loadLayoutBtn.onclick = () => this.loadBoardLayout();
 
 			const clearLayoutBtn = boardControls.createEl("button", { cls: "bt-btn" });
-			clearLayoutBtn.setText(t.boardClear);
+			const clearLayoutIcon = clearLayoutBtn.createSpan();
+			setIcon(clearLayoutIcon, "x");
+			clearLayoutBtn.createSpan({ text: t.boardClear });
 			clearLayoutBtn.onclick = () => this.clearBoardLayout();
 
 			const backgroundInput = boardControls.createEl("input", {
@@ -1205,9 +1352,11 @@ export class BattleTrackerView extends ItemView {
 					this.refresh();
 				};
 
-				const tools = token.createDiv("bt-token-tools");
-				const hideBtn = tools.createEl("button", { cls: "bt-token-tool" });
-				hideBtn.setText(tokenState.hidden ? t.boardReveal : t.boardHide);
+				const hideBtn = token.createEl("button", {
+					cls: "bt-token-hide",
+					title: tokenState.hidden ? t.boardReveal : t.boardHide,
+				});
+				setIcon(hideBtn, tokenState.hidden ? "eye-off" : "eye")
 				hideBtn.onclick = (evt) => {
 					evt.stopPropagation();
 					this.updateTokenState(combatant.id, { hidden: !tokenState.hidden });
@@ -1227,7 +1376,12 @@ export class BattleTrackerView extends ItemView {
 			const strip = container.createDiv("bt-init-strip");
 			alive.forEach((combatant, index) => {
 				const chip = strip.createDiv(`bt-init-chip${index === activeIndex ? " active" : ""}`);
-				chip.setText(`${combatant.name} (${combatant.initiative})`);
+				chip.createSpan({ cls: "bt-init-chip-name", text: combatant.name });
+
+				chip.createSpan({
+						cls: "bt-init-chip-value",
+						text: String(combatant.initiative)
+				});
 			});
 		}
 
@@ -1251,7 +1405,7 @@ export class BattleTrackerView extends ItemView {
 			if (this.mode === "gm") {
 				nameEl.addClass("bt-clickable-name");
 				nameEl.title = lang === "es" ? "Abrir nota" : "Open note";
-				nameEl.onclick = () => void this.app.workspace.getLeaf(true).openFile(combatant.file);
+				nameEl.onclick = () => void this.revealObsidianFile(combatant.file);
 			}
 
 			const metaRow = nameWrap.createDiv("bt-sub bt-init-edit-row");
@@ -1291,18 +1445,27 @@ export class BattleTrackerView extends ItemView {
 			}
 
 			const badge = header.createDiv(`bt-badge bt-badge-${combatant.combatType === "PC" ? "pc" : combatant.combatType === "Enemy" ? "enemy" : "npc"}`);
-			badge.setText(combatant.combatType);
+			badge.title = combatant.combatType;
+			setIcon(badge, combatant.combatType === "PC" ? "user" : combatant.combatType === "Enemy"? "skull" : "handshake");
 
 			if (this.mode === "gm") {
-				const initEditBtn = header.createEl("button", { cls: "bt-btn-icon", title: t.editInitiative });
-				initEditBtn.setText("✎");
-				initEditBtn.onclick = () => {
+				const metaActions = header.createDiv(`bt-meta-actions`);
+				const editInitBtn = metaActions.createEl("button", { cls: "bt-btn-icon bt-btn-small-width", title: t.editInitiative });
+				setIcon(editInitBtn, "pen");
+				editInitBtn.onclick = () => {
 					this.editingInitiativeId = combatant.id;
 					this.refresh();
 				};
 
-				const removeBtn = header.createEl("button", { cls: "bt-btn-icon", title: t.removeTitle });
-				removeBtn.setText("✕");
+				const rollInitBtn = metaActions.createEl("button", { cls: "bt-btn-icon bt-btn-small-width", title: t.rollInitiative });
+				setIcon(rollInitBtn, "dices");
+				rollInitBtn.onclick = () => {
+					combatant.initiative = this.rollInitiative(combatant.initiativeMod);
+					this.refresh();
+				};
+
+				const removeBtn = metaActions.createEl("button", { cls: "bt-btn-icon bt-btn-error bt-btn-small-width", title: t.removeTitle });
+				setIcon(removeBtn, "x");
 				removeBtn.onclick = () => void this.removeCombatant(combatant.id);
 			}
 
@@ -1340,10 +1503,12 @@ export class BattleTrackerView extends ItemView {
 					const box = extraRow.createDiv("bt-extra-box");
 					box.createEl("span", { cls: "bt-label", text: key.toUpperCase() });
 					const valRow = box.createDiv("bt-extra-val-row");
-					const minusBtn = valRow.createEl("button", { cls: "bt-btn-mini", text: "−" });
+					const minusBtn = valRow.createEl("button", { cls: "bt-btn-mini" });
+					setIcon(minusBtn, "minus");
 					minusBtn.onclick = () => void this.modExtra(combatant.id, key, -1);
 					valRow.createEl("span", { cls: "bt-extra-val", text: String(combatant.extraFields[key]) });
-					const plusBtn = valRow.createEl("button", { cls: "bt-btn-mini", text: "+" });
+					const plusBtn = valRow.createEl("button", { cls: "bt-btn-mini" });
+					setIcon(plusBtn, "plus");
 					plusBtn.onclick = () => void this.modExtra(combatant.id, key, 1);
 				});
 			}
@@ -1355,20 +1520,26 @@ export class BattleTrackerView extends ItemView {
 			if (this.mode === "gm") {
 				const actions = card.createDiv("bt-actions");
 
-				const dmgBtn = actions.createEl("button", { cls: "bt-btn bt-btn-danger-soft" });
-				dmgBtn.setText(t.damageHeal);
+				const dmgBtn = actions.createEl("button", { cls: "bt-btn bt-btn-large-width" });
+				const dmgIcon = dmgBtn.createSpan();
+				setIcon(dmgIcon, "swords");
+				dmgBtn.createSpan({ text: t.damageHeal });
 				dmgBtn.onclick = () => new DmgModal(this.app, combatant.name, this.plugin, combatant.shield > 0, (value, heal, useShield) => {
 					void this.applyDmg(combatant.id, value, heal, useShield);
 				}).open();
 
-				const condBtn = actions.createEl("button", { cls: "bt-btn" });
-				condBtn.setText(t.status);
+				const condBtn = actions.createEl("button", { cls: "bt-btn bt-btn-medium-width" });
+				const condIcon = condBtn.createSpan();
+				setIcon(condIcon, "bubbles");
+				condBtn.createSpan({ text: t.status });
 				condBtn.onclick = () => new ConditionModal(this.app, conditionEntries, combatant.conditions, this.plugin, (updated) => {
 					void this.updateConditions(combatant.id, updated);
 				}).open();
 
-				const noteBtn = actions.createEl("button", { cls: "bt-btn" });
-				noteBtn.setText(t.note);
+				const noteBtn = actions.createEl("button", { cls: "bt-btn bt-btn-medium-width" });
+				const noteIcon = noteBtn.createSpan();
+				setIcon(noteIcon, "notebook-pen");
+				noteBtn.createSpan({ text: t.note });
 				noteBtn.onclick = () => new NoteModal(this.app, combatant.notes, this.plugin, (text) => {
 					combatant.notes = text;
 					void this.writeToLog(lang === "es"
@@ -1378,8 +1549,10 @@ export class BattleTrackerView extends ItemView {
 				}).open();
 
 				if (isActive && alive.length > 1) {
-					const actionBtn = actions.createEl("button", { cls: "bt-btn bt-btn-primary" });
-					actionBtn.setText(t.action);
+					const actionBtn = actions.createEl("button", { cls: "bt-btn bt-btn-primary bt-btn-medium-width" });
+					const actionIcon = actionBtn.createSpan();
+					setIcon(actionIcon, "zap");
+					actionBtn.createSpan({ text: t.action });
 					actionBtn.onclick = () => new ActionModal(
 						this.app,
 						combatant,
@@ -1390,8 +1563,10 @@ export class BattleTrackerView extends ItemView {
 					).open();
 				}
 
-				const defeatBtn = actions.createEl("button", { cls: "bt-btn bt-btn-ghost" });
-				defeatBtn.setText(t.defeat);
+				const defeatBtn = actions.createEl("button", { cls: "bt-btn bt-btn-ghost bt-btn-medium-width" });
+				const defeatIcon = defeatBtn.createSpan();
+				setIcon(defeatIcon, "skull");
+				defeatBtn.createSpan({ text: t.defeat });
 				defeatBtn.onclick = () => {
 					void (async () => {
 						await this.markCombatantDefeated(combatant);

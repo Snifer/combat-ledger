@@ -2,6 +2,18 @@
    Combat Ledger
 ============================================================ */
 
+:root {
+	--color-red-background: #ef444422;
+	--color-green-background: #22c55e22;
+	--color-blue-background: #3b82f622;
+	--color-yellow-background: #f59e0b22;
+	--color-orange-background: #f9731622;
+}
+
+h3 {
+	margin-top: 0;
+}
+
 /* ── Panel ─────────────────────────────────────────────────── */
 .bt-panel {
 	padding: 10px;
@@ -26,10 +38,16 @@
 }
 
 .bt-round-badge {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 	font-size: 12px;
 	font-weight: 600;
-	padding: 3px 10px;
+	line-height: 1;
+	padding: 6px 10px;
 	border-radius: 6px;
+	min-height: var(--input-height);
+	min-width: 80px;
 	background: var(--background-modifier-border);
 	color: var(--text-normal);
 }
@@ -96,6 +114,13 @@
 	background: transparent;
 	color: var(--text-normal);
 	cursor: pointer;
+	gap: 4px;
+}
+
+.bt-btn > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .bt-btn:hover {
@@ -146,11 +171,13 @@
 	margin-left: auto;
 }
 
-.bt-btn-icon:hover {
-	color: var(--text-error);
+.bt-btn-error:hover {
+	color: var(--text-error) !important;
 }
 
 .bt-btn-mini {
+	height: 25px;
+	width: 25px;
 	font-size: 13px;
 	padding: 0 5px;
 	border: 1px solid var(--background-modifier-border);
@@ -163,6 +190,18 @@
 
 .bt-btn-mini:hover {
 	background: var(--background-modifier-hover);
+}
+
+.bt-btn-small-width {
+	min-width: 30px;
+}
+
+.bt-btn-medium-width {
+	min-width: 80px;
+}
+
+.bt-btn-large-width {
+	min-width: 110px;
 }
 
 .bt-alerts {
@@ -196,6 +235,10 @@
 
 .bt-board-section {
 	margin-bottom: 12px;
+}
+
+.bt-board-section.board-hidden {
+	display: none;
 }
 
 .bt-board-controls {
@@ -281,7 +324,7 @@
 	width: 40px;
 	height: 40px;
 	border-radius: 999px;
-	margin-bottom: 4px;
+	margin: 0 auto 4px auto;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -295,6 +338,7 @@
 	font-size: 10px;
 	font-weight: 700;
 	line-height: 1.2;
+	text-align: center;
 }
 
 .bt-token-conditions {
@@ -306,42 +350,53 @@
 
 .bt-token-condition {
 	font-size: 9px;
-	padding: 1px 4px;
-	border-radius: 999px;
+	padding: 2px 2px;
+	border-radius: 8px;
 	background: var(--background-primary);
 	border: 1px solid var(--background-modifier-border);
+	text-align: center;
 }
 
-.bt-token-tools {
-	display: flex;
-	gap: 4px;
-	margin-top: 4px;
+.bt-token:hover .bt-token-hide {
+	display: block;
 }
 
-.bt-token-tool {
+.bt-token-hide {
+	display: none;
+	width: 25px;
+	height: 25px;
+	position: absolute;
+	top: 4px;
+	right: 4px;
 	font-size: 9px;
-	padding: 2px 4px;
+	padding: 4px 4px;
 	border-radius: 4px;
 	border: 1px solid var(--background-modifier-border);
 	background: var(--background-primary);
+	opacity: 80%;
 	cursor: pointer;
 }
 
 /* ── Initiative strip ───────────────────────────────────────── */
 .bt-init-strip {
 	display: flex;
-	gap: 5px;
+	gap: 4px;
 	flex-wrap: wrap;
 	margin-bottom: 10px;
 }
 
 .bt-init-chip {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 	font-size: 11px;
-	padding: 2px 8px;
-	border-radius: 99px;
+	line-height: 1;
+	padding: 4px 4px 4px 8px;
+	border-radius: 8px;
 	border: 1px solid var(--background-modifier-border);
 	color: var(--text-muted);
 	background: var(--background-secondary);
+	gap: 4px;
 }
 
 .bt-init-chip.active {
@@ -349,6 +404,21 @@
 	color: var(--text-on-accent);
 	border-color: transparent;
 	font-weight: 600;
+}
+
+.bt-init-chip-name {
+	white-space: nowrap;
+}
+
+.bt-init-chip-value {
+	padding: 4px;
+	border-radius: 4px;
+    background: var(--background-modifier-border);
+    color: var(--text-muted);
+}
+
+.bt-init-chip.active .bt-init-chip-value {
+    background: color-mix(in srgb, var(--interactive-accent) 65%, black);
 }
 
 /* ── Empty state ────────────────────────────────────────────── */
@@ -398,6 +468,7 @@
 	font-size: 11px;
 	font-weight: 600;
 	flex-shrink: 0;
+	line-height: 1;
 }
 
 .bt-avatar-image {
@@ -408,18 +479,21 @@
 }
 
 .bt-avatar-pc {
-	background: var(--color-blue-background);
-	color: var(--color-blue);
+	background: var(--color-green-background);
+	color: var(--color-green);
+	font-weight: bold;
 }
 
 .bt-avatar-enemy {
 	background: var(--color-red-background);
 	color: var(--color-red);
+	font-weight: bold;
 }
 
 .bt-avatar-npc {
 	background: var(--color-yellow-background);
 	color: var(--color-yellow);
+	font-weight: bold;
 }
 
 /* Name */
@@ -448,6 +522,10 @@
 	color: var(--text-muted);
 }
 
+.bt-sub > span {
+	line-height: 1;
+}
+
 .bt-init-edit-row {
 	display: flex;
 	align-items: center;
@@ -474,26 +552,37 @@
 
 /* Type badge */
 .bt-badge {
-	font-size: 10px;
-	padding: 2px 6px;
-	border-radius: 4px;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
 	margin-left: auto;
+	padding: 4px 6px;
+	border-radius: 4px;
 	white-space: nowrap;
+	font-size: 12px;
+	gap: 4px;
+	min-width: 40px;
+}
+
+.bt-badge > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .bt-badge-pc {
-	background: var(--color-blue-background);
-	color: var(--color-blue);
+	color: var(--color-green);
+	font-weight: bold;
 }
 
 .bt-badge-enemy {
-	background: var(--color-red-background);
 	color: var(--color-red);
+	font-weight: bold;
 }
 
 .bt-badge-npc {
-	background: var(--color-yellow-background);
 	color: var(--color-yellow);
+	font-weight: bold;
 }
 
 /* ── Condition tags ─────────────────────────────────────────── */
@@ -507,7 +596,7 @@
 .bt-cond-tag {
 	--bt-cond-color: var(--text-accent);
 	--bt-cond-background: var(--background-secondary);
-	font-size: 10px;
+	font-size: 11px;
 	padding: 2px 6px;
 	border-radius: 99px;
 	border: 1px solid var(--background-modifier-border);
@@ -590,7 +679,7 @@
 	align-items: center;
 	background: var(--background-secondary);
 	border-radius: 5px;
-	padding: 4px 8px;
+	padding: 4px 4px;
 	min-width: 60px;
 }
 
@@ -618,10 +707,29 @@
 }
 
 /* ── Action row ─────────────────────────────────────────────── */
+.bt-meta-actions {
+	display: flex;
+	gap: 0px;
+	flex-wrap: wrap;
+}
+
+.bt-meta-actions > button {
+	background: transparent;
+	box-shadow: none;
+}
+
+.bt-meta-actions > button:hover {
+	box-shadow: var(--input-shadow-hover);
+}
+
 .bt-actions {
 	display: flex;
 	gap: 5px;
 	flex-wrap: wrap;
+}
+
+.bt-actions > :last-child {
+    margin-left: auto;
 }
 
 .bt-graveyard {
@@ -691,7 +799,6 @@
 .bt-modal-content input,
 .bt-modal-content textarea,
 .bt-modal-content select {
-	width: 100%;
 	padding: 6px 8px;
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 5px;
@@ -706,6 +813,7 @@
 }
 
 .bt-modal-search-input {
+	width: 100%;
 	margin-bottom: 8px;
 }
 
@@ -752,6 +860,8 @@
 	display: flex;
 	align-items: center;
 	gap: 8px;
+	cursor: pointer;
+	height: var(--input-height);
 }
 
 .bt-cond-edit-main {
@@ -776,18 +886,14 @@
 	cursor: pointer;
 	background: transparent;
 	color: var(--text-muted);
+	width: 20px;
+	height: 20px;
 }
 
-.bt-cond-toggle-custom {
+.bt-cond-toggle.bt-cond-toggle-custom {
 	color: var(--bt-cond-toggle-color);
 	border-color: var(--bt-cond-toggle-border);
 	background: var(--bt-cond-toggle-background);
-}
-
-.bt-cond-toggle.selected {
-	background: var(--interactive-accent);
-	color: var(--text-on-accent);
-	border-color: transparent;
 }
 
 .bt-modal-actions {
@@ -797,9 +903,9 @@
 	margin-top: 10px;
 }
 
-/* Pick combatants list */
+/* General Pick list */
 .bt-pick-list {
-	max-height: 300px;
+	height: 400px;
 	overflow-y: auto;
 	display: flex;
 	flex-direction: column;
@@ -827,6 +933,38 @@
 .bt-pick-item label {
 	cursor: pointer;
 	font-size: 12px;
+}
+
+/* Pick combatants list */
+.bt-combatant-pick-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;	
+	gap: 8px;
+	padding: 5px 8px;
+	border-radius: 5px;
+}
+
+.bt-combatant-pick-item:hover {
+	background: var(--background-modifier-hover);
+}
+
+.bt-combatant-pick-item label {
+	font-size: 12px;
+}
+
+.bt-combatant-counter-div {
+	display: flex;
+	align-items: center;
+}
+
+.bt-combatant-counter-div input {
+	max-width: 30px;
+	margin: 0 5px 0 5px;
+	align-items: center;
+	justify-items: center;
+	background: transparent;
+	border: none;
 }
 
 /* ── Settings — Condition color manager ─────────────────────── */
@@ -932,6 +1070,7 @@
 	color: var(--text-muted);
 	cursor: pointer;
 	transition: all 0.15s;
+	gap: 4px;
 }
 
 .bt-settings-cond-add:hover {

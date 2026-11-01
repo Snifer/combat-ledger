@@ -1,4 +1,4 @@
-import { App, PluginSettingTab, Setting } from "obsidian";
+import { App, PluginSettingTab, Setting, setIcon } from "obsidian";
 import BattleTrackerPlugin from "./main";
 import { BattleTrackerSettings, ConditionEntry } from "./types";
 import { LOCALIZATION } from "./localization";
@@ -33,6 +33,7 @@ export const DEFAULT_SETTINGS: BattleTrackerSettings = {
 	language: "es",
 	fields: {
 		initiative: "initiative",
+		initiative_mod: "initiative_mod",
 		hp: "hp",
 		hp_max: "hp_max",
 		shield: "shield",
@@ -45,13 +46,15 @@ export const DEFAULT_SETTINGS: BattleTrackerSettings = {
 		conditions: "conditions",
 	},
 	conditions: DEFAULT_CONDITIONS_ES,
-	combatantFolder: "",
+	rootCombatantFolder: "",
+	defaultCombatantFolder: "",
 	realtimeSync: false,
 	realtimeSyncMode: "pc",
 	shieldAbsorbsDamage: true,
 	turnTimerEnabled: false,
 	turnTimerSeconds: 60,
 	playerViewShowHp: false,
+	boardEnabled: true,
 	boardGridEnabled: true,
 	boardSnapToGrid: false,
 	boardGridSize: 64,
@@ -62,6 +65,8 @@ export const DEFAULT_SETTINGS: BattleTrackerSettings = {
 	logHeader: "## Registro de Combate",
 	logFileName: "Registro de Combate {date}",
 	logFolder: "",
+	maxAlertDuration: 8000,
+	maxAlertCount: 5,
 };
 
 export class BattleTrackerSettingTab extends PluginSettingTab {
@@ -92,7 +97,7 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 
 		this.addHeading(containerEl, t.settingsTitle);
 
-		// Language Setting
+		// ── Language ──────────────────────────────────────────────────────────
 		new Setting(containerEl)
 			.setName(t.settingsLanguageName)
 			.setDesc(t.settingsLanguageDesc)
@@ -136,6 +141,7 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 					})
 			);
 
+		// ── Combatant Fields ──────────────────────────────────────────────────
 		this.addHeading(containerEl, t.settingsFieldsTitle, t.settingsFieldsDesc);
 
 		const f = this.plugin.settings.fields;
@@ -144,6 +150,11 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 			.setName(t.settingsInitName)
 			.setDesc(t.settingsInitDesc)
 			.addText((text) => text.setValue(f.initiative).onChange(async (v) => { f.initiative = v; await this.plugin.saveSettings(); }));
+
+		new Setting(containerEl)
+			.setName(t.settingsInitModName)
+			.setDesc(t.settingsInitModDesc)
+			.addText((text) => text.setValue(f.initiative_mod).onChange(async (v) => { f.initiative_mod = v; await this.plugin.saveSettings(); }));
 			
 		new Setting(containerEl)
 			.setName(t.settingsHpName)
@@ -284,6 +295,17 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 
 		this.addHeading(containerEl, t.settingsBoardTitle);
 		new Setting(containerEl)
+			.setName(t.settingsBoardVisibilityName)
+			.setDesc(t.settingsBoardVisibilityDesc)
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.boardEnabled)
+					.onChange(async (v) => {
+						this.plugin.settings.boardEnabled = v;
+						await this.plugin.saveSettings();
+					})
+			);
+		new Setting(containerEl)
 			.setName(t.settingsBoardGridName)
 			.setDesc(t.settingsBoardGridDesc)
 			.addToggle((toggle) =>
@@ -343,21 +365,34 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 		const condListEl = containerEl.createDiv("bt-settings-cond-list");
 		this.renderConditionRows(condListEl, t);
 
+		// ── Combatant Folders ─────────────────────────────────────────────────
 		this.addHeading(containerEl, t.settingsFolderTitle);
 		new Setting(containerEl)
-			.setName(t.settingsFolderFieldName)
-			.setDesc(t.settingsFolderFieldDesc)
+			.setName(t.settingsRootFolderFieldName)
+			.setDesc(t.settingsRootFolderFieldDesc)
 			.addText((text) =>
 				text
-					.setPlaceholder("Campaña/Criaturas")
-					.setValue(this.plugin.settings.combatantFolder)
+					.setPlaceholder("Campaign/Creatures")
+					.setValue(this.plugin.settings.rootCombatantFolder)
 					.onChange(async (v) => {
-						this.plugin.settings.combatantFolder = v;
+						this.plugin.settings.rootCombatantFolder = v.trim().replace(/\/$/, "");
+						await this.plugin.saveSettings();
+					})
+			);
+		new Setting(containerEl)
+			.setName(t.settingsDefaultFolderFieldName)
+			.setDesc(t.settingsDefaultFolderFieldDesc)
+			.addText((text) =>
+				text
+					.setPlaceholder("Campaign/Creatures/Players")
+					.setValue(this.plugin.settings.defaultCombatantFolder)
+					.onChange(async (v) => {
+						this.plugin.settings.defaultCombatantFolder = v.trim().replace(/\/$/, "");
 						await this.plugin.saveSettings();
 					})
 			);
 
-		// Logging Section in Settings
+		// ── Logging ───────────────────────────────────────────────────────────
 		this.addHeading(containerEl, t.logTitle);
 		
 		new Setting(containerEl)
@@ -412,6 +447,41 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 						})
 				);
 		}
+
+		// ── Alerts ────────────────────────────────────────────────────────────
+		this.addHeading(containerEl, t.settingsAlertsTitle);
+		
+		new Setting(containerEl)
+			.setName(t.settingsAlertsMaxDurationName)
+			.setDesc(t.settingsAlertsMaxDurationDesc)
+			.addText((text) =>
+				text
+					.setPlaceholder("8000")
+					.setValue(String(this.plugin.settings.maxAlertDuration))
+					.onChange(async (v) => {
+						const newDuration = Number(v);
+						if (Number.isFinite(newDuration)) {
+							this.plugin.settings.maxAlertDuration = newDuration;
+							await this.plugin.saveSettings();
+						}
+					})
+			);
+
+		new Setting(containerEl)
+			.setName(t.settingsAlertsMaxNumberName)
+			.setDesc(t.settingsAlertsMaxNumberDesc)
+			.addText((text) =>
+				text
+					.setPlaceholder("5")
+					.setValue(String(this.plugin.settings.maxAlertCount))
+					.onChange(async (v) => {
+						const newDuration = Number(v);
+						if (Number.isFinite(newDuration)) {
+							this.plugin.settings.maxAlertCount = newDuration;
+							await this.plugin.saveSettings();
+						}
+					})
+			);
 	}
 
 	// ── Render condition rows ──────────────────────────────────────────────────
@@ -466,8 +536,9 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 			// Delete button
 			const delBtn = row.createEl("button", {
 				cls: "bt-settings-cond-del",
-				text: t.settingsCondDeleteBtn,
+				title: t.settingsCondDeleteBtn,
 			});
+			setIcon(delBtn, "trash");
 			delBtn.onclick = () => {
 				void (async () => {
 					conditions.splice(idx, 1);
@@ -479,10 +550,10 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 		});
 
 		// Add condition button
-		const addBtn = condListEl.createEl("button", {
-			cls: "bt-settings-cond-add",
-			text: t.settingsCondAddBtn,
-		});
+		const addBtn = condListEl.createEl("button", { cls: "bt-settings-cond-add" });
+		const addIcon = addBtn.createSpan();
+		setIcon(addIcon, "plus");
+		addBtn.createSpan({ text: t.settingsCondAddBtn });
 		addBtn.onclick = () => {
 			void (async () => {
 				conditions.push({ name: "", color: "#888888" });
