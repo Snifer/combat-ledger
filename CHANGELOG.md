@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.2.3] - 2026-11-01
+
+### Added
+- Setting *Root combatant folder*.
+- New action *Load Default* to distinguish loading manually and using the *Default combatant folder* setting.
+- Functionality for loading multiple identical combatants.
+
 ## [1.2.2] - 2026-11-01
 
 ### Added
