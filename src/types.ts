@@ -51,6 +51,7 @@ export interface BattleTrackerSettings {
 	turnTimerEnabled: boolean;
 	turnTimerSeconds: number;
 	playerViewShowHp: boolean;
+	boardEnabled: boolean;
 	boardGridEnabled: boolean;
 	boardSnapToGrid: boolean;
 	boardGridSize: number;
@@ -61,6 +62,8 @@ export interface BattleTrackerSettings {
 	logHeader: string;
 	logFileName: string;
 	logFolder: string;
+	maxAlertCount: number;
+	maxAlertDuration: number;
 }
 
 export interface Combatant {
@@ -100,6 +103,7 @@ export interface CombatSessionState {
 	turnTimerStartedAt: number;
 	turnTimerCombatantId: string | null;
 	boardBackground: string;
+	boardEnabled: boolean;
 	boardGridEnabled: boolean;
 	boardSnapToGrid: boolean;
 	boardGridSize: number;
@@ -108,6 +112,5 @@ export interface CombatSessionState {
 	activeLogFile: TFile | null;
 	logDismissed: boolean;
 	logQueue: string[];
-	logSetupInProgress: boolean;
 	alerts: CombatAlert[];
 }

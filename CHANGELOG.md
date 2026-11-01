@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.2.2] - 2026-11-01
+
+### Added
+- Functionality for toggling visual board visibility.
+- Settings for alerts duration and count.
+- Functionality for opening configured log file.
+- Shortcuts for closing modal windows.
+
+### Changed
+- *Open note* now reveals the note if already opened instead of opening a new one.
+
+### Fixed
+- Log setup appearing when it was disabled in the settings.
+- *Let shield absorb damage* label overflowing outside of screen.
+- Saved combatants not being loaded after reopening Obsidian.
+- Log setup screen not being able to open after closing Obsidian while it was open.
+
 ## [1.2.1] - 2026-06-05
 
 ### Changed

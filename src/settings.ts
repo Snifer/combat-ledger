@@ -2,6 +2,7 @@ import { App, PluginSettingTab, Setting } from "obsidian";
 import BattleTrackerPlugin from "./main";
 import { BattleTrackerSettings, ConditionEntry } from "./types";
 import { LOCALIZATION } from "./localization";
+import { isNumber } from 'util';
 
 export const DEFAULT_CONDITIONS_ES: ConditionEntry[] = [
 	{ name: "Aturdido",       color: "#f59e0b" },
@@ -52,6 +53,7 @@ export const DEFAULT_SETTINGS: BattleTrackerSettings = {
 	turnTimerEnabled: false,
 	turnTimerSeconds: 60,
 	playerViewShowHp: false,
+	boardEnabled: true,
 	boardGridEnabled: true,
 	boardSnapToGrid: false,
 	boardGridSize: 64,
@@ -62,6 +64,8 @@ export const DEFAULT_SETTINGS: BattleTrackerSettings = {
 	logHeader: "## Registro de Combate",
 	logFileName: "Registro de Combate {date}",
 	logFolder: "",
+	maxAlertDuration: 8000,
+	maxAlertCount: 5,
 };
 
 export class BattleTrackerSettingTab extends PluginSettingTab {
@@ -284,6 +288,17 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 
 		this.addHeading(containerEl, t.settingsBoardTitle);
 		new Setting(containerEl)
+			.setName(t.settingsBoardVisibilityName)
+			.setDesc(t.settingsBoardVisibilityDesc)
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.boardEnabled)
+					.onChange(async (v) => {
+						this.plugin.settings.boardEnabled = v;
+						await this.plugin.saveSettings();
+					})
+			);
+		new Setting(containerEl)
 			.setName(t.settingsBoardGridName)
 			.setDesc(t.settingsBoardGridDesc)
 			.addToggle((toggle) =>
@@ -412,6 +427,41 @@ export class BattleTrackerSettingTab extends PluginSettingTab {
 						})
 				);
 		}
+
+		// Alerts Section in Settings
+		this.addHeading(containerEl, t.settingsAlertsTitle);
+		
+		new Setting(containerEl)
+			.setName(t.settingsAlertsMaxDurationName)
+			.setDesc(t.settingsAlertsMaxDurationDesc)
+			.addText((text) =>
+				text
+					.setPlaceholder("8000")
+					.setValue(String(this.plugin.settings.maxAlertDuration))
+					.onChange(async (v) => {
+						const newDuration = Number(v);
+						if (Number.isFinite(newDuration)) {
+							this.plugin.settings.maxAlertDuration = newDuration;
+							await this.plugin.saveSettings();
+						}
+					})
+			);
+
+		new Setting(containerEl)
+			.setName(t.settingsAlertsMaxNumberName)
+			.setDesc(t.settingsAlertsMaxNumberDesc)
+			.addText((text) =>
+				text
+					.setPlaceholder("5")
+					.setValue(String(this.plugin.settings.maxAlertCount))
+					.onChange(async (v) => {
+						const newDuration = Number(v);
+						if (Number.isFinite(newDuration)) {
+							this.plugin.settings.maxAlertCount = newDuration;
+							await this.plugin.saveSettings();
+						}
+					})
+			);
 	}
 
 	// ── Render condition rows ──────────────────────────────────────────────────
