@@ -57,9 +57,11 @@ stamina: 3          # Extra field
 
 ### 2. Loading Combatants
 * Open the Combat Ledger sidebar view by clicking the **Sword Ribbon Icon** on the left ribbon, or run the command `Open Combat Ledger`.
+* Click **＋ Load Default** in the top bar.
+  * If a **Default Combatant Folder** is defined in your settings, it will automatically load all files inside that folder.
 * Click **＋ Load** in the top bar.
-  * If a **Combatant Folder** is defined in your settings, it will automatically load all files inside that folder.
-  * If the path is empty, a modal will open allowing you to search and select one or multiple notes manually.
+  * A modal will open allowing you to search and select one or multiple notes manually.
+  * If a **Root Combatant Folder** is defined in your settings, it will only show the files inside that folder and its subfolders.
 
 ### 3. Setting Up the Combat Log
 When combat begins or you perform the first action, if logging is enabled, a modal will prompt you to set up where you want to keep the log:

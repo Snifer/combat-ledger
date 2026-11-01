@@ -57,9 +57,11 @@ stamina: 3          # Campo extra
 
 ### 2. Cargar Combatientes
 * Abre el panel del tracker pulsando el **icono de la espada** en la cinta lateral de Obsidian, o ejecuta el comando `Abrir Combat Ledger`.
-* Haz clic en **＋ Cargar** en la barra superior.
-  * Si configuraste una **Carpeta de combatientes** en los ajustes, cargará todas las notas de esa carpeta automáticamente.
-  * Si la ruta está vacía, se abrirá un modal de selección manual que te permite buscar y seleccionar una o varias notas.
+- Haz clic en **＋ Carga por defecto** en la barra superior.
+  - Si has definido una **Carpeta de combatientes predeterminada** en los ajustes, se cargarán automáticamente todos los archivos que contenga.
+- Haz clic en **＋ Cargar** en la barra superior.
+  - Se abrirá una ventana que te permitirá buscar y seleccionar manualmente una o varias notas.
+  - Si has definido una **Carpeta raíz de combatientes** en los ajustes, solo se mostrarán los archivos de esa carpeta y de sus subcarpetas.
 
 ### 3. Configurar el Registro (Log) de Combate
 Cuando comience el encuentro o realices la primera acción de combate, el plugin abrirá un diálogo (si el registro está habilitado) para decidir dónde guardar el log:
